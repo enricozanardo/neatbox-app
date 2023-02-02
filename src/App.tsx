@@ -1,3 +1,5 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import Authentication from 'Authentication';
 import ScrollToTop from 'components/layout/ScrollToTop';
 import Toast from 'components/layout/Toast';
@@ -10,6 +12,8 @@ import { useWalletStore } from 'stores/useWalletStore';
 import Layout from './components/layout';
 import Routes from './Routes';
 
+const queryClient = new QueryClient();
+
 function App() {
   const wallet = useWalletStore(state => state.wallet);
   useAccountAutoRefresh(wallet?.binaryAddress);
@@ -17,15 +21,18 @@ function App() {
   return (
     <HelmetProvider>
       <SEO rootMetadata />
-      <BrowserRouter>
-        <Toast />
-        <ScrollToTop />
-        <Authentication>
-          <Layout>
-            <Routes />
-          </Layout>
-        </Authentication>
-      </BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools />
+        <BrowserRouter>
+          <Toast />
+          <ScrollToTop />
+          <Authentication>
+            <Layout>
+              <Routes />
+            </Layout>
+          </Authentication>
+        </BrowserRouter>
+      </QueryClientProvider>
     </HelmetProvider>
   );
 }
