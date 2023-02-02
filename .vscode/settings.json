@@ -1,0 +1,21 @@
+{
+  "workbench.colorCustomizations": {
+    "titleBar.activeForeground": "#000",
+    "titleBar.inactiveForeground": "#000000cc",
+    "titleBar.activeBackground": "#d8fc60",
+    "titleBar.inactiveBackground": "#d8fc60"
+  },
+  "cSpell.words": [
+    "fontawesome",
+    "fortawesome",
+    "luxon",
+    "Neatbox",
+    "Parens",
+    "Roadmap",
+    "Strapi",
+    "tailwindcss",
+    "Topas",
+    "webp",
+    "zustand"
+  ]
+}

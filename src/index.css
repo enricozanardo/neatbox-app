@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Jost:wght@500;600;700&display=swap');
+
+@layer base {
+  img,
+  canvas {
+    pointer-events: none;
+  }
+
+  select:required:invalid {
+    color: gray;
+  }
+
+  * {
+    @apply transition-colors;
+  }
+
+  .base-input {
+    @apply mt-1 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0 disabled:text-gray-400 disabled:bg-gray-50;
+  }
+
+  .label {
+    @apply text-secondary-700 font-semibold;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-thin uppercase text-gray-700;
+    font-family: 'Jost', sans-serif;
+  }
+
+  h4 {
+    @apply text-xl;
+  }
+
+  h3 {
+    @apply text-2xl;
+  }
+
+  h2 {
+    @apply text-3xl;
+  }
+
+  h1 {
+    @apply text-4xl;
+  }
+
+  a {
+    @apply text-blue-400  hover:underline;
+  }
+
+  .pagination {
+    @apply bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center justify-center w-6 md:w-10 h-6 md:h-10 border rounded-full text-xs font-medium;
+  }
+
+  .pagination-selected {
+    @apply bg-primary-50 border-primary-500 text-primary-600 relative inline-flex items-center justify-center w-6 md:w-10 h-6 md:h-10 border rounded-full text-xs font-medium;
+  }
+
+  button {
+    font-family: 'Jost', sans-serif;
+  }
+
+  .text-xxs {
+    font-size: 0.5em;
+  }
+}
+
+.ReactCollapse--collapse {
+  transition: height 500ms;
+}
+
+html {
+  scroll-behavior: smooth;
+}
