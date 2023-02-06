@@ -1,4 +1,6 @@
-import { useCollectionData } from 'hooks/useCollectionData';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect } from 'react';
+import { getCollectionById, getFilesByIds } from 'services/api';
 
 import Button from '../Button';
 import Empty from '../Empty';
@@ -14,14 +16,33 @@ type Props = {
 };
 
 const CollectionModal = ({ collectionMeta, closeHandler, modalIsOpen }: Props) => {
-  const { collection, isLoading } = useCollectionData(collectionMeta.id);
+  const queryClient = useQueryClient();
+
+  const { isLoading, data } = useQuery({
+    queryKey: ['collection', collectionMeta.id],
+    queryFn: () => getCollectionById(collectionMeta.id),
+  });
+
+  useEffect(() => {
+    const prefetch = async () => {
+      if (!data) {
+        return;
+      }
+
+      await queryClient.prefetchQuery({
+        queryKey: ['collection', data.id, 'files', data.fileIds],
+        queryFn: () => getFilesByIds(data.fileIds),
+      });
+    };
+
+    prefetch();
+  }, [data, queryClient]);
 
   return (
     <Modal title="Collection Details" isOpen={modalIsOpen} handleClose={closeHandler}>
       {isLoading && <Spinner />}
-
-      {!isLoading && collection && <CollectionView collection={collection} closeHandler={closeHandler} />}
-      {!isLoading && !collection && <Empty />}
+      {!isLoading && data && <CollectionView collection={data} closeHandler={closeHandler} />}
+      {!isLoading && !data && <Empty />}
 
       <Hr className="my-4" />
       <div className="flex justify-center">
