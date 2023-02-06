@@ -1,3 +1,4 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Button from 'components/ui/Button';
 import Icon from 'components/ui/Icon';
 import Modal from 'components/ui/Modal';
@@ -13,16 +14,46 @@ import CustomFields, { CustomField } from '../upload/CustomFields';
 
 type Props = {
   file: File;
-  handleOptimisticUpdate: (updatedData: Partial<File>) => void;
 };
 
-const UpdateFile = ({ file, handleOptimisticUpdate }: Props) => {
+const UpdateFile = ({ file }: Props) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [transferFee, setTransferFee] = useState(file.data.transferFee);
   const [accessPermissionFee, setAccessPermissionFee] = useState(file.data.accessPermissionFee);
   const [isPrivate, setIsPrivate] = useState(file.data.private);
   const [customFields, setCustomFields] = useState<CustomField[]>(bufferToJson(file.data.customFields));
   const wallet = useWalletStore(state => state.wallet);
+  const queryClient = useQueryClient();
+  const updateFileMutation = useMutation({
+    mutationFn: ({ passphrase, txAsset }: { passphrase: string; txAsset: UpdateFileAssetProps }) =>
+      sendUpdateFileAsset(passphrase, txAsset),
+    onSuccess: () => {
+      queryClient.setQueryData<File>(['view', file.data.id], oldFile => {
+        if (!oldFile) {
+          return oldFile;
+        }
+
+        return {
+          ...oldFile,
+          data: {
+            ...oldFile.data,
+            accessPermissionFee,
+            transferFee,
+            private: isPrivate,
+            customFields: jsonToBuffer(customFields),
+          },
+        };
+      });
+
+      toast.success('File updated!');
+    },
+    onError: err => {
+      // Todo: create proper error handler
+      // @ts-ignore
+      toast.error(err.message);
+    },
+    onSettled: () => setModalIsOpen(false),
+  });
 
   const handleUpdateFile = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -46,24 +77,7 @@ const UpdateFile = ({ file, handleOptimisticUpdate }: Props) => {
       timestamp: getTransactionTimestamp(),
     };
 
-    try {
-      await sendUpdateFileAsset(wallet.passphrase, txAsset);
-      toast.success('File updated!');
-
-      const updatedAsset = { ...file };
-      updatedAsset.data.accessPermissionFee = accessPermissionFee;
-      updatedAsset.data.transferFee = transferFee;
-      updatedAsset.data.private = isPrivate;
-      updatedAsset.data.customFields = jsonToBuffer(customFields);
-
-      handleOptimisticUpdate(updatedAsset);
-    } catch (err) {
-      // Todo: create proper error handler
-      // @ts-ignore
-      toast.error(err.message);
-    }
-
-    setModalIsOpen(false);
+    updateFileMutation.mutate({ passphrase: wallet.passphrase, txAsset });
   };
 
   return (
@@ -99,7 +113,6 @@ const UpdateFile = ({ file, handleOptimisticUpdate }: Props) => {
                     type="number"
                     value={accessPermissionFee}
                     onChange={e => setAccessPermissionFee(Number(e.target.value))}
-                    // onChange={e => handleAmountChange(e.target.value, setAccessPermissionFee)}
                     className="base-input mb-1 block"
                     disabled={fileIsTimedTransfer(file)}
                   />
