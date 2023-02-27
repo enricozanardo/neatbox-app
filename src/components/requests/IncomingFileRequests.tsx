@@ -72,15 +72,19 @@ const IncomingFileRequests = ({ files }: Props) => {
       newHash = encryptedHash;
     }
 
-    const txAsset: RespondToFileRequestAssetProps = {
-      fileId,
-      requestId,
-      accept,
-      newHash,
-      timestamp: getTransactionTimestamp(),
-    };
+    try {
+      const txAsset: RespondToFileRequestAssetProps = {
+        fileId,
+        requestId,
+        accept,
+        newHash,
+        timestamp: getTransactionTimestamp(),
+      };
 
-    mutate({ passphrase: wallet.passphrase, txAsset, request, accept });
+      mutate({ passphrase: wallet.passphrase, txAsset, request, accept });
+    } catch (err) {
+      handleError(err);
+    }
   };
 
   const { isLoading, mutate } = useMutation({
@@ -100,13 +104,16 @@ const IncomingFileRequests = ({ files }: Props) => {
           : [request.requestId];
 
       removeRequests(ids);
-      toast.success('Request success');
+      toast.success('Request successfully processed');
 
       if (accept && (request.type === FileRequestType.Transfer || request.type === FileRequestType.TimedTransfer)) {
         navigate(`/dashboard?ref=${txAsset.fileId}`);
       }
     },
     onError: handleError,
+    onSettled: () => {
+      setDisableInteraction(false);
+    },
   });
 
   if (!account) {
