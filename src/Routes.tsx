@@ -1,5 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { lazy, Suspense, useLayoutEffect, useRef, useState, useTransition } from 'react';
+import { lazy, Suspense } from 'react';
 import { Outlet, Route, Routes as BrowserRoutes } from 'react-router-dom';
 
 const BrowsePage = lazy(() => import('pages/BrowsePage'));

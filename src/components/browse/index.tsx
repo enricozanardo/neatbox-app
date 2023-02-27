@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import config from 'config';
 import useDebounce from 'hooks/useDebounce';
+import useTablePagination from 'hooks/useTablePagination';
 import { cloneDeep } from 'lodash';
 import { useState } from 'react';
 import { getFiles } from 'services/api';
@@ -14,9 +14,9 @@ import SearchForm from './SearchForm';
 const FILTERS_INIT = { searchInput: '', mimeType: '', sortType: '', isUpdated: false };
 
 const Browse = () => {
-  const [offset, setOffset] = useState(0);
   const [filters, setFilters] = useState<Filters>(cloneDeep(FILTERS_INIT));
   const debouncedFilters = useDebounce<Filters>(filters);
+  const { offset, handlePageChange } = useTablePagination();
 
   const { isLoading, isFetching, data } = useQuery({
     queryKey: ['files', { offset, filters: debouncedFilters }],
@@ -25,20 +25,6 @@ const Browse = () => {
     onError: handleError,
     keepPreviousData: true,
   });
-
-  const handlePageChange = (page: number) => {
-    let newOffset = 0;
-
-    if (page > 1) {
-      newOffset = (page - 1) * config.ITEMS_PER_PAGE;
-    }
-
-    if (newOffset === offset) {
-      return;
-    }
-
-    setOffset(newOffset);
-  };
 
   return (
     <>

@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import FileTable from 'components/ui/tables/FileTable';
-import config from 'config';
-import { useState } from 'react';
+import useTablePagination from 'hooks/useTablePagination';
 import { getFilesByIds } from 'services/api';
 import { devLog } from 'utils/helpers';
 
@@ -10,7 +9,7 @@ type Props = {
 };
 
 const FilesDisplay = ({ fileIds }: Props) => {
-  const [offset, setOffset] = useState(0);
+  const { offset, handlePageChange } = useTablePagination();
 
   const { isLoading, isFetching, data } = useQuery({
     queryKey: ['files', fileIds, [offset]],
@@ -22,20 +21,6 @@ const FilesDisplay = ({ fileIds }: Props) => {
     },
     keepPreviousData: true,
   });
-
-  const handlePageChange = (page: number) => {
-    let newOffset = 0;
-
-    if (page > 1) {
-      newOffset = (page - 1) * config.ITEMS_PER_PAGE;
-    }
-
-    if (newOffset === offset) {
-      return;
-    }
-
-    setOffset(newOffset);
-  };
 
   return (
     <FileTable
