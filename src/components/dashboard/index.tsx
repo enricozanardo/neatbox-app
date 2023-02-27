@@ -11,7 +11,7 @@ import { devLog } from 'utils/helpers';
 
 import AccountStatistics from './AccountStatistics';
 import DangerZone from './DangerZone';
-import DashboardFileTable from './DashboardFileTable';
+import FilesDisplay from './FilesDisplay';
 import MyFilesTransfersIndicator from './MyFilesTransfersIndicator';
 import UserProfile from './UserProfile';
 import Wallet from './Wallet';
@@ -69,7 +69,7 @@ const Dashboard = () => {
 
         <div className="col-span-1 lg:col-span-2" id="myFiles" ref={myFilesRef}>
           <PageTitle text="My Files" />
-          {account && <DashboardFileTable fileIds={account.storage.filesOwned} />}
+          {account && <FilesDisplay fileIds={account.storage.filesOwned} />}
           <MyFilesTransfersIndicator fileId={ref} />
 
           {!wallet && <NoWalletFeedback />}
@@ -81,7 +81,7 @@ const Dashboard = () => {
 
         <div className="col-span-1 lg:col-span-2">
           <PageTitle text="Files Shared With Me" />
-          {account && <DashboardFileTable fileIds={account.storage.filesAllowed} />}
+          {account && <FilesDisplay fileIds={account.storage.filesAllowed} />}
 
           {!wallet && <NoWalletFeedback />}
         </div>
