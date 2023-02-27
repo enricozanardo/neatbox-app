@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { getCollectionsByIds } from 'services/api';
-import { useAccountStore } from 'stores/useAccountStore';
 import { ApiOptions, Collection } from 'types';
 import { devLog } from 'utils/helpers';
+
+import useAccountData from './useAccountData';
 
 export const useOwnedCollectionData = (
   options: ApiOptions = {},
@@ -11,7 +12,7 @@ export const useOwnedCollectionData = (
   const [collections, setCollections] = useState<Collection[]>([]);
   const [total, setTotal] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(true);
-  const account = useAccountStore(state => state.account);
+  const { account } = useAccountData();
 
   useEffect(() => {
     const fetchData = async () => {

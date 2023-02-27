@@ -1,15 +1,15 @@
 import CollectionTable from 'components/collections/CollectionTable';
 import PageTitle from 'components/ui/PageTitle';
 import TransferConfirmationSpinner from 'components/ui/TransferConfirmationSpinner';
+import useAccountData from 'hooks/useAccountData';
 import { useOwnedCollectionData } from 'hooks/useOwnedCollectionData';
 import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useAccountStore } from 'stores/useAccountStore';
 
 import CreateCollection from './CreateCollection';
 
 const Collections = () => {
-  const account = useAccountStore(state => state.account);
+  const { account } = useAccountData();
   const { collections } = useOwnedCollectionData({ limit: -1 }, true);
   const [searchParams] = useSearchParams();
   const [isProcessing, setIsProcessing] = useState(false);
@@ -50,11 +50,8 @@ const Collections = () => {
   return (
     <div className="mb-32">
       <PageTitle text="My Collections" />
-
       {accountHasCollections && <CollectionTable data={collections} />}
-
       {isProcessing && <TransferConfirmationSpinner />}
-
       {!isProcessing && <CreateCollection accountHasCollections={accountHasCollections} />}
     </div>
   );

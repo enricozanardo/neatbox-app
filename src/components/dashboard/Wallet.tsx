@@ -1,9 +1,9 @@
 import { useAuth0 } from '@auth0/auth0-react';
+import useAccountData from 'hooks/useAccountData';
 import { useAccountMapEntry } from 'hooks/useAccountMapEntry';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { sendInitWalletAsset } from 'services/transactions';
-import { useAccountStore } from 'stores/useAccountStore';
 import { useWalletStore } from 'stores/useWalletStore';
 import { InitWalletAssetProps } from 'types';
 import { hashEmail } from 'utils/crypto';
@@ -20,11 +20,7 @@ const Wallet = () => {
     wallet: state.wallet,
     removeWallet: state.removeWallet,
   }));
-
-  const { account, setIgnoreRefresh } = useAccountStore(state => ({
-    account: state.account,
-    setIgnoreRefresh: state.setIgnoreRefresh,
-  }));
+  const { account } = useAccountData();
 
   const { user } = useAuth0();
   const { map } = useAccountMapEntry(user?.email);
@@ -58,7 +54,6 @@ const Wallet = () => {
 
     try {
       await sendInitWalletAsset(wallet.passphrase, txAsset);
-      setIgnoreRefresh(true);
       setAccountHasMappedWallet(true);
       toast.success('Wallet successfully locked to user account!');
     } catch (err) {

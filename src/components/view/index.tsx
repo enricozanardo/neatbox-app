@@ -4,10 +4,10 @@ import Empty from 'components/ui/Empty';
 import Error from 'components/ui/Error';
 import PageTitle from 'components/ui/PageTitle';
 import SEO from 'components/ui/SEO';
+import useAccountData from 'hooks/useAccountData';
 import NotFoundPage from 'pages/NotFoundPage';
 import { toast } from 'react-hot-toast';
 import { getFileById } from 'services/api';
-import { useAccountStore } from 'stores/useAccountStore';
 import { useWalletStore } from 'stores/useWalletStore';
 import { bufferToHex } from 'utils/crypto';
 import { devLog, fileIsTimedTransfer } from 'utils/helpers';
@@ -22,7 +22,7 @@ type Props = {
 
 const View = ({ id }: Props) => {
   const wallet = useWalletStore(state => state.wallet);
-  const account = useAccountStore(state => state.account);
+  const { account } = useAccountData();
   const { isAuthenticated } = useAuth0();
 
   const { isError, data } = useQuery({

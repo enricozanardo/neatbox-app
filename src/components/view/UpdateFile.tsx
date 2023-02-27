@@ -8,6 +8,7 @@ import { toast } from 'react-hot-toast';
 import { sendUpdateFileAsset } from 'services/transactions';
 import { useWalletStore } from 'stores/useWalletStore';
 import { File, UpdateFileAssetProps } from 'types';
+import { handleError } from 'utils/errors';
 import { bufferToJson, fileIsTimedTransfer, getTransactionTimestamp, jsonToBuffer } from 'utils/helpers';
 
 import CustomFields, { CustomField } from '../upload/CustomFields';
@@ -22,8 +23,10 @@ const UpdateFile = ({ file }: Props) => {
   const [accessPermissionFee, setAccessPermissionFee] = useState(file.data.accessPermissionFee);
   const [isPrivate, setIsPrivate] = useState(file.data.private);
   const [customFields, setCustomFields] = useState<CustomField[]>(bufferToJson(file.data.customFields));
+
   const wallet = useWalletStore(state => state.wallet);
   const queryClient = useQueryClient();
+
   const updateFileMutation = useMutation({
     mutationFn: ({ passphrase, txAsset }: { passphrase: string; txAsset: UpdateFileAssetProps }) =>
       sendUpdateFileAsset(passphrase, txAsset),
@@ -47,11 +50,7 @@ const UpdateFile = ({ file }: Props) => {
 
       toast.success('File updated!');
     },
-    onError: err => {
-      // Todo: create proper error handler
-      // @ts-ignore
-      toast.error(err.message);
-    },
+    onError: handleError,
     onSettled: () => setModalIsOpen(false),
   });
 

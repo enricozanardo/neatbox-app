@@ -1,11 +1,11 @@
 import Empty from 'components/ui/Empty';
+import useAccountData from 'hooks/useAccountData';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { getFilesByIds, getPublicKeyFromTransaction } from 'services/api';
 import { buildDamUrl, getAxios } from 'services/axios';
 import { sendRespondToCollectionRequestAsset } from 'services/transactions';
-import { useAccountStore } from 'stores/useAccountStore';
 import { useWalletStore } from 'stores/useWalletStore';
 import { Collection, CollectionRequest, RespondToCollectionRequestAssetProps } from 'types';
 import { getTransactionTimestamp } from 'utils/helpers';
@@ -18,10 +18,7 @@ type Props = {
 
 const IncomingCollectionRequests = ({ collections }: Props) => {
   const wallet = useWalletStore(state => state.wallet);
-  const { removeRequests, setIgnoreRefresh } = useAccountStore(state => ({
-    removeRequests: state.removeRequests,
-    setIgnoreRefresh: state.setIgnoreRefresh,
-  }));
+  const { removeRequests } = useAccountData();
   const [isLoading, setIsLoading] = useState(false);
   const [disableInteraction, setDisableInteraction] = useState(false);
 
@@ -96,8 +93,6 @@ const IncomingCollectionRequests = ({ collections }: Props) => {
 
       if (accept) {
         navigate(`/collections?ref=${collectionId}`);
-      } else {
-        setIgnoreRefresh(true);
       }
     } catch (err) {
       // Todo: create proper error handler

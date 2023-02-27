@@ -1,8 +1,8 @@
 import Button from 'components/ui/Button';
 import Modal from 'components/ui/Modal';
 import config from 'config';
+import useAccountData from 'hooks/useAccountData';
 import { useState } from 'react';
-import { useAccountStore } from 'stores/useAccountStore';
 
 type Props = {
   removeWallet: () => void;
@@ -11,7 +11,7 @@ type Props = {
 
 const WalletActions = ({ removeWallet, initializeWallet }: Props) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const account = useAccountStore(state => state.account);
+  const { account } = useAccountData();
 
   const isAbleToInitializeWallet = account && account.token.balance > BigInt('0');
 

@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { getFilesByIds } from 'services/api';
-import { useAccountStore } from 'stores/useAccountStore';
 import { ApiOptions, File } from 'types';
+
+import useAccountData from './useAccountData';
 
 export const useOwnedFilesData = (options: ApiOptions = {}): { files: File[]; isLoading: boolean } => {
   const [files, setFiles] = useState<File[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const account = useAccountStore(state => state.account);
+  const { account } = useAccountData();
 
   useEffect(() => {
     if (!account) {

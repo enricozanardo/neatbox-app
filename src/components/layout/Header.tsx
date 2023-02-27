@@ -1,9 +1,9 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import logoBox from 'assets/img/neatbox-logo-box.png';
 import logoFull from 'assets/img/neatbox-logo-full.png';
+import useAccountData from 'hooks/useAccountData';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useAccountStore } from 'stores/useAccountStore';
 import { getClasses } from 'utils/helpers';
 
 import LogInButton from './LogInButton';
@@ -19,7 +19,7 @@ const navigation = [
 
 const Header = () => {
   const [menuIsOpen, setMenuIsOpen] = useState(true);
-  const account = useAccountStore(state => state.account);
+  const { account } = useAccountData();
   const { pathname } = useLocation();
   const { isAuthenticated } = useAuth0();
 

@@ -1,7 +1,7 @@
 import config from 'config';
+import useAccountData from 'hooks/useAccountData';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useAccountStore } from 'stores/useAccountStore';
 import { File } from 'types';
 import { displayFileSize } from 'utils/formatting';
 import { fileIsPArtOfCollection, fileIsTimedTransfer } from 'utils/helpers';
@@ -21,7 +21,7 @@ type Props = {
 };
 
 const FileTable = ({ handlePageChange, total, data, showLegend, isLoading }: Props) => {
-  const account = useAccountStore(state => state.account);
+  const { account } = useAccountData();
   const [currentPage, setCurrentPage] = useState(1);
 
   const handleChange = (page: number) => {

@@ -1,8 +1,8 @@
 import Button from 'components/ui/Button';
 import Empty from 'components/ui/Empty';
+import useAccountData from 'hooks/useAccountData';
 import { toast } from 'react-hot-toast';
 import { sendCancelRequestAsset } from 'services/transactions';
-import { useAccountStore } from 'stores/useAccountStore';
 import { useWalletStore } from 'stores/useWalletStore';
 import { CancelRequestAssetProps, Collection, CollectionRequest, File, FileRequest } from 'types';
 import { getTransactionTimestamp, prepareCollectionRequests, prepareFileRequests } from 'utils/helpers';
@@ -93,11 +93,7 @@ type Props = {
 
 const PendingRequests = ({ files, collections }: Props) => {
   const wallet = useWalletStore(state => state.wallet);
-  const { removeRequests, account } = useAccountStore(state => ({
-    removeRequests: state.removeRequests,
-    account: state.account,
-  }));
-  const setIgnoreRefresh = useAccountStore(state => state.setIgnoreRefresh);
+  const { removeRequests, account } = useAccountData();
 
   if (!account) {
     return null;
@@ -111,10 +107,7 @@ const PendingRequests = ({ files, collections }: Props) => {
 
     try {
       const txAsset: CancelRequestAssetProps = data;
-
       await sendCancelRequestAsset(wallet.passphrase, txAsset);
-
-      setIgnoreRefresh(true);
       removeRequests([data.requestId]);
       toast.success(`Request successfully cancelled`);
     } catch (err) {
