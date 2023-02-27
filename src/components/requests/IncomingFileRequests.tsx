@@ -1,5 +1,6 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import Empty from 'components/ui/Empty';
+import Unauthorized from 'components/ui/Unauthorized';
 import useAccountData from 'hooks/useAccountData';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
@@ -8,7 +9,7 @@ import { getFileById, getPublicKeyFromTransaction } from 'services/api';
 import { buildDamUrl, getAxios } from 'services/axios';
 import { sendRespondToFileRequestAsset } from 'services/transactions';
 import { useWalletStore } from 'stores/useWalletStore';
-import { AccountProps, File, FileRequest, FileRequestType, RespondToFileRequestAssetProps } from 'types';
+import { File, FileRequest, FileRequestType, RespondToFileRequestAssetProps } from 'types';
 import { handleError } from 'utils/errors';
 import { getTransactionTimestamp, prepareFileRequests } from 'utils/helpers';
 
@@ -29,12 +30,8 @@ const IncomingFileRequests = ({ files }: Props) => {
   const wallet = useWalletStore(state => state.wallet);
   const { removeRequests, account } = useAccountData();
 
-  // const { data } = useQuery<AccountProps>({ queryKey: ['account'], staleTime: 10000 });
-  // const account = data;
-
   const [disableInteraction, setDisableInteraction] = useState(false);
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
 
   const handleResponse = async (request: FileRequest, accept: boolean) => {
     if (!wallet?.passphrase) {
@@ -46,14 +43,16 @@ const IncomingFileRequests = ({ files }: Props) => {
 
     let newHash = '';
 
-    /** if accepted, make a request to retrieve, decrypt and re-encrypt the file on the DAM server */
-    if (
+    const includesFileProcessing =
       accept &&
       (type === FileRequestType.Transfer ||
         type === FileRequestType.Ownership ||
-        type === FileRequestType.TimedTransfer)
-    ) {
+        type === FileRequestType.TimedTransfer);
+
+    /** if accepted, make a request to retrieve, decrypt and re-encrypt the file on the DAM server */
+    if (includesFileProcessing) {
       setDisableInteraction(true);
+
       const file = await getFileById(fileId);
 
       const requesterPublicKey = await getPublicKeyFromTransaction(requestId);
@@ -100,27 +99,7 @@ const IncomingFileRequests = ({ files }: Props) => {
           ? account.storage.incomingFileRequests.filter(r => r.fileId === txAsset.fileId).map(r => r.requestId)
           : [request.requestId];
 
-      queryClient.setQueryData<AccountProps>(['account'], oldAccount => {
-        if (!oldAccount) {
-          return oldAccount;
-        }
-
-        const updatedAccount = { ...oldAccount };
-
-        updatedAccount.storage.incomingFileRequests = updatedAccount.storage.incomingFileRequests.filter(
-          r => !ids.includes(r.requestId),
-        );
-        updatedAccount.storage.outgoingFileRequests = updatedAccount.storage.outgoingFileRequests.filter(
-          r => !ids.includes(r.requestId),
-        );
-        updatedAccount.storage.incomingCollectionRequests = updatedAccount.storage.incomingCollectionRequests.filter(
-          r => !ids.includes(r.requestId),
-        );
-        updatedAccount.storage.outgoingCollectionRequests = updatedAccount.storage.outgoingCollectionRequests.filter(
-          r => !ids.includes(r.requestId),
-        );
-      });
-
+      removeRequests(ids);
       toast.success('Request success');
 
       if (accept && (request.type === FileRequestType.Transfer || request.type === FileRequestType.TimedTransfer)) {
@@ -128,11 +107,10 @@ const IncomingFileRequests = ({ files }: Props) => {
       }
     },
     onError: handleError,
-    onSettled: () => {},
   });
 
   if (!account) {
-    return null;
+    return <Unauthorized />;
   }
 
   const requests = prepareFileRequests(files, account.storage.incomingFileRequests);

@@ -1,9 +1,11 @@
 import { toast } from 'react-hot-toast';
 
+import { devLog } from './helpers';
+
 export const handleError = (error: unknown) => {
   let message = 'Something went wrong';
 
-  console.debug(error);
+  devLog(error);
 
   if (typeof error === 'string') {
     message = error;

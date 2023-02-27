@@ -1,5 +1,6 @@
 import axios from 'axios';
 import config from 'config';
+import { devLog } from 'utils/helpers';
 
 export const getAxios = () => {
   return axios;
@@ -34,6 +35,6 @@ export const handleLoadingProgress = (
   setLoadingProgress: (value: React.SetStateAction<number>) => void,
 ) => {
   const progress = (e.loaded / e.total) * 100;
-  console.debug('Loaded: ', e.loaded, 'Total: ', e.total, 'Progress: ', progress);
+  devLog(`Loaded: ${e.loaded}, Total: ${e.total}, Progress: ${progress}`);
   setLoadingProgress(Math.round(progress));
 };
