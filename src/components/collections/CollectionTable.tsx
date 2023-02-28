@@ -1,88 +1,9 @@
 import useAccountData from 'hooks/useAccountData';
 import { useFileData } from 'hooks/useFileData';
-import { useEffect, useState } from 'react';
-import { Collapse } from 'react-collapse';
-import { Link } from 'react-router-dom';
-import { Collection, File } from 'types';
-import { displayNumber } from 'utils/formatting';
+import { Collection } from 'types';
 
-import Button from '../ui/Button';
 import Empty from '../ui/Empty';
-import Spinner from '../ui/Spinner';
-import UpdateCollection from './UpdateCollection';
-
-type FileListProps = { fileIds: string[] };
-
-const FileList = ({ fileIds }: FileListProps) => {
-  const { files, total, isLoading } = useFileData(fileIds);
-
-  if (!total) {
-    return <div className="text-center w-full ml-8">This collection contains no files</div>;
-  }
-
-  return (
-    <ul className="list-disc ml-16 mb-4 w-full whitespace-nowrap">
-      {isLoading && <Spinner />}
-
-      {!isLoading &&
-        files.map(a => (
-          <li className="list-disc" key={a.data.id}>
-            <Link to={`/view/${a.data.id}`}>{a.data.title}</Link>
-          </li>
-        ))}
-    </ul>
-  );
-};
-
-type RowProps = { collection: Collection; ownedFiles: File[] };
-
-const CollectionTableRow = ({ collection, ownedFiles }: RowProps) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  useEffect(() => {
-    if (collection.fileIds.length === 0) {
-      setIsExpanded(false);
-    }
-  }, [collection.fileIds]);
-
-  return (
-    <>
-      <tr className="bg-white">
-        <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-          {collection.title}
-
-          {collection.fileIds.length > 0 && (
-            <Button link onClick={() => setIsExpanded(!isExpanded)} className="ml-4">
-              {!isExpanded ? 'Expand' : 'Collapse'}
-            </Button>
-          )}
-        </td>
-
-        <td className="px-6 py-4 text-center">{displayNumber(collection.fileIds.length)}</td>
-
-        <td className="px-6 py-4 text-center hidden md:block">{displayNumber(collection.transferFee)}</td>
-
-        <td className="px-6 py-4 text-right">
-          <UpdateCollection collection={collection} ownedFiles={ownedFiles} />
-        </td>
-
-        <td className="px-6 py-4 text-right">
-          <Link to={`/transfer/collection?defaultValue=${collection.id}`} className="font-medium">
-            Transfer
-          </Link>
-        </td>
-      </tr>
-
-      <tr className="w-full">
-        <td colSpan={4}>
-          <Collapse isOpened={isExpanded}>
-            <FileList fileIds={collection.fileIds} />
-          </Collapse>
-        </td>
-      </tr>
-    </>
-  );
-};
+import { CollectionTableRow } from './CollectionTableRow';
 
 type TableProps = { data: Collection[] };
 
