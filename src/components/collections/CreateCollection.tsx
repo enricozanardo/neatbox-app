@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Button from 'components/ui/Button';
 import Icon from 'components/ui/Icon';
 import Modal from 'components/ui/Modal';
@@ -7,6 +7,7 @@ import { toast } from 'react-hot-toast';
 import { sendCreateCollectionAsset, TX_FEES } from 'services/transactions';
 import { useWalletStore } from 'stores/useWalletStore';
 import { CreateCollectionAssetProps } from 'types';
+import { optimisticallyAddCollection } from 'utils/cache';
 import { hexToBuffer } from 'utils/crypto';
 import { handleError } from 'utils/errors';
 import { beddowsToLsk } from 'utils/formatting';
@@ -14,16 +15,16 @@ import { getTransactionTimestamp } from 'utils/helpers';
 
 type Props = {
   accountHasCollections: boolean;
-  optimisticallyAddCollection: (transactionId: string, address: Buffer, txAsset: CreateCollectionAssetProps) => void;
 };
 
 const DEFAULT_FEE = 100;
 
-const CreateCollection = ({ accountHasCollections, optimisticallyAddCollection }: Props) => {
+const CreateCollection = ({ accountHasCollections }: Props) => {
   const wallet = useWalletStore(state => state.wallet);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [transferFee, setTransferFee] = useState(DEFAULT_FEE);
+  const queryClient = useQueryClient();
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -51,7 +52,13 @@ const CreateCollection = ({ accountHasCollections, optimisticallyAddCollection }
       sendCreateCollectionAsset(passphrase, asset),
     onSuccess: ({ transactionId }, { asset }) => {
       toast.success('Collection created!');
-      optimisticallyAddCollection(transactionId, hexToBuffer(wallet!.binaryAddress), asset);
+      optimisticallyAddCollection(
+        queryClient,
+        ['account', 'collectionsOwned'],
+        transactionId,
+        hexToBuffer(wallet!.binaryAddress),
+        asset,
+      );
     },
     onError: handleError,
     onSettled: () => {

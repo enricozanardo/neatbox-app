@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Button from 'components/ui/Button';
 import Modal from 'components/ui/Modal';
 import { useState } from 'react';
@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { sendUpdateCollectionAsset } from 'services/transactions';
 import { useWalletStore } from 'stores/useWalletStore';
 import { Collection, File, UpdateCollectionAssetProps } from 'types';
+import { optimisticallyUpdateCollection, optimisticallyUpdateFileCollection } from 'utils/cache';
 import { handleError } from 'utils/errors';
 import { getTransactionTimestamp } from 'utils/helpers';
 
@@ -17,21 +18,15 @@ const DEFAULT_FEE = 100;
 type Props = {
   collection: Collection;
   ownedFiles: File[];
-  optimisticallyUpdateCollection: (asset: UpdateCollectionAssetProps) => void;
-  optimisticallyUpdateFileCollection: (fileIds: string[], collection: Collection) => void;
 };
 
-const UpdateCollection = ({
-  collection,
-  ownedFiles,
-  optimisticallyUpdateCollection,
-  optimisticallyUpdateFileCollection,
-}: Props) => {
+const UpdateCollection = ({ collection, ownedFiles }: Props) => {
   const wallet = useWalletStore(state => state.wallet);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [title, setTitle] = useState(collection.title);
   const [transferFee, setTransferFee] = useState(collection.transferFee);
   const [updatedCollectionFileIds, setUpdatedCollectionFileIds] = useState(collection.fileIds);
+  const queryClient = useQueryClient();
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -60,8 +55,8 @@ const UpdateCollection = ({
       sendUpdateCollectionAsset(passphrase, asset),
     onSuccess: (_, { asset }) => {
       toast.success('Collection updated!');
-      optimisticallyUpdateCollection(asset);
-      optimisticallyUpdateFileCollection(asset.fileIds, collection);
+      optimisticallyUpdateCollection(queryClient, ['account', 'collectionsOwned'], asset);
+      optimisticallyUpdateFileCollection(queryClient, ['account', 'filesOwned'], asset.fileIds, collection);
     },
     onError: handleError,
     onSettled: () => {

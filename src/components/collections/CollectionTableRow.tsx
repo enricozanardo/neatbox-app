@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Collapse } from 'react-collapse';
 import { Link } from 'react-router-dom';
-import { Collection, File, UpdateCollectionAssetProps } from 'types';
+import { Collection, File } from 'types';
 import { displayNumber } from 'utils/formatting';
 
 import Button from '../ui/Button';
@@ -11,16 +11,9 @@ import UpdateCollection from './UpdateCollection';
 type RowProps = {
   collection: Collection;
   ownedFiles: File[];
-  optimisticallyUpdateCollection: (asset: UpdateCollectionAssetProps) => void;
-  optimisticallyUpdateFileCollection: (fileIds: string[], collection: Collection) => void;
 };
 
-export const CollectionTableRow = ({
-  collection,
-  ownedFiles,
-  optimisticallyUpdateCollection,
-  optimisticallyUpdateFileCollection,
-}: RowProps) => {
+export const CollectionTableRow = ({ collection, ownedFiles }: RowProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
@@ -47,12 +40,7 @@ export const CollectionTableRow = ({
         <td className="px-6 py-4 text-center hidden md:block">{displayNumber(collection.transferFee)}</td>
 
         <td className="px-6 py-4 text-right">
-          <UpdateCollection
-            collection={collection}
-            ownedFiles={ownedFiles}
-            optimisticallyUpdateCollection={optimisticallyUpdateCollection}
-            optimisticallyUpdateFileCollection={optimisticallyUpdateFileCollection}
-          />
+          <UpdateCollection collection={collection} ownedFiles={ownedFiles} />
         </td>
 
         <td className="px-6 py-4 text-right">

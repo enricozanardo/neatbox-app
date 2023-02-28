@@ -12,7 +12,11 @@ export const handleError = (error: unknown) => {
   }
 
   if (error instanceof Error) {
-    message = error.message;
+    if (error.message === 'Incoming transaction fee is not sufficient to replace existing transaction') {
+      message = 'Previous action is still processing';
+    } else {
+      message = error.message;
+    }
   }
 
   toast.error(message);

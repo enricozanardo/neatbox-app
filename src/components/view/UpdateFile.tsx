@@ -8,6 +8,7 @@ import { toast } from 'react-hot-toast';
 import { sendUpdateFileAsset } from 'services/transactions';
 import { useWalletStore } from 'stores/useWalletStore';
 import { File, UpdateFileAssetProps } from 'types';
+import { optimisticallyUpdateFile } from 'utils/cache';
 import { handleError } from 'utils/errors';
 import { bufferToJson, fileIsTimedTransfer, getTransactionTimestamp, jsonToBuffer } from 'utils/helpers';
 
@@ -30,8 +31,8 @@ const UpdateFile = ({ file }: Props) => {
   const updateFileMutation = useMutation({
     mutationFn: ({ passphrase, txAsset }: { passphrase: string; txAsset: UpdateFileAssetProps }) =>
       sendUpdateFileAsset(passphrase, txAsset),
-    onSuccess: () => {
-      optimisticallyUpdateFile();
+    onSuccess: (_, { txAsset }) => {
+      optimisticallyUpdateFile(queryClient, txAsset, isPrivate, customFields);
       toast.success('File updated!');
     },
     onError: handleError,
@@ -61,25 +62,6 @@ const UpdateFile = ({ file }: Props) => {
     };
 
     updateFileMutation.mutate({ passphrase: wallet.passphrase, txAsset });
-  };
-
-  const optimisticallyUpdateFile = () => {
-    queryClient.setQueryData<File>(['view', file.data.id], oldFile => {
-      if (!oldFile) {
-        return oldFile;
-      }
-
-      return {
-        ...oldFile,
-        data: {
-          ...oldFile.data,
-          accessPermissionFee,
-          transferFee,
-          private: isPrivate,
-          customFields: jsonToBuffer(customFields),
-        },
-      };
-    });
   };
 
   return (
