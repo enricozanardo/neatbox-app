@@ -1,7 +1,9 @@
+import { useQueryClient } from '@tanstack/react-query';
 import config from 'config';
 import useAccountData from 'hooks/useAccountData';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { getFileById } from 'services/api';
 import { File } from 'types';
 import { displayFileSize } from 'utils/formatting';
 import { fileIsPArtOfCollection, fileIsTimedTransfer } from 'utils/helpers';
@@ -21,12 +23,21 @@ type Props = {
 };
 
 const FileTable = ({ handlePageChange, total, data, showLegend, isLoading }: Props) => {
+  const queryClient = useQueryClient();
   const { account } = useAccountData();
   const [currentPage, setCurrentPage] = useState(1);
 
   const handleChange = (page: number) => {
     setCurrentPage(page);
     handlePageChange(page);
+  };
+
+  const prefetchFileData = (id: string) => {
+    queryClient.prefetchQuery({
+      queryKey: ['view', id],
+      queryFn: () => getFileById(id),
+      staleTime: 60000,
+    });
   };
 
   const ownedItems = account ? account.storage.filesOwned.filter(f => data.find(d => d.data.id === f)) : [];
@@ -73,7 +84,10 @@ const FileTable = ({ handlePageChange, total, data, showLegend, isLoading }: Pro
 
               return (
                 <tr className="bg-white" key={item.data.id}>
-                  <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                  <td
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                    onMouseEnter={() => prefetchFileData(item.data.id)}
+                  >
                     <Link to={`/view/${item.data.id}`} className="font-bold">
                       {item.data.title}
                     </Link>

@@ -1,8 +1,9 @@
 import { useAuth0 } from '@auth0/auth0-react';
+import BrowsePage from 'pages/BrowsePage';
+import ViewPage from 'pages/ViewPage';
 import { lazy, Suspense } from 'react';
 import { Outlet, Route, Routes as BrowserRoutes } from 'react-router-dom';
 
-const BrowsePage = lazy(() => import('pages/BrowsePage'));
 const CollectionsPage = lazy(() => import('pages/CollectionsPage'));
 const DashboardPage = lazy(() => import('pages/DashboardPage'));
 const HomePage = lazy(() => import('pages/HomePage'));
@@ -13,7 +14,7 @@ const TransferCollectionPage = lazy(() => import('pages/TransferCollectionPage')
 const TransferFilePage = lazy(() => import('pages/TransferFilePage'));
 const TransferPage = lazy(() => import('pages/TransferPage'));
 const UploadPage = lazy(() => import('pages/UploadPage'));
-const ViewPage = lazy(() => import('pages/ViewPage'));
+
 const WelcomePage = lazy(() => import('pages/WelcomePage'));
 
 const ProtectedRoute = ({ isAllowed, children }: { isAllowed: boolean; children?: any }) => {
