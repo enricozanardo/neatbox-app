@@ -19,10 +19,10 @@ type Props = {
 };
 
 const IncomingCollectionRequests = ({ collections }: Props) => {
-  const wallet = useWalletStore(state => state.wallet);
-  const { removeRequests } = useAccountData();
   const [disableInteraction, setDisableInteraction] = useState(false);
 
+  const wallet = useWalletStore(state => state.wallet);
+  const { removeRequests } = useAccountData();
   const navigate = useNavigate();
 
   const handleResponse = async (request: CollectionRequest, collection: Collection, accept: boolean) => {

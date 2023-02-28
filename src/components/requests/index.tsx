@@ -9,9 +9,10 @@ import IncomingFileRequests from './IncomingFileRequests';
 import PendingRequests from './PendingRequests';
 
 const Requests = () => {
-  const { account } = useAccountData();
   const [filesInRequests, setFilesInRequests] = useState<File[]>([]);
   const [collectionsInRequests, setCollectionsInRequests] = useState<Collection[]>([]);
+
+  const { account } = useAccountData();
 
   useEffect(() => {
     if (!account) {

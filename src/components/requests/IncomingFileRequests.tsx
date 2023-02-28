@@ -27,10 +27,10 @@ export const requestTypeMap = {
 };
 
 const IncomingFileRequests = ({ files }: Props) => {
+  const [disableInteraction, setDisableInteraction] = useState(false);
+
   const wallet = useWalletStore(state => state.wallet);
   const { removeRequests, account } = useAccountData();
-
-  const [disableInteraction, setDisableInteraction] = useState(false);
   const navigate = useNavigate();
 
   const handleResponse = async (request: FileRequest, accept: boolean) => {

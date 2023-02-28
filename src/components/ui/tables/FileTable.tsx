@@ -23,9 +23,10 @@ type Props = {
 };
 
 const FileTable = ({ handlePageChange, total, data, showLegend, isLoading }: Props) => {
+  const [currentPage, setCurrentPage] = useState(1);
+
   const queryClient = useQueryClient();
   const { account } = useAccountData();
-  const [currentPage, setCurrentPage] = useState(1);
 
   const handleChange = (page: number) => {
     setCurrentPage(page);

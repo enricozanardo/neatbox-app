@@ -11,7 +11,6 @@ const Welcome = () => {
       <div className="text-center">
         {isAuthenticated && (
           <>
-            {' '}
             <h1>Welcome back!</h1>
             <p className="mt-4 mb-4">
               You've already signed up, so <Link to="/upload">start uploading</Link>! :)
@@ -21,7 +20,6 @@ const Welcome = () => {
 
         {!isAuthenticated && (
           <>
-            {' '}
             <h1>Welcome to Neatbox!</h1>
             <p className="mt-4 mb-4">Follow these steps to access your files:</p>
             <div className="flex justify-center my-8">
