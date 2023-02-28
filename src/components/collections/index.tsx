@@ -2,7 +2,7 @@ import CollectionTable from 'components/collections/CollectionTable';
 import PageTitle from 'components/ui/PageTitle';
 import TransferConfirmationSpinner from 'components/ui/TransferConfirmationSpinner';
 import useAccountData from 'hooks/useAccountData';
-import { useOwnedCollectionData } from 'hooks/useOwnedCollectionData';
+import { useCollectionData } from 'hooks/useCollectionData';
 import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
@@ -10,7 +10,7 @@ import CreateCollection from './CreateCollection';
 
 const Collections = () => {
   const { account } = useAccountData();
-  const { collections } = useOwnedCollectionData({ limit: -1 }, true);
+  const { collections } = useCollectionData(account?.storage.collectionsOwned ?? [], { limit: -1 }, ['account']);
   const [searchParams] = useSearchParams();
   const [isProcessing, setIsProcessing] = useState(false);
 

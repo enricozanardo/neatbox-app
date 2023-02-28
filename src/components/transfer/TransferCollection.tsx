@@ -1,7 +1,8 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import PageTitle from 'components/ui/PageTitle';
 import SuccessScreen from 'components/ui/SuccessScreen';
-import { useOwnedCollectionData } from 'hooks/useOwnedCollectionData';
+import useAccountData from 'hooks/useAccountData';
+import { useCollectionData } from 'hooks/useCollectionData';
 import { useState } from 'react';
 import { useWalletStore } from 'stores/useWalletStore';
 
@@ -15,7 +16,8 @@ const TransferCollection = ({ defaultValue }: Props) => {
   const [success, setSuccess] = useState(false);
   const wallet = useWalletStore(state => state.wallet);
   const { isAuthenticated } = useAuth0();
-  const { collections } = useOwnedCollectionData({ limit: -1 });
+  const { account } = useAccountData();
+  const { collections } = useCollectionData(account?.storage.collectionsOwned ?? [], { limit: -1 }, ['account']);
 
   const reset = () => {
     setSuccess(false);
