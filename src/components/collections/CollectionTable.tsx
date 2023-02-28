@@ -1,15 +1,18 @@
 import useAccountData from 'hooks/useAccountData';
 import { useFileData } from 'hooks/useFileData';
-import { Collection } from 'types';
+import { Collection, UpdateCollectionAssetProps } from 'types';
 
 import Empty from '../ui/Empty';
 import { CollectionTableRow } from './CollectionTableRow';
 
-type TableProps = { data: Collection[] };
+type TableProps = { data: Collection[]; optimisticallyUpdateCollection: (asset: UpdateCollectionAssetProps) => void };
 
-const CollectionTable = ({ data }: TableProps) => {
+const CollectionTable = ({ data, optimisticallyUpdateCollection }: TableProps) => {
   const { account } = useAccountData();
-  const { files } = useFileData(account?.storage.filesOwned ?? [], { limit: -1 }, ['account', 'filesOwned']);
+  const { files, optimisticallyUpdateFileCollection } = useFileData(account?.storage.filesOwned ?? [], { limit: -1 }, [
+    'account',
+    'filesOwned',
+  ]);
 
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -47,7 +50,13 @@ const CollectionTable = ({ data }: TableProps) => {
           )}
 
           {data.map((item, i) => (
-            <CollectionTableRow collection={item} key={item.id} ownedFiles={files} />
+            <CollectionTableRow
+              collection={item}
+              key={item.id}
+              ownedFiles={files}
+              optimisticallyUpdateCollection={optimisticallyUpdateCollection}
+              optimisticallyUpdateFileCollection={optimisticallyUpdateFileCollection}
+            />
           ))}
         </tbody>
       </table>

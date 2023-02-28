@@ -1,3 +1,4 @@
+import { useMutation } from '@tanstack/react-query';
 import Button from 'components/ui/Button';
 import Modal from 'components/ui/Modal';
 import { useState } from 'react';
@@ -6,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { sendUpdateCollectionAsset } from 'services/transactions';
 import { useWalletStore } from 'stores/useWalletStore';
 import { Collection, File, UpdateCollectionAssetProps } from 'types';
+import { handleError } from 'utils/errors';
 import { getTransactionTimestamp } from 'utils/helpers';
 
 import { FileCheckBox } from './FileCheckBox';
@@ -15,9 +17,16 @@ const DEFAULT_FEE = 100;
 type Props = {
   collection: Collection;
   ownedFiles: File[];
+  optimisticallyUpdateCollection: (asset: UpdateCollectionAssetProps) => void;
+  optimisticallyUpdateFileCollection: (fileIds: string[], collection: Collection) => void;
 };
 
-const UpdateCollection = ({ collection, ownedFiles }: Props) => {
+const UpdateCollection = ({
+  collection,
+  ownedFiles,
+  optimisticallyUpdateCollection,
+  optimisticallyUpdateFileCollection,
+}: Props) => {
   const wallet = useWalletStore(state => state.wallet);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [title, setTitle] = useState(collection.title);
@@ -43,21 +52,24 @@ const UpdateCollection = ({ collection, ownedFiles }: Props) => {
       timestamp: getTransactionTimestamp(),
     };
 
-    try {
-      await sendUpdateCollectionAsset(wallet!.passphrase, asset);
+    mutate({ passphrase: wallet.passphrase, asset });
+  };
+
+  const { mutate } = useMutation({
+    mutationFn: ({ passphrase, asset }: { passphrase: string; asset: UpdateCollectionAssetProps }) =>
+      sendUpdateCollectionAsset(passphrase, asset),
+    onSuccess: (_, { asset }) => {
       toast.success('Collection updated!');
+      optimisticallyUpdateCollection(asset);
+      optimisticallyUpdateFileCollection(asset.fileIds, collection);
+    },
+    onError: handleError,
+    onSettled: () => {
       setModalIsOpen(false);
       setTitle('');
       setTransferFee(DEFAULT_FEE);
-    } catch (err) {
-      // Todo: create proper error handler
-
-      const error = err as any;
-      let msg = error.message;
-      toast.error(msg);
-      console.error(msg);
-    }
-  };
+    },
+  });
 
   const handleCheck = (id: string, checked: boolean) => {
     if (checked) {

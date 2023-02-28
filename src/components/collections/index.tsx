@@ -10,7 +10,7 @@ import CreateCollection from './CreateCollection';
 
 const Collections = () => {
   const { account } = useAccountData();
-  const { collections, optimisticallyAddCollection } = useCollectionData(
+  const { collections, optimisticallyAddCollection, optimisticallyUpdateCollection } = useCollectionData(
     account?.storage.collectionsOwned ?? [],
     { limit: -1 },
     ['account', 'collectionsOwned'],
@@ -54,7 +54,9 @@ const Collections = () => {
   return (
     <div className="mb-32">
       <PageTitle text="My Collections" />
-      {accountHasCollections && <CollectionTable data={collections} />}
+      {accountHasCollections && (
+        <CollectionTable data={collections} optimisticallyUpdateCollection={optimisticallyUpdateCollection} />
+      )}
       {isProcessing && <TransferConfirmationSpinner />}
       {!isProcessing && (
         <CreateCollection
