@@ -1,5 +1,5 @@
+import useAccountData from 'hooks/useAccountData';
 import { useFileData } from 'hooks/useFileData';
-import { useOwnedFilesData } from 'hooks/useOwnedFilesData';
 import { useEffect, useState } from 'react';
 import { Collapse } from 'react-collapse';
 import { Link } from 'react-router-dom';
@@ -87,7 +87,8 @@ const CollectionTableRow = ({ collection, ownedFiles }: RowProps) => {
 type TableProps = { data: Collection[] };
 
 const CollectionTable = ({ data }: TableProps) => {
-  const { files } = useOwnedFilesData({ limit: -1 });
+  const { account } = useAccountData();
+  const { files } = useFileData(account?.storage.filesOwned ?? [], { limit: -1 }, ['account', 'filesOwned']);
 
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
