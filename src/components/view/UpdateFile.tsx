@@ -31,23 +31,7 @@ const UpdateFile = ({ file }: Props) => {
     mutationFn: ({ passphrase, txAsset }: { passphrase: string; txAsset: UpdateFileAssetProps }) =>
       sendUpdateFileAsset(passphrase, txAsset),
     onSuccess: () => {
-      queryClient.setQueryData<File>(['view', file.data.id], oldFile => {
-        if (!oldFile) {
-          return oldFile;
-        }
-
-        return {
-          ...oldFile,
-          data: {
-            ...oldFile.data,
-            accessPermissionFee,
-            transferFee,
-            private: isPrivate,
-            customFields: jsonToBuffer(customFields),
-          },
-        };
-      });
-
+      optimisticallyUpdateFile();
       toast.success('File updated!');
     },
     onError: handleError,
@@ -77,6 +61,25 @@ const UpdateFile = ({ file }: Props) => {
     };
 
     updateFileMutation.mutate({ passphrase: wallet.passphrase, txAsset });
+  };
+
+  const optimisticallyUpdateFile = () => {
+    queryClient.setQueryData<File>(['view', file.data.id], oldFile => {
+      if (!oldFile) {
+        return oldFile;
+      }
+
+      return {
+        ...oldFile,
+        data: {
+          ...oldFile.data,
+          accessPermissionFee,
+          transferFee,
+          private: isPrivate,
+          customFields: jsonToBuffer(customFields),
+        },
+      };
+    });
   };
 
   return (

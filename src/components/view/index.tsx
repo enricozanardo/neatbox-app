@@ -6,10 +6,10 @@ import PageTitle from 'components/ui/PageTitle';
 import SEO from 'components/ui/SEO';
 import useAccountData from 'hooks/useAccountData';
 import NotFoundPage from 'pages/NotFoundPage';
-import { toast } from 'react-hot-toast';
 import { getFileById } from 'services/api';
 import { useWalletStore } from 'stores/useWalletStore';
 import { bufferToHex } from 'utils/crypto';
+import { handleError } from 'utils/errors';
 import { devLog, fileIsTimedTransfer } from 'utils/helpers';
 
 import FileCard from './FileCard';
@@ -29,10 +29,7 @@ const View = ({ id }: Props) => {
     queryKey: ['view', id],
     queryFn: () => getFileById(id),
     onSuccess: data => devLog(data),
-    onError: err => {
-      // @ts-ignore
-      toast.error(err.message);
-    },
+    onError: handleError,
   });
 
   const file = data;
