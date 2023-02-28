@@ -17,7 +17,10 @@ const TransferCollection = ({ defaultValue }: Props) => {
   const wallet = useWalletStore(state => state.wallet);
   const { isAuthenticated } = useAuth0();
   const { account } = useAccountData();
-  const { collections } = useCollectionData(account?.storage.collectionsOwned ?? [], { limit: -1 }, ['account']);
+  const { collections } = useCollectionData(account?.storage.collectionsOwned ?? [], { limit: -1 }, [
+    'account',
+    'collectionsOwned',
+  ]);
 
   const reset = () => {
     setSuccess(false);

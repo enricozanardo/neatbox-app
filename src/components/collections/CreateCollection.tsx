@@ -1,3 +1,4 @@
+import { useMutation } from '@tanstack/react-query';
 import Button from 'components/ui/Button';
 import Icon from 'components/ui/Icon';
 import Modal from 'components/ui/Modal';
@@ -6,16 +7,19 @@ import { toast } from 'react-hot-toast';
 import { sendCreateCollectionAsset, TX_FEES } from 'services/transactions';
 import { useWalletStore } from 'stores/useWalletStore';
 import { CreateCollectionAssetProps } from 'types';
+import { hexToBuffer } from 'utils/crypto';
+import { handleError } from 'utils/errors';
 import { beddowsToLsk } from 'utils/formatting';
 import { getTransactionTimestamp } from 'utils/helpers';
 
 type Props = {
   accountHasCollections: boolean;
+  optimisticallyAddCollection: (transactionId: string, address: Buffer, txAsset: CreateCollectionAssetProps) => void;
 };
 
 const DEFAULT_FEE = 100;
 
-const CreateCollection = ({ accountHasCollections }: Props) => {
+const CreateCollection = ({ accountHasCollections, optimisticallyAddCollection }: Props) => {
   const wallet = useWalletStore(state => state.wallet);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [title, setTitle] = useState('');
@@ -39,21 +43,23 @@ const CreateCollection = ({ accountHasCollections }: Props) => {
       timestamp: getTransactionTimestamp(),
     };
 
-    try {
-      await sendCreateCollectionAsset(wallet!.passphrase, asset);
+    mutate({ passphrase: wallet.passphrase, asset });
+  };
+
+  const { mutate } = useMutation({
+    mutationFn: ({ passphrase, asset }: { passphrase: string; asset: CreateCollectionAssetProps }) =>
+      sendCreateCollectionAsset(passphrase, asset),
+    onSuccess: ({ transactionId }, { asset }) => {
       toast.success('Collection created!');
-      setModalIsOpen(false);
+      optimisticallyAddCollection(transactionId, hexToBuffer(wallet!.binaryAddress), asset);
+    },
+    onError: handleError,
+    onSettled: () => {
       setTitle('');
       setTransferFee(DEFAULT_FEE);
-    } catch (err) {
-      // Todo: create proper error handler
-
-      const error = err as any;
-      let msg = error.message;
-      toast.error(msg);
-      console.error(msg);
-    }
-  };
+      setModalIsOpen(false);
+    },
+  });
 
   return (
     <>

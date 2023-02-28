@@ -10,7 +10,11 @@ import CreateCollection from './CreateCollection';
 
 const Collections = () => {
   const { account } = useAccountData();
-  const { collections } = useCollectionData(account?.storage.collectionsOwned ?? [], { limit: -1 }, ['account']);
+  const { collections, optimisticallyAddCollection } = useCollectionData(
+    account?.storage.collectionsOwned ?? [],
+    { limit: -1 },
+    ['account', 'collectionsOwned'],
+  );
   const [searchParams] = useSearchParams();
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -52,7 +56,12 @@ const Collections = () => {
       <PageTitle text="My Collections" />
       {accountHasCollections && <CollectionTable data={collections} />}
       {isProcessing && <TransferConfirmationSpinner />}
-      {!isProcessing && <CreateCollection accountHasCollections={accountHasCollections} />}
+      {!isProcessing && (
+        <CreateCollection
+          accountHasCollections={accountHasCollections}
+          optimisticallyAddCollection={optimisticallyAddCollection}
+        />
+      )}
     </div>
   );
 };
