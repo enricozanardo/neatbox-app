@@ -1,6 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
+import { useFileData } from 'hooks/useFileData';
 import { useNavigate } from 'react-router-dom';
-import { getFilesByIds } from 'services/api';
 import { Collection } from 'types';
 import { displayNumber } from 'utils/formatting';
 
@@ -15,10 +14,8 @@ type Props = {
 };
 
 const CollectionView = ({ collection, closeHandler }: Props) => {
-  const { isLoading, data } = useQuery({
-    queryKey: ['collection', collection.id, 'files', collection.fileIds],
-    queryFn: () => getFilesByIds(collection.fileIds),
-  });
+  const { isLoading, files, total } = useFileData(collection.fileIds, {}, ['collection', collection.id]);
+
   const navigate = useNavigate();
 
   const handleNavigate = (fileId: string) => {
@@ -30,13 +27,13 @@ const CollectionView = ({ collection, closeHandler }: Props) => {
     return <Spinner />;
   }
 
-  if (!data) {
+  if (total === 0) {
     return <Empty />;
   }
 
   const renderFileList = () => (
     <ul className="list-disc ml-8 ">
-      {data.files.map(f => (
+      {files.map(f => (
         <li key={f.data.id}>
           <Button link onClick={() => handleNavigate(f.data.id)}>
             {f.data.title}
@@ -58,7 +55,7 @@ const CollectionView = ({ collection, closeHandler }: Props) => {
           {isLoading && <Spinner />}
           {!isLoading && (
             <div className="mt-4">
-              <div className="mb-2">Files in Collection ({data.files.length})</div>
+              <div className="mb-2">Files in Collection ({total})</div>
               {renderFileList()}
             </div>
           )}

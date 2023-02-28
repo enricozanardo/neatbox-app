@@ -14,9 +14,9 @@ import UpdateCollection from './UpdateCollection';
 type FileListProps = { fileIds: string[] };
 
 const FileList = ({ fileIds }: FileListProps) => {
-  const { files, isLoading } = useFileData(fileIds);
+  const { files, total, isLoading } = useFileData(fileIds);
 
-  if (fileIds.length === 0) {
+  if (!total) {
     return <div className="text-center w-full ml-8">This collection contains no files</div>;
   }
 
