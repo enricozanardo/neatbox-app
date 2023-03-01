@@ -57,7 +57,7 @@ const CreateCollection = ({ accountHasCollections }: Props) => {
         ['account', 'collectionsOwned'],
         transactionId,
         hexToBuffer(wallet!.binaryAddress),
-        asset,
+        { title: asset.title, transferFee: asset.transferFee, fileIds: [] },
       );
     },
     onError: handleError,

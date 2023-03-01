@@ -2,7 +2,7 @@ import { QueryClient } from '@tanstack/react-query';
 import { CustomField } from 'components/upload/CustomFields';
 import { cloneDeep } from 'lodash';
 import { getCollectionsByIds, getFilesByIds } from 'services/api';
-import { Collection, CreateCollectionAssetProps, File, UpdateCollectionAssetProps, UpdateFileAssetProps } from 'types';
+import { AccountProps, Collection, File, UpdateCollectionAssetProps, UpdateFileAssetProps } from 'types';
 
 import { jsonToBuffer } from './helpers';
 import { createDummyCollection } from './mocks';
@@ -10,21 +10,33 @@ import { createDummyCollection } from './mocks';
 export const optimisticallyAddCollection = (
   queryClient: QueryClient,
   queryKey: string[],
-  transactionId: string,
+  collectionId: string,
   address: Buffer,
-  txAsset: CreateCollectionAssetProps,
+  collectionData: { title: string; transferFee: number; fileIds: string[] },
 ) => {
   queryClient.setQueryData<Awaited<ReturnType<typeof getCollectionsByIds>>>(queryKey, prevData => {
+    const prev = prevData || {
+      collections: [],
+      total: 0,
+    };
+
+    const newCollection = createDummyCollection(collectionId, address, collectionData);
+
+    return {
+      collections: [...prev.collections, newCollection],
+      total: prev.total + 1,
+    };
+  });
+
+  queryClient.setQueryData<AccountProps>(['account'], prevData => {
     if (!prevData) {
       return prevData;
     }
 
-    const newCollection = createDummyCollection(transactionId, address, txAsset);
+    const updatedData = cloneDeep(prevData);
+    updatedData.storage.collectionsOwned.push(collectionId);
 
-    return {
-      collections: [...prevData!.collections, newCollection],
-      total: prevData.total + 1,
-    };
+    return updatedData;
   });
 };
 

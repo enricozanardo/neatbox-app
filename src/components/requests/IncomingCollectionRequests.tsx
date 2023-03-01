@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Empty from 'components/ui/Empty';
 import useAccountData from 'hooks/useAccountData';
 import { useState } from 'react';
@@ -9,6 +9,8 @@ import { buildDamUrl, getAxios } from 'services/axios';
 import { sendRespondToCollectionRequestAsset } from 'services/transactions';
 import { useWalletStore } from 'stores/useWalletStore';
 import { Collection, CollectionRequest, RespondToCollectionRequestAssetProps } from 'types';
+import { optimisticallyAddCollection } from 'utils/cache';
+import { hexToBuffer } from 'utils/crypto';
 import { handleError } from 'utils/errors';
 import { getTransactionTimestamp } from 'utils/helpers';
 
@@ -25,6 +27,7 @@ const IncomingCollectionRequests = ({ collections }: Props) => {
   const wallet = useWalletStore(state => state.wallet);
   const { removeRequests } = useAccountData();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const handleResponse = async (request: CollectionRequest, collection: Collection, accept: boolean) => {
     if (!wallet?.passphrase) {
@@ -86,9 +89,10 @@ const IncomingCollectionRequests = ({ collections }: Props) => {
         timestamp: getTransactionTimestamp(),
       };
 
-      mutate({ passphrase: wallet.passphrase, txAsset, request, accept });
+      mutate({ passphrase: wallet.passphrase, txAsset, request, accept, collection });
     } catch (err) {
       handleError(err);
+      setDamIsProcessing(false);
     }
   };
 
@@ -101,13 +105,21 @@ const IncomingCollectionRequests = ({ collections }: Props) => {
       txAsset: RespondToCollectionRequestAssetProps;
       request: CollectionRequest;
       accept: boolean;
+      collection: Collection;
     }) => sendRespondToCollectionRequestAsset(passphrase, txAsset),
-    onSuccess: (_, { request, accept }) => {
+    onSuccess: (_, { request, accept, collection }) => {
       removeRequests([request.requestId]);
       toast.success('Request successfully processed');
 
       if (accept) {
-        navigate(`/collections?ref=${request.collectionId}`);
+        optimisticallyAddCollection(
+          queryClient,
+          ['account', 'collectionsOwned'],
+          collection.id,
+          hexToBuffer(wallet!.binaryAddress),
+          { title: collection.title, fileIds: collection.fileIds, transferFee: collection.transferFee },
+        );
+        navigate(`/collections?ref=${collection.id}`);
       }
     },
     onError: handleError,

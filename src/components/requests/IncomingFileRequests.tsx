@@ -87,6 +87,7 @@ const IncomingFileRequests = ({ files }: Props) => {
       mutate({ passphrase: wallet.passphrase, txAsset, request, accept });
     } catch (err) {
       handleError(err);
+      setDamIsProcessing(false);
     }
   };
 

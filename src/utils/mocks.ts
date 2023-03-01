@@ -1,14 +1,18 @@
-import { Collection, CreateCollectionAssetProps } from 'types';
+import { Collection } from 'types';
 
-export const createDummyCollection = (id: string, owner: Buffer, txAsset: CreateCollectionAssetProps): Collection => {
-  const { title, transferFee } = txAsset;
+export const createDummyCollection = (
+  id: string,
+  owner: Buffer,
+  collectionData: { title: string; transferFee: number; fileIds: string[] },
+): Collection => {
+  const { title, transferFee, fileIds } = collectionData;
 
   return {
     id,
     title,
     transferFee,
     owner,
-    fileIds: [],
+    fileIds,
     requests: [],
   };
 };
