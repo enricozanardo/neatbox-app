@@ -11,6 +11,7 @@ export const useCollectionData = (
   options: ApiOptions = {},
   queryKeyBase: string[] = [],
   queryKeyOverride?: string[],
+  refetchInterval?: number,
 ) => {
   const { account } = useAccountData();
 
@@ -22,6 +23,7 @@ export const useCollectionData = (
     onSuccess: data => devLog(data),
     onError: handleError,
     enabled: !!account,
+    refetchInterval,
   });
 
   return {

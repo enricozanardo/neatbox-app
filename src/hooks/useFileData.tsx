@@ -9,6 +9,7 @@ export const useFileData = (
   options: ApiOptions = {},
   queryKeyBase: string[] = [],
   queryKeyOverride?: string[],
+  refetchInterval?: number,
 ) => {
   const queryKey = queryKeyOverride || [...queryKeyBase, 'files', fileIds, options];
 
@@ -18,6 +19,7 @@ export const useFileData = (
     onSuccess: data => devLog(data),
     onError: handleError,
     keepPreviousData: true,
+    refetchInterval,
   });
 
   return {

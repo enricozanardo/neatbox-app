@@ -14,10 +14,17 @@ type Props = {
 
 const TransferFile = ({ defaultValue }: Props) => {
   const [success, setSuccess] = useState(false);
+
   const wallet = useWalletStore(state => state.wallet);
   const { isAuthenticated } = useAuth0();
   const { account } = useAccountData();
-  const { files } = useFileData(account?.storage.filesOwned ?? [], { limit: -1 }, ['account', 'filesOwned']);
+  const { files } = useFileData(
+    account?.storage.filesOwned ?? [],
+    { limit: -1 },
+    ['account', 'filesOwned'],
+    undefined,
+    defaultValue ? 5000 : undefined, // refetch collections if being referred from other page
+  );
 
   const reset = () => {
     setSuccess(false);

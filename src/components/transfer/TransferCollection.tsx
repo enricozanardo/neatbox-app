@@ -14,13 +14,17 @@ type Props = {
 
 const TransferCollection = ({ defaultValue }: Props) => {
   const [success, setSuccess] = useState(false);
+
   const wallet = useWalletStore(state => state.wallet);
   const { isAuthenticated } = useAuth0();
   const { account } = useAccountData();
-  const { collections } = useCollectionData(account?.storage.collectionsOwned ?? [], { limit: -1 }, [
-    'account',
-    'collectionsOwned',
-  ]);
+  const { collections } = useCollectionData(
+    account?.storage.collectionsOwned ?? [],
+    { limit: -1 },
+    ['account', 'collectionsOwned'],
+    undefined,
+    defaultValue ? 5000 : undefined, // refetch collections if being referred from other page
+  );
 
   const reset = () => {
     setSuccess(false);
