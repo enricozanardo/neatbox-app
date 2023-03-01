@@ -32,7 +32,7 @@ const CollectionTable = ({ data }: TableProps) => {
               <span className="sr-only">Edit</span>
             </th>
 
-            <th scope="col" className="px-6 py-3">
+            <th scope="col" className="">
               <span className="sr-only">Transfer</span>
             </th>
           </tr>

@@ -43,11 +43,13 @@ export const CollectionTableRow = ({ collection, ownedFiles }: RowProps) => {
           <UpdateCollection collection={collection} ownedFiles={ownedFiles} />
         </td>
 
-        <td className="px-6 py-4 text-right">
-          <Link to={`/transfer/collection?defaultValue=${collection.id}`} className="font-medium">
-            Transfer
-          </Link>
-        </td>
+        {collection.fileIds.length > 0 && (
+          <td className="px-6 py-4 text-right">
+            <Link to={`/transfer/collection?defaultValue=${collection.id}`} className="font-medium">
+              Transfer
+            </Link>
+          </td>
+        )}
       </tr>
 
       <tr className="w-full">
