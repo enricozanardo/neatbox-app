@@ -1,13 +1,13 @@
 import TransferConfirmationSpinner from 'components/ui/TransferConfirmationSpinner';
+import useAccountData from 'hooks/useAccountData';
 import { useEffect, useRef, useState } from 'react';
-import { useAccountStore } from 'stores/useAccountStore';
 
 type Props = {
   fileId: string | null;
 };
 
 const MyFilesTransfersIndicator = ({ fileId }: Props) => {
-  const account = useAccountStore(state => state.account);
+  const { account } = useAccountData();
   const [isProcessing, setIsProcessing] = useState(false);
   const timeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 

@@ -26,6 +26,10 @@ export const bufferToHex = (input: Buffer) => {
   return cryptography.bufferToHex(input);
 };
 
+export const hexToBuffer = (input: string) => {
+  return cryptography.hexToBuffer(input);
+};
+
 export const generateChecksum = (file: FileWithPath): Promise<string> => {
   return new Promise(resolve => {
     const reader = new FileReader();

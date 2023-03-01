@@ -1,31 +1,30 @@
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { getFilesByIds } from 'services/api';
-import { ApiOptions, File } from 'types';
+import { ApiOptions } from 'types';
+import { handleError } from 'utils/errors';
+import { devLog } from 'utils/helpers';
 
-export const useFileData = (fileIds: string[], options: ApiOptions = {}) => {
-  const [files, setFiles] = useState<File[]>([]);
-  const [total, setTotal] = useState<number>(0);
-  const [isLoading, setIsLoading] = useState(true);
+export const useFileData = (
+  fileIds: string[],
+  options: ApiOptions = {},
+  queryKeyBase: string[] = [],
+  queryKeyOverride?: string[],
+  refetchInterval?: number,
+) => {
+  const queryKey = queryKeyOverride || [...queryKeyBase, 'files', fileIds, options];
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await getFilesByIds(fileIds, {
-        offset: options?.offset,
-        limit: options?.limit,
-        filters: options?.filters,
-      });
+  const { isLoading, isFetching, data } = useQuery({
+    queryKey,
+    queryFn: () => getFilesByIds(fileIds, options),
+    onSuccess: data => devLog(data),
+    onError: handleError,
+    keepPreviousData: true,
+    refetchInterval,
+  });
 
-      setFiles(data.files);
-      setTotal(data.total);
-      setIsLoading(false);
-    };
-
-    try {
-      fetchData();
-    } catch (err) {
-      setIsLoading(false);
-    }
-  }, [fileIds, options?.filters, options?.limit, options?.offset]);
-
-  return { files, total, isLoading };
+  return {
+    files: data?.files ?? [],
+    total: data?.total ?? 0,
+    isLoading: isLoading || isFetching,
+  };
 };

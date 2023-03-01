@@ -1,3 +1,4 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Button from 'components/ui/Button';
 import Icon from 'components/ui/Icon';
 import Modal from 'components/ui/Modal';
@@ -6,6 +7,9 @@ import { toast } from 'react-hot-toast';
 import { sendCreateCollectionAsset, TX_FEES } from 'services/transactions';
 import { useWalletStore } from 'stores/useWalletStore';
 import { CreateCollectionAssetProps } from 'types';
+import { optimisticallyAddCollection } from 'utils/cache';
+import { hexToBuffer } from 'utils/crypto';
+import { handleError } from 'utils/errors';
 import { beddowsToLsk } from 'utils/formatting';
 import { getTransactionTimestamp } from 'utils/helpers';
 
@@ -20,6 +24,7 @@ const CreateCollection = ({ accountHasCollections }: Props) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [transferFee, setTransferFee] = useState(DEFAULT_FEE);
+  const queryClient = useQueryClient();
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -39,21 +44,29 @@ const CreateCollection = ({ accountHasCollections }: Props) => {
       timestamp: getTransactionTimestamp(),
     };
 
-    try {
-      await sendCreateCollectionAsset(wallet!.passphrase, asset);
+    mutate({ passphrase: wallet.passphrase, asset });
+  };
+
+  const { mutate } = useMutation({
+    mutationFn: ({ passphrase, asset }: { passphrase: string; asset: CreateCollectionAssetProps }) =>
+      sendCreateCollectionAsset(passphrase, asset),
+    onSuccess: ({ transactionId }, { asset }) => {
       toast.success('Collection created!');
-      setModalIsOpen(false);
+      optimisticallyAddCollection(
+        queryClient,
+        ['account', 'collectionsOwned'],
+        transactionId,
+        hexToBuffer(wallet!.binaryAddress),
+        { title: asset.title, transferFee: asset.transferFee, fileIds: [] },
+      );
+    },
+    onError: handleError,
+    onSettled: () => {
       setTitle('');
       setTransferFee(DEFAULT_FEE);
-    } catch (err) {
-      // Todo: create proper error handler
-
-      const error = err as any;
-      let msg = error.message;
-      toast.error(msg);
-      console.error(msg);
-    }
-  };
+      setModalIsOpen(false);
+    },
+  });
 
   return (
     <>

@@ -5,6 +5,7 @@ import { displayNumber } from 'utils/formatting';
 
 import Button from '../Button';
 import DetailInline from '../DetailInline';
+import Empty from '../Empty';
 import Spinner from '../Spinner';
 
 type Props = {
@@ -13,19 +14,28 @@ type Props = {
 };
 
 const CollectionView = ({ collection, closeHandler }: Props) => {
-  const { files, isLoading } = useFileData(collection.fileIds);
+  const { isLoading, files, total } = useFileData(collection.fileIds, {}, ['collection', collection.id]);
+
   const navigate = useNavigate();
 
-  const handleClick = (fileId: string) => {
+  const handleNavigate = (fileId: string) => {
     closeHandler();
     navigate(`/view/${fileId}`);
   };
+
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+  if (total === 0) {
+    return <Empty />;
+  }
 
   const renderFileList = () => (
     <ul className="list-disc ml-8 ">
       {files.map(f => (
         <li key={f.data.id}>
-          <Button link onClick={() => handleClick(f.data.id)}>
+          <Button link onClick={() => handleNavigate(f.data.id)}>
             {f.data.title}
           </Button>
         </li>
@@ -45,7 +55,7 @@ const CollectionView = ({ collection, closeHandler }: Props) => {
           {isLoading && <Spinner />}
           {!isLoading && (
             <div className="mt-4">
-              <div className="mb-2">Files in Collection ({files.length})</div>
+              <div className="mb-2">Files in Collection ({total})</div>
               {renderFileList()}
             </div>
           )}

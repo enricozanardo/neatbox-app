@@ -15,6 +15,7 @@ import { buildDamUrl, getAxios, handleLoadingProgress, sendTimedTransferMail } f
 import { sendCreateFileAsset, sendTimedTransferAsset } from 'services/transactions';
 import { useWalletStore } from 'stores/useWalletStore';
 import { ApiAction, CreateFileAssetProps, TimedTransferAssetProps } from 'types';
+import { handleError } from 'utils/errors';
 import { getTransactionTimestamp, isEmail, jsonToBuffer } from 'utils/helpers';
 
 import CustomFields, { CustomField } from './CustomFields';
@@ -174,18 +175,8 @@ const Upload = () => {
       setLoadingStatus('');
       setSuccess(true);
     } catch (err) {
-      // Todo: create proper error handler
       setLoadingStatus('');
-      const error = err as any;
-      let msg;
-
-      if (typeof error.message === 'string') {
-        msg = error.message;
-      } else {
-        msg = JSON.stringify(error.message);
-      }
-      toast.error(msg);
-      console.error(msg);
+      handleError(err);
     }
   };
 

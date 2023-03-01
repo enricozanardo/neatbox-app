@@ -1,47 +1,30 @@
-import Button from 'components/ui/Button';
 import CollectionLink from 'components/ui/CollectionLink';
 import DetailBlock from 'components/ui/DetailBlock';
 import DetailInline from 'components/ui/DetailInline';
 import Hr from 'components/ui/Hr';
-import Spinner from 'components/ui/Spinner';
 import { CustomField } from 'components/upload/CustomFields';
 import FileTypeIcon from 'components/upload/FileTypeIcon';
-import { Link } from 'react-router-dom';
 import { File } from 'types';
 import { displayDate, displayDateTime, displayFileSize, displayNumber } from 'utils/formatting';
-import { bufferToJson, fileIsPArtOfCollection, fileIsTimedTransfer } from 'utils/helpers';
+import { bufferToJson, fileIsTimedTransfer } from 'utils/helpers';
 
+import FileActions from './FileActions';
 import UpdateFile from './UpdateFile';
 
 type Props = {
   file: File;
   isOwner: boolean;
   isAllowed: boolean;
-  handleFileDownload: () => void;
-  isLoading: boolean;
-  loadingProgress: number;
-  handleOptimisticUpdate: (updatedData: Partial<File>) => void;
 };
 
-const FileDetails = ({
-  file,
-  isOwner,
-  isAllowed,
-  handleFileDownload,
-  isLoading,
-  loadingProgress,
-  handleOptimisticUpdate,
-}: Props) => {
+const FileCard = ({ file, isOwner, isAllowed }: Props) => {
   const customFields: CustomField[] = bufferToJson(file.data.customFields) || [];
   const isTimed = fileIsTimedTransfer(file);
-  const isPartOfCollection = fileIsPArtOfCollection(file);
 
   return (
     <div className="flex justify-center text-sm">
       <div className="shadow-md rounded-lg bg-white p-8 border-2 border-gray-50 w-full">
-        <div className="flex justify-end h-4">
-          {isOwner && !isTimed && <UpdateFile file={file} handleOptimisticUpdate={handleOptimisticUpdate} />}
-        </div>
+        <div className="flex justify-end h-4">{isOwner && !isTimed && <UpdateFile file={file} />}</div>
 
         <div className="flex justify-center gap-4 items-center mt-4">
           <h1 className="text-secondary-200">
@@ -90,35 +73,10 @@ const FileDetails = ({
 
         <Hr text="Actions" className="mt-12" />
 
-        {isLoading && (
-          <div className="text-center h-7">
-            <span className="text-secondary-500 mr-2">
-              <Spinner />
-            </span>
-            <span className="font-bold">{loadingProgress} %</span>
-
-            <span className="text-xs text-gray-400 block">
-              {loadingProgress === 0 ? 'Processing...' : 'Downloading...'}
-            </span>
-          </div>
-        )}
-
-        {!isLoading && (
-          <div className="flex justify-center gap-4">
-            {isOwner && !isTimed && !isPartOfCollection && (
-              <Link to={`/transfer/file?defaultValue=${file.data.id}`} className="text-black">
-                <Button color="primary-bordered">Transfer</Button>
-              </Link>
-            )}
-
-            <Button onClick={handleFileDownload} disabled={!(isAllowed || isOwner)}>
-              Download
-            </Button>
-          </div>
-        )}
+        <FileActions isTransferrable={isOwner && !isTimed} file={file} isOwner={isOwner} isAllowed={isAllowed} />
       </div>
     </div>
   );
 };
 
-export default FileDetails;
+export default FileCard;

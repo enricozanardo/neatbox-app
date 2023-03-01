@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { sendRequestFileTransferAsset } from 'services/transactions';
 import { File, RequestFileTransferAssetProps, Wallet } from 'types';
+import { handleError } from 'utils/errors';
 import { accountHasEnoughBalance, getTransactionTimestamp } from 'utils/helpers';
 
 type Props = {
@@ -57,9 +58,7 @@ const TransferFileForm = ({ files, defaultValue, wallet, isAuthenticated, setSuc
       toast.success('File transfer initiated!');
       setSuccess(true);
     } catch (err) {
-      // Todo: create proper error handler
-      // @ts-ignore
-      toast.error(err.message);
+      handleError(err);
     }
   };
 

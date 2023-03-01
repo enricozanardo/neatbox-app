@@ -5,7 +5,7 @@ type Props = {
 };
 const LoadingOverlay = ({ isLoading }: Props) => {
   if (!isLoading) {
-    return <></>;
+    return null;
   }
 
   return (

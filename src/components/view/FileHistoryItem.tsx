@@ -61,7 +61,7 @@ const fallBack = {
   body: 'Account: ',
 };
 
-const TimelineItem = ({ item }: Props) => {
+const FileHistoryItem = ({ item }: Props) => {
   const content = contentMap[item.activity] || fallBack;
 
   return (
@@ -80,4 +80,4 @@ const TimelineItem = ({ item }: Props) => {
   );
 };
 
-export default TimelineItem;
+export default FileHistoryItem;

@@ -1,45 +1,19 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Button from 'components/ui/Button';
 import Modal from 'components/ui/Modal';
-import FileTypeIcon from 'components/upload/FileTypeIcon';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import { sendUpdateCollectionAsset } from 'services/transactions';
 import { useWalletStore } from 'stores/useWalletStore';
 import { Collection, File, UpdateCollectionAssetProps } from 'types';
+import { optimisticallyUpdateCollection, optimisticallyUpdateFileCollection } from 'utils/cache';
+import { handleError } from 'utils/errors';
 import { getTransactionTimestamp } from 'utils/helpers';
 
+import { FileCheckBox } from './FileCheckBox';
+
 const DEFAULT_FEE = 100;
-
-type FileCheckboxProps = {
-  checked: boolean;
-  file: File;
-  handleCheck: (id: string, checked: boolean) => void;
-};
-
-const FileCheckBox = ({ checked, file, handleCheck }: FileCheckboxProps) => {
-  return (
-    <div className="flex justify-between border-2 border-dashed rounded-xl my-4 p-4 w-full bg-gray-50 ">
-      <div className="flex gap-4 ">
-        <div className="text-gray-400">
-          <FileTypeIcon file={file} />
-        </div>
-        <div>
-          <span>{file.data.title}</span>
-        </div>
-      </div>
-      <div>
-        <input
-          defaultChecked={checked}
-          id="checked-checkbox"
-          type="checkbox"
-          className="text-secondary-400 bg-gray-100 rounded border-gray-300 focus:ring-secondary-400 mb-1"
-          onChange={() => handleCheck(file.data.id, !checked)}
-        />
-      </div>
-    </div>
-  );
-};
 
 type Props = {
   collection: Collection;
@@ -52,6 +26,7 @@ const UpdateCollection = ({ collection, ownedFiles }: Props) => {
   const [title, setTitle] = useState(collection.title);
   const [transferFee, setTransferFee] = useState(collection.transferFee);
   const [updatedCollectionFileIds, setUpdatedCollectionFileIds] = useState(collection.fileIds);
+  const queryClient = useQueryClient();
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -72,21 +47,24 @@ const UpdateCollection = ({ collection, ownedFiles }: Props) => {
       timestamp: getTransactionTimestamp(),
     };
 
-    try {
-      await sendUpdateCollectionAsset(wallet!.passphrase, asset);
+    mutate({ passphrase: wallet.passphrase, asset });
+  };
+
+  const { mutate } = useMutation({
+    mutationFn: ({ passphrase, asset }: { passphrase: string; asset: UpdateCollectionAssetProps }) =>
+      sendUpdateCollectionAsset(passphrase, asset),
+    onSuccess: (_, { asset }) => {
       toast.success('Collection updated!');
+      optimisticallyUpdateCollection(queryClient, ['account', 'collectionsOwned'], asset);
+      optimisticallyUpdateFileCollection(queryClient, ['account', 'filesOwned'], asset.fileIds, collection);
+    },
+    onError: handleError,
+    onSettled: () => {
       setModalIsOpen(false);
       setTitle('');
       setTransferFee(DEFAULT_FEE);
-    } catch (err) {
-      // Todo: create proper error handler
-
-      const error = err as any;
-      let msg = error.message;
-      toast.error(msg);
-      console.error(msg);
-    }
-  };
+    },
+  });
 
   const handleCheck = (id: string, checked: boolean) => {
     if (checked) {

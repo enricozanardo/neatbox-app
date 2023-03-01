@@ -1,7 +1,7 @@
 import Hr from 'components/ui/Hr';
 import { HistoryItem } from 'types';
 
-import TimelineItem from './TimelineItem';
+import FileHistoryItem from './FileHistoryItem';
 
 type Props = {
   history: HistoryItem[];
@@ -15,7 +15,7 @@ const FileHistory = ({ history }: Props) => {
       <Hr className="mb-4" />
 
       {history.map(item => (
-        <TimelineItem item={item} key={item.createdAt.unix} />
+        <FileHistoryItem item={item} key={item.createdAt.unix} />
       ))}
     </div>
   );
