@@ -2,12 +2,12 @@ import Button from 'components/ui/Button';
 import Spinner from 'components/ui/Spinner';
 import fileDownload from 'js-file-download';
 import { useState } from 'react';
-import { toast } from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import { fetchTx, getPublicKeyFromTransaction } from 'services/api';
 import { buildDamUrl, getAxios, handleLoadingProgress } from 'services/axios';
 import { useWalletStore } from 'stores/useWalletStore';
 import { File, HistoryItemType, RespondToFileRequestAssetProps } from 'types';
+import { handleError } from 'utils/errors';
 import { fileIsPArtOfCollection } from 'utils/helpers';
 
 type Props = {
@@ -89,12 +89,7 @@ const FileActions = ({ file, isOwner, isAllowed, isTransferrable }: Props) => {
       const blob = new Blob([data], { type: file.data.type });
       fileDownload(blob, file.data.name);
     } catch (err) {
-      // Todo: create proper error handler
-      const error = err as any;
-      let msg = error.message;
-
-      toast.error(msg);
-      console.error(err);
+      handleError(err);
     }
 
     setIsDownloading(false);

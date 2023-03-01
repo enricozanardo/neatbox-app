@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { sendRequestCollectionTransferAsset } from 'services/transactions';
 import { Collection, RequestCollectionTransferAssetProps, Wallet } from 'types';
+import { handleError } from 'utils/errors';
 import { accountHasEnoughBalance, getTransactionTimestamp } from 'utils/helpers';
 
 type Props = {
@@ -57,9 +58,7 @@ const TransferCollectionForm = ({ collections, defaultValue, wallet, isAuthentic
       toast.success('Collection transfer initiated!');
       setSuccess(true);
     } catch (err) {
-      // Todo: create proper error handler
-      // @ts-ignore
-      toast.error(err.message);
+      handleError(err);
     }
   };
 

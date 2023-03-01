@@ -5,6 +5,7 @@ import { toast } from 'react-hot-toast';
 import { sendCancelRequestAsset } from 'services/transactions';
 import { useWalletStore } from 'stores/useWalletStore';
 import { CancelRequestAssetProps, Collection, CollectionRequest, File, FileRequest } from 'types';
+import { handleError } from 'utils/errors';
 import { getTransactionTimestamp, prepareCollectionRequests, prepareFileRequests } from 'utils/helpers';
 
 import { requestTypeMap } from './IncomingFileRequests';
@@ -111,9 +112,7 @@ const PendingRequests = ({ files, collections }: Props) => {
       removeRequests([data.requestId]);
       toast.success(`Request successfully cancelled`);
     } catch (err) {
-      // Todo: create proper error handler
-      // @ts-ignore
-      toast.error(err.message);
+      handleError(err);
     }
   };
 

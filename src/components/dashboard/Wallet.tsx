@@ -7,6 +7,7 @@ import { sendInitWalletAsset } from 'services/transactions';
 import { useWalletStore } from 'stores/useWalletStore';
 import { InitWalletAssetProps } from 'types';
 import { hashEmail } from 'utils/crypto';
+import { handleError } from 'utils/errors';
 import { getTransactionTimestamp } from 'utils/helpers';
 
 import WalletActions from './WalletActions';
@@ -57,12 +58,7 @@ const Wallet = () => {
       setAccountHasMappedWallet(true);
       toast.success('Wallet successfully locked to user account!');
     } catch (err) {
-      // Todo: create proper error handler
-
-      const error = err as any;
-      let msg = JSON.stringify(error.message);
-      toast.error(msg);
-      console.error(msg);
+      handleError(err);
     }
   };
 
