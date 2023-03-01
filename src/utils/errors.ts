@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios';
 import { toast } from 'react-hot-toast';
 
 import { devLog } from './helpers';
@@ -9,9 +10,9 @@ export const handleError = (error: unknown) => {
 
   if (typeof error === 'string') {
     message = error;
-  }
-
-  if (error instanceof Error) {
+  } else if (error instanceof AxiosError) {
+    message = error.response?.data || error.message;
+  } else if (error instanceof Error) {
     if (error.message === 'Incoming transaction fee is not sufficient to replace existing transaction') {
       message = 'Previous action is still processing';
     } else {

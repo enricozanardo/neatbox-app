@@ -28,6 +28,7 @@ export const requestTypeMap = {
 
 const IncomingFileRequests = ({ files }: Props) => {
   const [disableInteraction, setDisableInteraction] = useState(false);
+  const [damIsProcessing, setDamIsProcessing] = useState(false);
 
   const wallet = useWalletStore(state => state.wallet);
   const { removeRequests, account } = useAccountData();
@@ -49,30 +50,32 @@ const IncomingFileRequests = ({ files }: Props) => {
         type === FileRequestType.Ownership ||
         type === FileRequestType.TimedTransfer);
 
-    /** if accepted, make a request to retrieve, decrypt and re-encrypt the file on the DAM server */
-    if (includesFileProcessing) {
-      setDisableInteraction(true);
-
-      const file = await getFileById(fileId);
-
-      const requesterPublicKey = await getPublicKeyFromTransaction(requestId);
-      const responderPublicKey = wallet.publicKey;
-
-      const formData = new FormData();
-      formData.append('encryptedHash', file.data.hash);
-
-      const requesterIsOldOwner = type === FileRequestType.Transfer || type === FileRequestType.TimedTransfer;
-      formData.append('password', requesterIsOldOwner ? requesterPublicKey : responderPublicKey);
-      formData.append('newPassword', requesterIsOldOwner ? responderPublicKey : requesterPublicKey);
-
-      const { encryptedHash }: { encryptedHash: string } = await getAxios()
-        .post(buildDamUrl('transfer-file'), formData)
-        .then(res => res.data);
-
-      newHash = encryptedHash;
-    }
-
     try {
+      /** if accepted, make a request to retrieve, decrypt and re-encrypt the file on the DAM server */
+      if (includesFileProcessing) {
+        setDisableInteraction(true);
+
+        const file = await getFileById(fileId);
+
+        const requesterPublicKey = await getPublicKeyFromTransaction(requestId);
+        const responderPublicKey = wallet.publicKey;
+
+        const formData = new FormData();
+        formData.append('encryptedHash', file.data.hash);
+
+        const requesterIsOldOwner = type === FileRequestType.Transfer || type === FileRequestType.TimedTransfer;
+        formData.append('password', requesterIsOldOwner ? requesterPublicKey : responderPublicKey);
+        formData.append('newPassword', requesterIsOldOwner ? responderPublicKey : requesterPublicKey);
+
+        setDamIsProcessing(true);
+        const { encryptedHash }: { encryptedHash: string } = await getAxios()
+          .post(buildDamUrl('transfer-file'), formData)
+          .then(res => res.data);
+        setDamIsProcessing(false);
+
+        newHash = encryptedHash;
+      }
+
       const txAsset: RespondToFileRequestAssetProps = {
         fileId,
         requestId,
@@ -135,7 +138,7 @@ const IncomingFileRequests = ({ files }: Props) => {
             request={request}
             asset={file}
             handleResponse={handleResponse}
-            isLoading={isLoading}
+            isLoading={isLoading || damIsProcessing}
             disableInteraction={disableInteraction}
           />
         ))}
