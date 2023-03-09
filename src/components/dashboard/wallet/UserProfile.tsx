@@ -1,7 +1,6 @@
 import { User } from '@auth0/auth0-react';
+import pictureFallback from 'assets/img/user-fallback.png';
 import { useState } from 'react';
-
-import pictureFallback from '../../assets/img/user-fallback.png';
 
 type Props = {
   user: User;

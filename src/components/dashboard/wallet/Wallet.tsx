@@ -36,24 +36,22 @@ const Wallet = () => {
   }, [account?.storage.map, map?.binaryAddress]);
 
   const initializeWallet = async () => {
-    if (!user?.email) {
-      toast.error('No e-mail found');
-      return;
-    }
-
-    if (!wallet?.passphrase) {
-      toast.error('No wallet found');
-      return;
-    }
-
-    const emailHash = hashEmail(user.email);
-
-    const txAsset: InitWalletAssetProps = {
-      emailHash,
-      timestamp: getTransactionTimestamp(),
-    };
-
     try {
+      if (!user?.email) {
+        throw new Error('No e-mail found');
+      }
+
+      if (!wallet?.passphrase) {
+        throw new Error('No wallet found');
+      }
+
+      const emailHash = hashEmail(user.email);
+
+      const txAsset: InitWalletAssetProps = {
+        emailHash,
+        timestamp: getTransactionTimestamp(),
+      };
+
       await sendInitWalletAsset(wallet.passphrase, txAsset);
       setAccountHasMappedWallet(true);
       toast.success('Wallet successfully locked to user account!');

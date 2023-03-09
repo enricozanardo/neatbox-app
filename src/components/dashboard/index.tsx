@@ -7,14 +7,14 @@ import { useSearchParams } from 'react-router-dom';
 import { useWalletStore } from 'stores/useWalletStore';
 import { devLog } from 'utils/helpers';
 
-import AccountStatistics from './AccountStatistics';
-import DangerZone from './DangerZone';
-import DashboardDivider from './DashboardDivider';
-import FilesDisplay from './FilesDisplay';
-import MyFilesTransfersIndicator from './MyFilesTransfersIndicator';
-import { NoWalletFeedback } from './NoWalletFeedback';
-import UserProfile from './UserProfile';
-import Wallet from './Wallet';
+import AccountInformation from './account-information/AccountInformation';
+import DangerZone from './danger-zone/DangerZone';
+import FilesDisplay from './files/FilesDisplay';
+import MyFilesTransfersIndicator from './files/MyFilesTransfersIndicator';
+import DashboardDivider from './shared/DashboardDivider';
+import { NoWalletFeedback } from './shared/NoWalletFeedback';
+import UserProfile from './wallet/UserProfile';
+import Wallet from './wallet/Wallet';
 
 const Dashboard = () => {
   const { account } = useAccountData();
@@ -49,7 +49,7 @@ const Dashboard = () => {
 
         <div className="col-span-1 lg:col-span-2">
           <PageTitle text="Account Information" />
-          {account && <AccountStatistics account={account} />}
+          {account && <AccountInformation account={account} />}
           {!wallet && <NoWalletFeedback />}
         </div>
 
