@@ -49,6 +49,7 @@ const Wallet = () => {
 
       const txAsset: InitWalletAssetProps = {
         emailHash,
+        username: 'placeholder',
         timestamp: getTransactionTimestamp(),
       };
 

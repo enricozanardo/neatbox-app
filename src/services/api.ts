@@ -51,7 +51,7 @@ export const fetchTx = async <T>(id: string): Promise<Transaction<T>> => {
 };
 
 export const fetchAccountMapEntry = async (emailHash: string) => {
-  return invokeAction<AccountMapEntry>(ApiAction.GetAccountMapEntry, { emailHash });
+  return invokeAction<AccountMapEntry>(ApiAction.GetAccountMapEntryByEmailHash, { emailHash });
 };
 
 export const getPublicKeyFromTransaction = async (txId: string) => {

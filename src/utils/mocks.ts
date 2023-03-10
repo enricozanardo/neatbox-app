@@ -2,7 +2,7 @@ import { cryptography } from '@liskhq/lisk-client/browser';
 import { AccountProps, Collection } from 'types';
 
 export const generateDefaultAccount = (address: string): AccountProps => {
-  const account = {
+  const account: AccountProps = {
     address: cryptography.hexToBuffer(address),
     token: { balance: BigInt('0') },
     storage: {
@@ -14,7 +14,10 @@ export const generateDefaultAccount = (address: string): AccountProps => {
       collectionsAllowed: [],
       incomingCollectionRequests: [],
       outgoingCollectionRequests: [],
-      map: '',
+      map: {
+        username: '',
+        emailHash: '',
+      },
     },
   };
 
