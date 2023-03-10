@@ -50,8 +50,12 @@ export const fetchTx = async <T>(id: string): Promise<Transaction<T>> => {
   return tx;
 };
 
-export const fetchAccountMapEntry = async (emailHash: string) => {
+export const fetchAccountMapEntryByEmailHash = async (emailHash: string) => {
   return invokeAction<AccountMapEntry>(ApiAction.GetAccountMapEntryByEmailHash, { emailHash });
+};
+
+export const fetchAccountMapEntryByUsername = async (username: string) => {
+  return invokeAction<AccountMapEntry>(ApiAction.getAccountMapEntryByUsername, { username });
 };
 
 export const getPublicKeyFromTransaction = async (txId: string) => {

@@ -245,6 +245,7 @@ export type CollectionRequest = {
 
 export type AccountMapEntry = {
   binaryAddress: string;
+  username: string;
   emailHash: string;
 };
 
