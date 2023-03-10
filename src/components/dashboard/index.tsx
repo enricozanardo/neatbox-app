@@ -41,7 +41,7 @@ const Dashboard = () => {
       <PageTitle text="My Dashboard" />
 
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 items-center">
-        <UserProfile user={user} />
+        <UserProfile user={user} account={account} />
 
         <Wallet />
 

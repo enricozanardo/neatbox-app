@@ -1,12 +1,14 @@
 import { User } from '@auth0/auth0-react';
 import pictureFallback from 'assets/img/user-fallback.png';
 import { useState } from 'react';
+import { AccountProps } from 'types';
 
 type Props = {
   user: User;
+  account: AccountProps | undefined;
 };
 
-const UserProfile = ({ user }: Props) => {
+const UserProfile = ({ user, account }: Props) => {
   const [profilePicture, setProfilePicture] = useState(user.picture || pictureFallback);
 
   const setFallback = () => {
@@ -25,17 +27,14 @@ const UserProfile = ({ user }: Props) => {
 
       <div className="text-center">
         <div className="mb-4">
+          <span className="label text-sm block">Username</span>
+          {account?.storage.map.username ?? 'Placeholder'}
+        </div>
+
+        <div className="mb-4">
           <span className="label text-sm block">Email Address</span>
           {user.email}
         </div>
-        <div className="mb-4">
-          <span className="label text-sm block">Nickname</span>
-          {user.nickname}
-        </div>
-        {/* <div className="mb-4">
-          <span className="text-secondary-500 font-bold block">Locale: </span>
-          {user.locale}
-        </div> */}
       </div>
     </div>
   );
