@@ -8,6 +8,7 @@ import {
   faCheck,
   faCircleInfo,
   faCircleNotch,
+  faClock,
   faCloudArrowUp,
   faDog,
   faDownload,
@@ -66,6 +67,7 @@ const icons = {
   faUserTie,
   faStar,
   faList,
+  faClock,
 };
 
 const Icon = ({ type, className }: Props) => {

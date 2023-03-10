@@ -93,6 +93,7 @@ const FileTable = ({ handlePageChange, total, data, showLegend, isLoading }: Pro
                       {item.data.title}
                     </Link>
 
+                    {fileIsTimedTransfer(item) && <Icon type="faClock" className="text-gray-300 ml-2" />}
                     {isPartOfCollection && <CollectionLink file={item} type="icon" />}
                     {isOwnerOfItem && <Icon type="faUserTie" className="text-gray-300 ml-2" />}
                     {itemIsAllowed && <Icon type="faUserGroup" className="text-gray-300 ml-2" />}
@@ -122,6 +123,7 @@ const FileTable = ({ handlePageChange, total, data, showLegend, isLoading }: Pro
             <Icon type="faUserTie" className="text-gray-200 mr-1" /> Owner
             <Icon type="faUserGroup" className="ml-8 text-gray-200 mr-1" /> Shared With
             <Icon type="faList" className="ml-8 text-gray-200 mr-1" /> Part of Collection
+            <Icon type="faClock" className="ml-8 text-gray-200 mr-1" /> Timed Transfer
           </div>
         </div>
       )}
