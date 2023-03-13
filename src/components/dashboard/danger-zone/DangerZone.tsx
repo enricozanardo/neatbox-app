@@ -1,5 +1,6 @@
 import Button from 'components/ui/Button';
 import Modal from 'components/ui/Modal';
+import useAccountData from 'hooks/useAccountData';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { useWalletStore } from 'stores/useWalletStore';
@@ -9,6 +10,7 @@ import { PassphraseValidator } from './PassphraseValidator';
 const DangerZone = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const { removeAccountCache } = useAccountData();
 
   const { wallet, removeWallet } = useWalletStore(state => ({
     wallet: state.wallet,
@@ -17,6 +19,7 @@ const DangerZone = () => {
 
   const handleRemoveWallet = () => {
     removeWallet();
+    removeAccountCache();
     toast.success('Wallet successfully removed');
   };
 
@@ -37,7 +40,7 @@ const DangerZone = () => {
           <span className="font-bold">Attention!</span>
           <br />
           This will remove your wallet from the browser session. Make sure you have your passphrase backed up, as you
-          will need it for re-linking your wallet to your account.
+          will need it next time to re-import your wallet to your account.
         </div>
 
         <div className="flex justify-center gap-4">

@@ -19,7 +19,9 @@ export enum ApiAction {
   GetCollectionById = 'apiPlugin:getCollectionById',
   GetCollectionsByIds = 'apiPlugin:getCollectionsByIds',
   GetStorageStatistics = 'apiPlugin:getStatistics',
-  GetAccountMapEntry = 'apiPlugin:getAccountMapEntry',
+  GetAccountMapEntryByEmailHash = 'apiPlugin:getAccountMapEntryByEmailHash',
+  getAccountMapEntryByUsername = 'apiPlugin:getAccountMapEntryByUsername',
+  AccountExists = 'apiPlugin:accountExists',
 }
 
 export enum EventType {
@@ -79,6 +81,7 @@ export type File = {
 };
 
 export type StorageStatistics = {
+  users: number;
   files: number;
   transfers: number;
 };
@@ -161,6 +164,7 @@ export type RespondToCollectionRequestAssetProps = {
 
 export type InitWalletAssetProps = {
   emailHash: string;
+  username: string;
   timestamp: number;
 };
 
@@ -181,7 +185,10 @@ export type StorageModuleAccountProps = {
     outgoingFileRequests: { fileId: string; requestId: string }[];
     incomingCollectionRequests: { collectionId: string; requestId: string }[];
     outgoingCollectionRequests: { collectionId: string; requestId: string }[];
-    map: string;
+    map: {
+      username: string;
+      emailHash: string;
+    };
   };
 };
 
@@ -239,6 +246,7 @@ export type CollectionRequest = {
 
 export type AccountMapEntry = {
   binaryAddress: string;
+  username: string;
   emailHash: string;
 };
 

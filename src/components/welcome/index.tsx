@@ -1,42 +1,46 @@
 import { useAuth0 } from '@auth0/auth0-react';
+import requestsLocation from 'assets/img/requests-location.png';
 import LogInButton from 'components/layout/LogInButton';
-import config from 'config';
+import useAccountData from 'hooks/useAccountData';
 import { Link } from 'react-router-dom';
 
 const Welcome = () => {
   const { isAuthenticated } = useAuth0();
+  const { account } = useAccountData();
+  const accountExists = !!account?.storage.map.emailHash;
 
   return (
     <div className="flex justify-center items-center h-full">
       <div className="text-center">
-        {isAuthenticated && (
+        {isAuthenticated && accountExists && (
           <>
             <h1>Welcome back!</h1>
             <p className="mt-4 mb-4">
-              You've already signed up, so <Link to="/upload">start uploading</Link>! :)
+              You're already signed up, so <Link to="/upload">start uploading</Link>! :)
             </p>
           </>
         )}
 
-        {!isAuthenticated && (
+        {(!isAuthenticated || !accountExists) && (
           <>
             <h1>Welcome to Neatbox!</h1>
             <p className="mt-4 mb-4">Follow these steps to access your files:</p>
             <div className="flex justify-center my-8">
-              <ul className="list-decimal text-left">
-                <li>Sign up via the login button</li>
-                <li>Create or import a wallet</li>
-                <li>
-                  Get some tokens from the{' '}
-                  <a href={config.FAUCET} target="_blank" rel="noreferrer">
-                    faucet
-                  </a>
-                </li>
-                <li>Lock the wallet to your account</li>
-                <li>
-                  Accept the transfer on the <Link to="/requests">requests</Link> page{' '}
-                </li>
-              </ul>
+              <div>
+                <ul className="list-decimal text-left">
+                  <li>Sign up via the login button</li>
+                  <li>Go through the registration process</li>
+                  <li>Accept the transfer on the requests page</li>
+                </ul>
+
+                <div className="flex justify-center">
+                  <img
+                    src={requestsLocation}
+                    alt="Requests Location"
+                    className="shadow-sm border rounded-lg border-gray-200 my-6 h-32"
+                  />
+                </div>
+              </div>
             </div>
             <LogInButton />
           </>

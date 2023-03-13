@@ -3,7 +3,7 @@ const config = {
   BLOCKCHAIN_API: process.env.REACT_APP_BLOCKCHAIN_API || 'ws://localhost:8080/ws',
   DAM_API: process.env.REACT_APP_DAM_API || 'http://localhost:9001',
   EMAIL_API: process.env.REACT_APP_EMAIL_API || 'http://localhost:4444',
-  FAUCET: process.env.REACT_APP_FAUCET || 'http://localhost:4004',
+  ACCOUNT_INITIALIZER: process.env.REACT_APP_ACCOUNT_INITIALIZER || 'http://localhost:4445',
   GIT_SHA: process.env.REACT_APP_GIT_SHA,
   VERSION: process.env.REACT_APP_VERSION,
   MAX_UPLOAD_FILE_SIZE: Number(process.env.REACT_APP_MAX_UPLOAD_FILE_SIZE || 10000000),

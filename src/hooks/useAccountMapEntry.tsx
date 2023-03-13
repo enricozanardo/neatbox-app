@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchAccountMapEntry } from 'services/api';
+import { fetchAccountMapEntryByEmailHash } from 'services/api';
 import { AccountMapEntry } from 'types';
 import { hashEmail } from 'utils/crypto';
 
@@ -14,7 +14,7 @@ export const useAccountMapEntry = (email?: string) => {
     const emailHash = hashEmail(email);
 
     const fetchData = async () => {
-      const data = await fetchAccountMapEntry(emailHash);
+      const data = await fetchAccountMapEntryByEmailHash(emailHash);
       setMap(data);
     };
 

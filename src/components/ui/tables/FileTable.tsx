@@ -46,6 +46,7 @@ const FileTable = ({ handlePageChange, total, data, showLegend, isLoading }: Pro
   return (
     <>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <LoadingOverlay isLoading={isLoading} />
         <table className="w-full text-sm text-left text-gray-500">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 whitespace-nowrap">
             <tr>
@@ -67,9 +68,7 @@ const FileTable = ({ handlePageChange, total, data, showLegend, isLoading }: Pro
               )}
             </tr>
           </thead>
-          <tbody className="bg-white relative">
-            <LoadingOverlay isLoading={isLoading} />
-
+          <tbody className="bg-white">
             {data.length === 0 && (
               <tr>
                 <td colSpan={4} className="text-center">
@@ -93,6 +92,7 @@ const FileTable = ({ handlePageChange, total, data, showLegend, isLoading }: Pro
                       {item.data.title}
                     </Link>
 
+                    {fileIsTimedTransfer(item) && <Icon type="faClock" className="text-gray-300 ml-2" />}
                     {isPartOfCollection && <CollectionLink file={item} type="icon" />}
                     {isOwnerOfItem && <Icon type="faUserTie" className="text-gray-300 ml-2" />}
                     {itemIsAllowed && <Icon type="faUserGroup" className="text-gray-300 ml-2" />}
@@ -122,6 +122,7 @@ const FileTable = ({ handlePageChange, total, data, showLegend, isLoading }: Pro
             <Icon type="faUserTie" className="text-gray-200 mr-1" /> Owner
             <Icon type="faUserGroup" className="ml-8 text-gray-200 mr-1" /> Shared With
             <Icon type="faList" className="ml-8 text-gray-200 mr-1" /> Part of Collection
+            <Icon type="faClock" className="ml-8 text-gray-200 mr-1" /> Timed Transfer
           </div>
         </div>
       )}

@@ -9,8 +9,8 @@ const LoadingOverlay = ({ isLoading }: Props) => {
   }
 
   return (
-    <div className="absolute w-full h-full bg-white bg-opacity-30">
-      <div className="flex justify-center items-center h-full">
+    <div className="absolute w-full h-full bg-white bg-opacity-30 z-50">
+      <div className="flex justify-center items-center h-full mt-4">
         <Spinner />
       </div>
     </div>

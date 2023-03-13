@@ -12,7 +12,7 @@ const Authentication = ({ children }: Props) => {
 
   const handleLogin = () => {
     toast.success('Successfully logged in!');
-    navigate('/dashboard');
+    navigate('/landing');
   };
 
   return (

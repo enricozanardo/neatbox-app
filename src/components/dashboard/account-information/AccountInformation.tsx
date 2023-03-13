@@ -6,10 +6,10 @@ type Props = {
   account: AccountProps;
 };
 
-const AccountStatistics = ({ account }: Props) => {
+const AccountInformation = ({ account }: Props) => {
   return (
     <>
-      <div className="hidden md:flex justify-center gap-16 lg:gap-32">
+      <div className="hidden md:flex justify-center gap-12 ">
         <Statistic label="Balance" value={displayBalance(account.token.balance)} />
         <Statistic label="Files Owned" value={displayNumber(account.storage.filesOwned.length)} />
 
@@ -37,4 +37,4 @@ const AccountStatistics = ({ account }: Props) => {
   );
 };
 
-export default AccountStatistics;
+export default AccountInformation;

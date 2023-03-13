@@ -12,8 +12,6 @@ export const displayBalance = (input: bigint) => {
 
 export const displayFileSize = (input: number) => prettyBytes(input);
 
-export const lskToBeddows = (amount: number) => BigInt(amount * 100000000);
-
 export const beddowsToLsk = (amount: BigInt | string) =>
   transactions.convertBeddowsToLSK(typeof amount === 'string' ? amount : amount.toString());
 

@@ -1,10 +1,10 @@
 declare module '@liskhq/lisk-client/browser' {
-  export const apiClient: typeof import('@liskhq/lisk-api-client');
-  export const cryptography: typeof import('@liskhq/lisk-cryptography');
-  export const passphrase: typeof import('@liskhq/lisk-passphrase');
-  export const transactions: typeof import('@liskhq/lisk-transactions');
-  export const utils: typeof import('@liskhq/lisk-utils');
-  export const tree: typeof import('@liskhq/lisk-tree');
-  export const validator: typeof import('@liskhq/lisk-validator');
-  export const codec: typeof import('@liskhq/lisk-codec');
+  const apiClient: typeof import('@liskhq/lisk-api-client');
+  const cryptography: typeof import('@liskhq/lisk-cryptography');
+  const passphrase: typeof import('@liskhq/lisk-passphrase');
+  const transactions: typeof import('@liskhq/lisk-transactions');
+  const utils: typeof import('@liskhq/lisk-utils');
+  const tree: typeof import('@liskhq/lisk-tree');
+  const validator: typeof import('@liskhq/lisk-validator');
+  const codec: typeof import('@liskhq/lisk-codec');
 }
