@@ -37,7 +37,7 @@ const DangerZone = () => {
           <span className="font-bold">Attention!</span>
           <br />
           This will remove your wallet from the browser session. Make sure you have your passphrase backed up, as you
-          will need it for re-linking your wallet to your account.
+          will need it next time to re-import your wallet to your account.
         </div>
 
         <div className="flex justify-center gap-4">

@@ -53,8 +53,8 @@ const Header = () => {
     <header>
       <nav className="bg-white border-gray-200 px-2 sm:px-4 py-2.5 rounded">
         <div className="container flex flex-wrap items-center justify-between mx-auto">
-          <div onClick={() => handleNavigate('/')}>
-            <img src={logoFull} alt="logo" className="md:h-16  hidden lg:block" />
+          <div onClick={() => handleNavigate('/')} className="cursor-pointer">
+            <img src={logoFull} alt="logo" className="md:h-16  hidden lg:block " />
             <img src={logoBox} alt="logo" className="ml-2 h-12 lg:hidden" />
           </div>
 
