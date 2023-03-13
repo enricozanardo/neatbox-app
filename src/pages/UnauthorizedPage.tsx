@@ -2,7 +2,7 @@ import LogInButton from 'components/layout/LogInButton';
 
 import SEO from '../components/ui/SEO';
 
-const NotAllowedPage = () => {
+const UnauthorizedPage = () => {
   return (
     <div className="flex justify-center items-center h-full">
       <SEO pageTitle="401" pageDescription="401 - Unauthorized" />
@@ -17,4 +17,4 @@ const NotAllowedPage = () => {
   );
 };
 
-export default NotAllowedPage;
+export default UnauthorizedPage;

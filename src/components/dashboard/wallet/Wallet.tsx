@@ -30,6 +30,7 @@ const Wallet = () => {
       {(!wallet || (wallet && !accountHasMappedWallet)) && (
         <WalletDialog email={user?.email} map={map} accountHasMappedWallet={accountHasMappedWallet} />
       )}
+
       {wallet && accountHasMappedWallet && <WalletDisplay wallet={wallet} />}
     </div>
   );
