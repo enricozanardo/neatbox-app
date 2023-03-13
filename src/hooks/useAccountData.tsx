@@ -4,7 +4,7 @@ import { removeAccountCache, removeRequests } from 'utils/cache';
 
 const useAccountData = () => {
   const queryClient = useQueryClient();
-  const { data, dataUpdatedAt } = useQuery<AccountProps>({ queryKey: ['account'], staleTime: 10000 });
+  const { data, dataUpdatedAt } = useQuery<AccountProps>({ queryKey: ['account'], staleTime: 10000 }); // Todo: utilize something other then useQuery to access cache
 
   const handleRemoveRequests = (ids: string[]) => {
     removeRequests(queryClient, ids);

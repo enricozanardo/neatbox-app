@@ -10,7 +10,7 @@ export const AccountDataFetcher = ({ wallet }: { wallet: Wallet }) => {
 
   const { refetch } = useQuery({
     queryKey: ['account'],
-    queryFn: () => fetchUser(wallet.binaryAddress).catch(() => undefined),
+    queryFn: () => fetchUser(wallet.binaryAddress),
     refetchInterval: 10000,
     keepPreviousData: true,
     staleTime: 10000,

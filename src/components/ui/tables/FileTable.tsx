@@ -46,6 +46,7 @@ const FileTable = ({ handlePageChange, total, data, showLegend, isLoading }: Pro
   return (
     <>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <LoadingOverlay isLoading={isLoading} />
         <table className="w-full text-sm text-left text-gray-500">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 whitespace-nowrap">
             <tr>
@@ -67,9 +68,7 @@ const FileTable = ({ handlePageChange, total, data, showLegend, isLoading }: Pro
               )}
             </tr>
           </thead>
-          <tbody className="bg-white relative">
-            <LoadingOverlay isLoading={isLoading} />
-
+          <tbody className="bg-white">
             {data.length === 0 && (
               <tr>
                 <td colSpan={4} className="text-center">
