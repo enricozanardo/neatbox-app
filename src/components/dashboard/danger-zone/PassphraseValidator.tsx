@@ -13,7 +13,6 @@ export const PassphraseValidator = ({ onSuccess, wallet }: { onSuccess: () => vo
     }
 
     onSuccess();
-    toast.success('Settings revealed');
   };
 
   return (

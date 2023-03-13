@@ -1,6 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import PageTitle from 'components/ui/PageTitle';
-import Unauthorized from 'components/ui/Unauthorized';
 import useAccountData from 'hooks/useAccountData';
 import { useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
@@ -31,17 +30,14 @@ const Dashboard = () => {
   }, [ref]);
 
   devLog(account?.storage);
-
-  if (!user) {
-    return <Unauthorized />;
-  }
+  const accountIsRegistered = account?.storage.map.emailHash;
 
   return (
     <div className="mb-32">
       <PageTitle text="My Dashboard" />
 
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 items-center">
-        <UserProfile user={user} account={account} />
+        <UserProfile user={user!} account={account} />
 
         <Wallet />
 
@@ -49,25 +45,22 @@ const Dashboard = () => {
 
         <div className="col-span-1 lg:col-span-2">
           <PageTitle text="Account Information" />
-          {account && <AccountInformation account={account} />}
-          {!wallet && <NoWalletFeedback />}
+          {accountIsRegistered ? <AccountInformation account={account} /> : <NoWalletFeedback />}
         </div>
 
         <DashboardDivider />
 
         <div className="col-span-1 lg:col-span-2" id="myFiles" ref={myFilesRef}>
           <PageTitle text="My Files" />
-          {account && <FilesDisplay fileIds={account.storage.filesOwned} />}
+          {accountIsRegistered ? <FilesDisplay fileIds={account.storage.filesOwned} /> : <NoWalletFeedback />}
           <MyFilesTransfersIndicator fileId={ref} />
-          {!wallet && <NoWalletFeedback />}
         </div>
 
         <DashboardDivider />
 
         <div className="col-span-1 lg:col-span-2">
           <PageTitle text="Files Shared With Me" />
-          {account && <FilesDisplay fileIds={account.storage.filesAllowed} />}
-          {!wallet && <NoWalletFeedback />}
+          {accountIsRegistered ? <FilesDisplay fileIds={account.storage.filesAllowed} /> : <NoWalletFeedback />}
         </div>
 
         {wallet && (

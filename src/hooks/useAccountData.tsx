@@ -1,5 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AccountProps } from 'types';
+import { devLog } from 'utils/helpers';
 
 const useAccountData = () => {
   const queryClient = useQueryClient();
@@ -31,7 +32,12 @@ const useAccountData = () => {
     });
   };
 
-  return { account: data, removeRequests, dataUpdatedAt };
+  const removeAccountCache = () => {
+    devLog('removing');
+    queryClient.removeQueries({ queryKey: ['account'], exact: true });
+  };
+
+  return { account: data, removeRequests, dataUpdatedAt, removeAccountCache };
 };
 
 export default useAccountData;

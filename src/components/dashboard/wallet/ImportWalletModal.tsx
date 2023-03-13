@@ -35,7 +35,7 @@ const ImportWalletModal = ({ isOpen, handleClose, accountMap }: Props) => {
     const binaryAddress = cryptography.getAddressFromPassphrase(passphrase).toString('hex');
 
     if (accountMap && accountMap.binaryAddress && binaryAddress !== accountMap.binaryAddress) {
-      setError('Passphrase does not match wallet locked to account');
+      setError('Passphrase does not match wallet registered to account');
       return;
     }
 

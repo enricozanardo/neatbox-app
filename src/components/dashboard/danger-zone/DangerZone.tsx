@@ -1,5 +1,6 @@
 import Button from 'components/ui/Button';
 import Modal from 'components/ui/Modal';
+import useAccountData from 'hooks/useAccountData';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { useWalletStore } from 'stores/useWalletStore';
@@ -9,6 +10,7 @@ import { PassphraseValidator } from './PassphraseValidator';
 const DangerZone = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const { removeAccountCache } = useAccountData();
 
   const { wallet, removeWallet } = useWalletStore(state => ({
     wallet: state.wallet,
@@ -17,6 +19,7 @@ const DangerZone = () => {
 
   const handleRemoveWallet = () => {
     removeWallet();
+    removeAccountCache();
     toast.success('Wallet successfully removed');
   };
 
