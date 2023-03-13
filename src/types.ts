@@ -81,6 +81,7 @@ export type File = {
 };
 
 export type StorageStatistics = {
+  users: number;
   files: number;
   transfers: number;
 };
