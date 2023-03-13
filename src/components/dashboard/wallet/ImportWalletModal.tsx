@@ -2,9 +2,12 @@ import { cryptography } from '@liskhq/lisk-client/browser';
 import Button from 'components/ui/Button';
 import Modal from 'components/ui/Modal';
 import { useState } from 'react';
+import { toast } from 'react-hot-toast';
+import { fetchUser } from 'services/api';
 import { useWalletStore } from 'stores/useWalletStore';
 import { AccountMapEntry } from 'types';
 import { validatePassphrase } from 'utils/crypto';
+import { devLog } from 'utils/helpers';
 
 type Props = {
   isOpen: boolean;
@@ -17,7 +20,7 @@ const ImportWalletModal = ({ isOpen, handleClose, accountMap }: Props) => {
   const [error, setError] = useState('');
   const addWalletViaPassphrase = useWalletStore(state => state.addWalletViaPassphrase);
 
-  const handleImportWallet = (e: React.SyntheticEvent) => {
+  const handleImportWallet = async (e: React.SyntheticEvent) => {
     e.preventDefault();
 
     setError('');
@@ -33,6 +36,16 @@ const ImportWalletModal = ({ isOpen, handleClose, accountMap }: Props) => {
 
     if (accountMap && accountMap.binaryAddress && binaryAddress !== accountMap.binaryAddress) {
       setError('Passphrase does not match wallet locked to account');
+      return;
+    }
+
+    const account = await fetchUser(binaryAddress).catch(err => {
+      devLog(err);
+      return undefined;
+    });
+
+    if (!account?.storage.map.emailHash) {
+      toast.error('Account has no wallet linked to it');
       return;
     }
 

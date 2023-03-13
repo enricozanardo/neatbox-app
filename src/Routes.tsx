@@ -1,5 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import BrowsePage from 'pages/BrowsePage';
+import LandingPage from 'pages/LandingPage';
 import ViewPage from 'pages/ViewPage';
 import { lazy, Suspense } from 'react';
 import { Outlet, Route, Routes as BrowserRoutes } from 'react-router-dom';
@@ -34,6 +35,7 @@ const Routes = () => {
         <Route path="/browse" element={<BrowsePage />} />
         <Route path="/view/:id" element={<ViewPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/landing" element={<LandingPage />} />
         <Route path="*" element={<NotFoundPage />} />
 
         <Route element={<ProtectedRoute isAllowed={isAuthenticated} />}>

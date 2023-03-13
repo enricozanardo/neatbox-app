@@ -7,11 +7,11 @@ const AlreadyRegistered = () => {
         <h2>Welcome back!</h2>
 
         <div className="font-bold">
-          <p>It seems that your e-mail is already registered.</p>
+          <p>It looks like your e-mail is already registered</p>
         </div>
 
         <p className="text-xs">
-          Import your wallet on your <Link to="/dashboard">dashboard</Link>.
+          Import your wallet on your <Link to="/dashboard">dashboard</Link>
         </p>
       </div>
     </div>

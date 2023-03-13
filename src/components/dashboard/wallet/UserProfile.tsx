@@ -26,10 +26,12 @@ const UserProfile = ({ user, account }: Props) => {
       </div>
 
       <div className="text-center">
-        <div className="mb-4">
-          <span className="label text-sm block">Username</span>
-          {account?.storage.map.username ?? 'Placeholder'}
-        </div>
+        {account?.storage.map.username && (
+          <div className="mb-4">
+            <span className="label text-sm block">Username</span>
+            {account.storage.map.username}
+          </div>
+        )}
 
         <div className="mb-4">
           <span className="label text-sm block">Email Address</span>

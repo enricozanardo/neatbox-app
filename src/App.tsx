@@ -21,9 +21,9 @@ function App() {
     <HelmetProvider>
       <SEO rootMetadata />
       <QueryClientProvider client={queryClient}>
-        {wallet && <AccountDataFetcher wallet={wallet} />}
         <ReactQueryDevtools />
         <BrowserRouter>
+          {wallet && <AccountDataFetcher wallet={wallet} />}
           <Toast />
           <ScrollToTop />
           <Authentication>
