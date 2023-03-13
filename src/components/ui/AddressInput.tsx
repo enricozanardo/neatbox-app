@@ -10,8 +10,6 @@ import { isEmail } from 'utils/helpers';
 
 import Label from './Label';
 
-export type RecipientAccount = AccountProps | null | undefined;
-
 type Props = {
   setAddressResult: React.Dispatch<
     React.SetStateAction<{ emailHash: string; rawInput: string; account: AccountProps | null; username: string }>

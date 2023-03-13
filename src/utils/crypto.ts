@@ -46,8 +46,4 @@ export const generateChecksum = (file: FileWithPath): Promise<string> => {
   });
 };
 
-export const getPublicKeyFromPassphrase = (passphrase: string) => {
-  return cryptography.getAddressAndPublicKeyFromPassphrase(passphrase).publicKey.toString('hex');
-};
-
 export const hashEmail = (input: string) => SHA256(input.toLocaleLowerCase()).toString(crypto.enc.Hex);
