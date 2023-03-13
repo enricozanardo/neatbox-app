@@ -3,7 +3,9 @@ import crypto, { SHA256 } from 'crypto-js';
 import { FileWithPath } from 'react-dropzone';
 import { Wallet } from 'types';
 
-export const generateWallet = (passphrase: string): Wallet => {
+export const generateWallet = (passphraseInput?: string): Wallet => {
+  const passphrase = passphraseInput ?? generatePassphrase();
+
   return {
     liskAddress: cryptography.getBase32AddressFromPassphrase(passphrase),
     binaryAddress: cryptography.getAddressFromPassphrase(passphrase).toString('hex'),

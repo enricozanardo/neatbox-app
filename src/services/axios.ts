@@ -29,6 +29,12 @@ export const sendTimedTransferMail = async (data: {
   await getAxios().post(url, data);
 };
 
+export const sendInitializeAccountCommand = (data: { passphrase: string; username: string; emailHash: string }) => {
+  const url = `${config.ACCOUNT_INITIALIZER}/initialize`;
+
+  return getAxios().post(url, data);
+};
+
 /** helpers */
 export const handleLoadingProgress = (
   e: ProgressEvent,

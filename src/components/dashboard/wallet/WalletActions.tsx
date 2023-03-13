@@ -1,6 +1,5 @@
 import Button from 'components/ui/Button';
 import Modal from 'components/ui/Modal';
-import config from 'config';
 import useAccountData from 'hooks/useAccountData';
 import { useState } from 'react';
 
@@ -22,7 +21,7 @@ const WalletActions = ({ removeWallet, initializeWallet }: Props) => {
       </Button>
 
       {!isAbleToInitializeWallet && (
-        <a href={config.FAUCET} target="_blank" rel="noreferrer" className="text-black">
+        <a href={''} target="_blank" rel="noreferrer" className="text-black">
           <Button>Get Tokens</Button>
         </a>
       )}

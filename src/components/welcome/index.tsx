@@ -1,6 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import LogInButton from 'components/layout/LogInButton';
-import config from 'config';
 import { Link } from 'react-router-dom';
 
 const Welcome = () => {
@@ -28,7 +27,7 @@ const Welcome = () => {
                 <li>Create or import a wallet</li>
                 <li>
                   Get some tokens from the{' '}
-                  <a href={config.FAUCET} target="_blank" rel="noreferrer">
+                  <a href={''} target="_blank" rel="noreferrer">
                     faucet
                   </a>
                 </li>

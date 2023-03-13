@@ -1,20 +1,23 @@
 import { useAuth0 } from '@auth0/auth0-react';
+import Unauthorized from 'components/ui/Unauthorized';
 import { useAccountMapEntry } from 'hooks/useAccountMapEntry';
-import { useWalletStore } from 'stores/useWalletStore';
 
 import AlreadyRegistered from './AlreadyRegistered';
-import RegisterForm from './RegisterForm';
+import RegistrationProcess from './RegistrationProcess';
 
 const Register = () => {
   const { user } = useAuth0();
-  const { wallet } = useWalletStore();
   const { map } = useAccountMapEntry(user?.email);
 
-  if (wallet || map) {
+  if (map) {
     return <AlreadyRegistered />;
   }
 
-  return <RegisterForm />;
+  if (!user?.email) {
+    return <Unauthorized />;
+  }
+
+  return <RegistrationProcess email={user.email} />;
 };
 
 export default Register;
