@@ -14,8 +14,7 @@ const TransferCollectionPage = lazy(() => import('pages/TransferCollectionPage')
 const TransferFilePage = lazy(() => import('pages/TransferFilePage'));
 const TransferPage = lazy(() => import('pages/TransferPage'));
 const UploadPage = lazy(() => import('pages/UploadPage'));
-
-const WelcomePage = lazy(() => import('pages/WelcomePage'));
+const RegisterPage = lazy(() => import('pages/RegisterPage'));
 
 const ProtectedRoute = ({ isAllowed, children }: { isAllowed: boolean; children?: any }) => {
   if (!isAllowed) {
@@ -34,7 +33,7 @@ const Routes = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/browse" element={<BrowsePage />} />
         <Route path="/view/:id" element={<ViewPage />} />
-        <Route path="/welcome" element={<WelcomePage />} />
+        <Route path="/register" element={<RegisterPage />} />
         <Route path="*" element={<NotFoundPage />} />
 
         <Route element={<ProtectedRoute isAllowed={isAuthenticated} />}>

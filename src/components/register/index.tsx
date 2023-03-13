@@ -1,38 +1,20 @@
-import Button from 'components/ui/Button';
-import PageTitle from 'components/ui/PageTitle';
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useAuth0 } from '@auth0/auth0-react';
+import { useAccountMapEntry } from 'hooks/useAccountMapEntry';
+import { useWalletStore } from 'stores/useWalletStore';
 
-import UsernameInput from './UsernameInput';
-
-const regex = /[a-zA-Z0-9]{3,24}/;
+import AlreadyRegistered from './AlreadyRegistered';
+import RegisterForm from './RegisterForm';
 
 const Register = () => {
-  const [username, setUsername] = useState('');
-  const onSubmit = () => {};
-  return (
-    <div className="flex justify-center items-center h-full  text-center">
-      <div className="w-full">
-        <PageTitle text="Welcome!" />
+  const { user } = useAuth0();
+  const { wallet } = useWalletStore();
+  const { map } = useAccountMapEntry(user?.email);
 
-        <div className="font-bold mb-10">
-          <p>To get started, please pick a username.</p>
-        </div>
+  if (wallet || map) {
+    return <AlreadyRegistered />;
+  }
 
-        <form onSubmit={onSubmit} className="mb-10">
-          <UsernameInput />
-
-          <Button type="submit">Register</Button>
-        </form>
-
-        <p className="text-xs">
-          Already registered?
-          <br />
-          Import your wallet on your <Link to="/dashboard">dashboard</Link>.
-        </p>
-      </div>
-    </div>
-  );
+  return <RegisterForm />;
 };
 
 export default Register;
