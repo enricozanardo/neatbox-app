@@ -1,4 +1,6 @@
+import Spinner from 'components/ui/Spinner';
 import { useEffect, useState } from 'react';
+import { devLog } from 'utils/helpers';
 
 const LoadingScreen = () => {
   const [progress, setProgress] = useState(0);
@@ -15,6 +17,8 @@ const LoadingScreen = () => {
         const updated = prevState + stepSize;
         return updated > 100 ? 100 : Math.round(updated);
       });
+
+      devLog(`${progress} %`);
     }, 250);
 
     return () => {
@@ -25,11 +29,14 @@ const LoadingScreen = () => {
   return (
     <div className="flex justify-center items-center h-full mt-4 mb-10 ">
       <div className="text-center">
-        <h1 className="text-6xl">{progress} %</h1>
-        <div className="mt-4 text-gray-500">
+        <h1 className="text-6xl">
+          <Spinner />
+        </h1>
+
+        <div className="mt-4 text-gray-400">
           Initializing your account..
           <br />
-          This will take between 10 and 20 seconds.
+          This will take between 10 and 20 seconds
         </div>
       </div>
     </div>

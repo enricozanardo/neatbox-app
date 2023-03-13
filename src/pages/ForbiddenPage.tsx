@@ -10,10 +10,9 @@ const ForbiddenPage = () => {
     <div className="flex justify-center items-center h-full">
       <SEO pageTitle="403" pageDescription="403 - Forbidden" />
 
-      <div className="text-center">
+      <div className="text-center space-y-4">
         <h1>403 - Forbidden</h1>
         <p className="mb-4">Whoops! Please register a username to view this page.</p>
-
         <Button onClick={() => navigate('/register')}>Register Username</Button>
       </div>
     </div>

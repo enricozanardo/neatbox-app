@@ -19,7 +19,7 @@ const CompletedScreen = () => {
       <div className="text-center">
         <h1 className="text-4xl">Initialization complete! ✔️</h1>
         <div className="mt-4 text-gray-500">
-          Redirecting to your <Link to="/dashboard">dashboard</Link>
+          Redirecting to your <Link to="/dashboard">dashboard</Link> in 3 seconds..
         </div>
       </div>
     </div>

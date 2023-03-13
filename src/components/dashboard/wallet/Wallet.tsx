@@ -12,7 +12,6 @@ const Wallet = () => {
 
   const wallet = useWalletStore(state => state.wallet);
   const { account } = useAccountData();
-
   const { user } = useAuth0();
   const { map } = useAccountMapEntry(user?.email);
 

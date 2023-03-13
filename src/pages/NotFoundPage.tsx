@@ -14,7 +14,7 @@ const NotFoundPage = () => {
     <div className="flex justify-center items-center h-full">
       <SEO pageTitle="404" pageDescription="404 - Not Found" />
 
-      <div className="text-center">
+      <div className="text-center space-y-4">
         <h1>404 - Not Found</h1>
         <p className="mb-4">Whoops! This page does not exist.</p>
 
