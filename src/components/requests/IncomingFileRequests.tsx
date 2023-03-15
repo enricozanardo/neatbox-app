@@ -110,8 +110,12 @@ const IncomingFileRequests = ({ files }: Props) => {
       removeRequests(ids);
       toast.success('Request successfully processed');
 
-      if (accept && (request.type === FileRequestType.Transfer || request.type === FileRequestType.TimedTransfer)) {
-        navigate(`/dashboard?ref=${txAsset.fileId}`);
+      if (accept) {
+        if (request.type === FileRequestType.Transfer || request.type === FileRequestType.TimedTransfer) {
+          navigate(`/dashboard?ref=${txAsset.fileId}`);
+        }
+      } else {
+        toast('Request successfully declined', { icon: 'ℹ️ ' });
       }
     },
     onError: handleError,

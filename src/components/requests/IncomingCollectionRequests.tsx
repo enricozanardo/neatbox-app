@@ -8,8 +8,8 @@ import { getFilesByIds, getPublicKeyFromTransaction } from 'services/api';
 import { buildDamUrl, getAxios } from 'services/axios';
 import { sendRespondToCollectionRequestAsset } from 'services/transactions';
 import { useWalletStore } from 'stores/useWalletStore';
-import { Collection, CollectionRequest, RespondToCollectionRequestAssetProps } from 'types';
-import { optimisticallyAddCollection } from 'utils/cache';
+import { Collection, CollectionRequest, CollectionRequestType, RespondToCollectionRequestAssetProps } from 'types';
+import { optimisticallyAddCollection, optimisticallyRemoveCollection } from 'utils/cache';
 import { hexToBuffer } from 'utils/crypto';
 import { handleError } from 'utils/errors';
 import { getTransactionTimestamp } from 'utils/helpers';
@@ -18,6 +18,11 @@ import { CollectionRequestItem } from './CollectionRequestItem';
 
 type Props = {
   collections: Collection[];
+};
+
+export const requestTypeMap = {
+  [CollectionRequestType.Ownership]: 'Ownership',
+  [CollectionRequestType.Transfer]: 'Transfer',
 };
 
 const IncomingCollectionRequests = ({ collections }: Props) => {
@@ -37,20 +42,21 @@ const IncomingCollectionRequests = ({ collections }: Props) => {
 
     let updatedFileData: { fileId: string; newHash: string }[] = [];
 
-    const { collectionId, requestId } = request;
+    const { collectionId, requestId, type } = request;
 
     try {
-      /** if accepted, make a request to retrieve, decrypt and re-encrypt the file on the DAM server */
+      /** if accepted, make a request to retrieve, decrypt and re-encrypt the collection on the DAM server */
       if (accept) {
         setDisableInteraction(true);
 
         const requesterPublicKey = await getPublicKeyFromTransaction(requestId);
         const responderPublicKey = wallet.publicKey;
 
-        const formData = new FormData();
+        const requesterIsOldOwner = type === CollectionRequestType.Transfer;
 
-        formData.append('password', requesterPublicKey);
-        formData.append('newPassword', responderPublicKey);
+        const formData = new FormData();
+        formData.append('password', requesterIsOldOwner ? requesterPublicKey : responderPublicKey);
+        formData.append('newPassword', requesterIsOldOwner ? responderPublicKey : requesterPublicKey);
 
         const { files } = await getFilesByIds(collection.fileIds);
         const fileData = files.map(file => ({ fileId: file.data.id, encryptedHash: file.data.hash }));
@@ -109,17 +115,23 @@ const IncomingCollectionRequests = ({ collections }: Props) => {
     }) => sendRespondToCollectionRequestAsset(passphrase, txAsset),
     onSuccess: (_, { request, accept, collection }) => {
       removeRequests([request.requestId]);
-      toast.success('Request successfully processed');
 
       if (accept) {
-        optimisticallyAddCollection(
-          queryClient,
-          ['account', 'collectionsOwned'],
-          collection.id,
-          hexToBuffer(wallet!.binaryAddress),
-          { title: collection.title, fileIds: collection.fileIds, transferFee: collection.transferFee },
-        );
-        navigate(`/collections?ref=${collection.id}`);
+        toast.success('Request successfully processed');
+        if (request.type === CollectionRequestType.Transfer) {
+          optimisticallyAddCollection(
+            queryClient,
+            ['account', 'collectionsOwned'],
+            collection.id,
+            hexToBuffer(wallet!.binaryAddress),
+            { title: collection.title, fileIds: collection.fileIds, transferFee: collection.transferFee },
+          );
+          navigate(`/collections?ref=${collection.id}`);
+        } else {
+          optimisticallyRemoveCollection(queryClient, ['account', 'collectionsOwned'], collection.id);
+        }
+      } else {
+        toast('Request successfully declined', { icon: 'ℹ️ ' });
       }
     },
     onError: handleError,
