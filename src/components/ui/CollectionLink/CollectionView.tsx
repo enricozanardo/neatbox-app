@@ -1,4 +1,5 @@
 import { useFileData } from 'hooks/useFileData';
+import { Dispatch, SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Collection } from 'types';
 import { displayNumber } from 'utils/formatting';
@@ -10,13 +11,16 @@ import Spinner from '../Spinner';
 
 type Props = {
   collection: Collection;
-  closeHandler: () => void;
+  setModalIsOpen: Dispatch<SetStateAction<boolean>>;
 };
 
-const CollectionView = ({ collection, closeHandler }: Props) => {
+const CollectionView = ({ collection, setModalIsOpen }: Props) => {
   const { isLoading, files, total } = useFileData(collection.fileIds, {}, ['collection', collection.id]);
-
   const navigate = useNavigate();
+
+  const closeHandler = () => {
+    setModalIsOpen(false);
+  };
 
   const handleNavigate = (fileId: string) => {
     closeHandler();
@@ -45,7 +49,7 @@ const CollectionView = ({ collection, closeHandler }: Props) => {
 
   return (
     <div>
-      <h3 className="text-center ">{collection.title}</h3>
+      <h3 className="text-center mb-4">{collection.title}</h3>
 
       <div className="flex justify-center text-sm">
         <div className=" w-full max-w-md">

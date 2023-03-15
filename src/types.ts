@@ -238,10 +238,21 @@ export type Collection = {
 };
 
 export type CollectionRequest = {
+  type: CollectionRequestType;
   collectionId: string;
   requestId: string;
   sender: Buffer;
   recipient: Buffer;
+};
+
+export enum CollectionRequestType {
+  Ownership = 'OWNERSHIP',
+  Transfer = 'TRANSFER',
+}
+
+export type RequestCollectionOwnershipAssetProps = {
+  id: string;
+  timestamp: number;
 };
 
 export type AccountMapEntry = {

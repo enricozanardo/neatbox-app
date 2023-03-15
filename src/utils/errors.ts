@@ -18,7 +18,9 @@ export const handleError = (error: unknown) => {
     } else {
       message = error.message;
     }
+  } else {
+    message = JSON.stringify(error);
   }
 
-  toast.error(message);
+  toast.error(typeof message === 'string' ? message : JSON.stringify(message));
 };
