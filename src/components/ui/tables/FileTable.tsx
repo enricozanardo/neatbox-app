@@ -104,7 +104,7 @@ const FileTable = ({ handlePageChange, total, data, showLegend, isLoading }: Pro
                     <td className="px-6 py-4 text-right">
                       {isOwnerOfItem && !fileIsTimedTransfer(item) && !isPartOfCollection && (
                         <Link to={`/transfer/file?defaultValue=${item.data.id}`} className="font-medium">
-                          Transfer
+                          <Icon type="faRightLeft" />
                         </Link>
                       )}
                     </td>

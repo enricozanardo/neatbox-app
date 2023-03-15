@@ -19,6 +19,7 @@ import {
   faImage,
   faList,
   faLock,
+  faRightLeft,
   faSpinner,
   faStar,
   faTrash,
@@ -68,6 +69,7 @@ const icons = {
   faStar,
   faList,
   faClock,
+  faRightLeft,
 };
 
 const Icon = ({ type, className }: Props) => {
