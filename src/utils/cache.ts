@@ -63,6 +63,31 @@ export const optimisticallyUpdateCollection = (
   });
 };
 
+export const optimisticallyRemoveCollection = (queryClient: QueryClient, queryKey: string[], collectionId: string) => {
+  queryClient.setQueryData<Awaited<ReturnType<typeof getCollectionsByIds>>>(queryKey, prevData => {
+    const prev = prevData || {
+      collections: [],
+      total: 0,
+    };
+
+    return {
+      collections: prev.collections.filter(col => col.id !== collectionId),
+      total: prev.total + 1,
+    };
+  });
+
+  queryClient.setQueryData<AccountProps>(['account'], prevData => {
+    if (!prevData) {
+      return prevData;
+    }
+
+    const updatedData = cloneDeep(prevData);
+    updatedData.storage.collectionsOwned.push(collectionId);
+
+    return updatedData;
+  });
+};
+
 export const optimisticallyUpdateFileCollection = (
   queryClient: QueryClient,
   queryKey: string[],

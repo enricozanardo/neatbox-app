@@ -2,6 +2,7 @@ import {
   CancelRequestAssetProps,
   CreateCollectionAssetProps,
   CreateFileAssetProps,
+  RequestCollectionOwnershipAssetProps,
   RequestCollectionTransferAssetProps,
   RequestFileAccessPermissionAssetProps,
   RequestFileOwnershipAssetProps,
@@ -178,6 +179,25 @@ export const sendRequestCollectionTransferAsset = async (
     {
       moduleID: 1000,
       assetID: 10,
+      fee: BigInt(10000000),
+      asset,
+    },
+    passphrase,
+  );
+
+  return client.transaction.send(tx);
+};
+
+export const sendRequestCollectionOwnershipAsset = async (
+  passphrase: string,
+  asset: RequestCollectionOwnershipAssetProps,
+) => {
+  const client = await api.getClient();
+
+  const tx = await client.transaction.create(
+    {
+      moduleID: 1000,
+      assetID: 14,
       fee: BigInt(10000000),
       asset,
     },

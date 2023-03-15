@@ -33,7 +33,7 @@ const CollectionLink = ({ type, file }: Props) => {
         <CollectionModal
           collectionMeta={file.meta.collection}
           modalIsOpen={modalIsOpen}
-          closeHandler={() => setModalIsOpen(false)}
+          setModalIsOpen={setModalIsOpen}
         />
       )}
     </>

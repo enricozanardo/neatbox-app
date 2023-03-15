@@ -4,7 +4,7 @@ import Icon from 'components/ui/Icon';
 import Spinner from 'components/ui/Spinner';
 import { useFileData } from 'hooks/useFileData';
 import { Link } from 'react-router-dom';
-import { Collection, CollectionRequest } from 'types';
+import { Collection, CollectionRequest, CollectionRequestType } from 'types';
 import { bufferToHex } from 'utils/crypto';
 import { displayNumber } from 'utils/formatting';
 
@@ -23,6 +23,18 @@ export const CollectionRequestItem = ({
   isLoading,
   disableInteraction,
 }: Props) => {
+  const style = {
+    [CollectionRequestType.Ownership]: {
+      header: 'Ownership Request',
+      icon: <Icon type="faList" />,
+    },
+    [CollectionRequestType.Transfer]: {
+      header: 'Transfer Request',
+      icon: <Icon type="faDownload" />,
+    },
+  };
+
+  const { header, icon } = style[request.type];
   const { files } = useFileData(collection.fileIds);
 
   return (
@@ -30,7 +42,7 @@ export const CollectionRequestItem = ({
       <div className="flex justify-center md:justify-between items-center text-center md:text-left">
         <div>
           <div className="block">
-            <span className="font-bold">Transfer request for:</span>{' '}
+            <span className="font-bold">{header} request for:</span>{' '}
             <h4 className="inline ml-2">{collection.title.toUpperCase()}</h4>
             <span className="block">Required Fee: {displayNumber(collection.transferFee)} tokens</span>
           </div>
@@ -57,9 +69,7 @@ export const CollectionRequestItem = ({
           </span>
         </div>
 
-        <div className="text-6xl text-secondary-200 hidden md:block">
-          <Icon type="faBook" />
-        </div>
+        <div className="text-6xl text-secondary-200 hidden md:block">{icon}</div>
       </div>
 
       <Hr text="Action" />
