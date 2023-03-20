@@ -87,14 +87,20 @@ const RegistrationProcess = ({ email }: Props) => {
     setUsername(e.target.value.trim());
   };
 
-  const onSubmit = async () => {
+  const onSubmit = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+
     const newWallet = generateWallet();
     const emailHash = hashEmail(email);
 
     try {
       setScreen('initializing');
       addWallet(newWallet);
-      await sendInitializeAccountCommand({ passphrase: newWallet.passphrase, username, emailHash });
+      await sendInitializeAccountCommand({
+        passphrase: newWallet.passphrase,
+        username: username.toLowerCase(),
+        emailHash,
+      });
       setScreen('completed');
     } catch (err) {
       handleError(err);

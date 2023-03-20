@@ -107,6 +107,15 @@ const FileTable = ({ handlePageChange, total, data, showLegend, isLoading }: Pro
                           <Icon type="faRightLeft" />
                         </Link>
                       )}
+
+                      {isOwnerOfItem && isPartOfCollection && (
+                        <Link
+                          to={`/transfer/collection?defaultValue=${item.meta.collection.id}`}
+                          className="font-medium"
+                        >
+                          <Icon type="faRightLeft" />
+                        </Link>
+                      )}
                     </td>
                   )}
                 </tr>
