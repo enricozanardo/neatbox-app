@@ -5,8 +5,10 @@ import Hr from 'components/ui/Hr';
 import { CustomField } from 'components/upload/CustomFields';
 import FileTypeIcon from 'components/upload/FileTypeIcon';
 import { File } from 'types';
+import { handleError } from 'utils/errors';
 import { displayDate, displayDateTime, displayFileSize, displayNumber } from 'utils/formatting';
-import { bufferToJson, fileIsTimedTransfer } from 'utils/helpers';
+import { bufferToJson, devLog, fileIsTimedTransfer } from 'utils/helpers';
+import { validateCustomFields } from 'utils/validation';
 
 import FileActions from './FileActions';
 import UpdateFile from './UpdateFile';
@@ -18,8 +20,23 @@ type Props = {
 };
 
 const FileCard = ({ file, isOwner, isAllowed }: Props) => {
-  const customFields: CustomField[] = bufferToJson(file.data.customFields) || [];
+  const getCustomFields = (input: Buffer) => {
+    let fields: CustomField[] = [];
+
+    const data = bufferToJson(input);
+
+    try {
+      fields = validateCustomFields(data);
+    } catch (err) {
+      devLog(err);
+      handleError('Could not process custom fields');
+    }
+
+    return fields;
+  };
+
   const isTimed = fileIsTimedTransfer(file);
+  const customFields = getCustomFields(file.data.customFields);
 
   return (
     <div className="flex justify-center text-sm">
