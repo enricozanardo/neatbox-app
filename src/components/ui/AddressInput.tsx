@@ -56,7 +56,7 @@ const AddressInput = ({ disabled, setAddressResult, isTimedTransfer }: Props) =>
       /** unknown e-mails may proceed in case of timed transfers */
       if (!map && isTimedTransfer) {
         setSuccess('Valid new e-mail');
-        setAddressResult({ ...cloneDeep(ADDRESS_RESULT_INIT), rawInput: sanitizedInput });
+        setAddressResult({ ...cloneDeep(ADDRESS_RESULT_INIT), emailHash, rawInput: sanitizedInput });
         return;
       }
 
