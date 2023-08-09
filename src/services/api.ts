@@ -41,8 +41,6 @@ export const invokeAction = async <T>(action: ApiAction, args: Record<string, un
 export const fetchUser = async (address: string): Promise<AccountProps> => {
   const client = await getClient();
   const response: unknown = await client.account.get(address);
-
-  console.log({ response });
   return response as AccountProps;
 };
 

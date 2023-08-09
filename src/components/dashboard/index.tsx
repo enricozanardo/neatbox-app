@@ -23,8 +23,6 @@ const Dashboard = () => {
   const [searchParams] = useSearchParams();
   const ref = searchParams.get('ref');
 
-  console.log(wallet);
-
   useEffect(() => {
     if (myFilesRef.current && ref) {
       myFilesRef.current.scrollIntoView();
