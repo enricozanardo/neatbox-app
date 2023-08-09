@@ -1,13 +1,16 @@
+import { useMutation } from '@tanstack/react-query';
 import Empty from 'components/ui/Empty';
+import Unauthorized from 'components/ui/Unauthorized';
+import useAccountData from 'hooks/useAccountData';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { getFileById, getPublicKeyFromTransaction } from 'services/api';
 import { buildDamUrl, getAxios } from 'services/axios';
 import { sendRespondToFileRequestAsset } from 'services/transactions';
-import { useAccountStore } from 'stores/useAccountStore';
 import { useWalletStore } from 'stores/useWalletStore';
 import { File, FileRequest, FileRequestType, RespondToFileRequestAssetProps } from 'types';
+import { handleError } from 'utils/errors';
 import { getTransactionTimestamp, prepareFileRequests } from 'utils/helpers';
 
 import { FileRequestItem } from './FileRequestItem';
@@ -24,14 +27,11 @@ export const requestTypeMap = {
 };
 
 const IncomingFileRequests = ({ files }: Props) => {
-  const wallet = useWalletStore(state => state.wallet);
-  const { removeRequests, account, setIgnoreRefresh } = useAccountStore(state => ({
-    removeRequests: state.removeRequests,
-    account: state.account,
-    setIgnoreRefresh: state.setIgnoreRefresh,
-  }));
-  const [isLoading, setIsLoading] = useState(false);
   const [disableInteraction, setDisableInteraction] = useState(false);
+  const [damIsProcessing, setDamIsProcessing] = useState(false);
+
+  const wallet = useWalletStore(state => state.wallet);
+  const { removeRequests, account } = useAccountData();
   const navigate = useNavigate();
 
   const handleResponse = async (request: FileRequest, accept: boolean) => {
@@ -40,21 +40,21 @@ const IncomingFileRequests = ({ files }: Props) => {
       return;
     }
 
-    setIsLoading(true);
-
     const { fileId, requestId, type } = request;
 
-    try {
-      let newHash = '';
+    let newHash = '';
 
+    const includesFileProcessing =
+      accept &&
+      (type === FileRequestType.Transfer ||
+        type === FileRequestType.Ownership ||
+        type === FileRequestType.TimedTransfer);
+
+    try {
       /** if accepted, make a request to retrieve, decrypt and re-encrypt the file on the DAM server */
-      if (
-        accept &&
-        (type === FileRequestType.Transfer ||
-          type === FileRequestType.Ownership ||
-          type === FileRequestType.TimedTransfer)
-      ) {
+      if (includesFileProcessing) {
         setDisableInteraction(true);
+
         const file = await getFileById(fileId);
 
         const requesterPublicKey = await getPublicKeyFromTransaction(requestId);
@@ -67,9 +67,11 @@ const IncomingFileRequests = ({ files }: Props) => {
         formData.append('password', requesterIsOldOwner ? requesterPublicKey : responderPublicKey);
         formData.append('newPassword', requesterIsOldOwner ? responderPublicKey : requesterPublicKey);
 
+        setDamIsProcessing(true);
         const { encryptedHash }: { encryptedHash: string } = await getAxios()
           .post(buildDamUrl('transfer-file'), formData)
           .then(res => res.data);
+        setDamIsProcessing(false);
 
         newHash = encryptedHash;
       }
@@ -82,34 +84,48 @@ const IncomingFileRequests = ({ files }: Props) => {
         timestamp: getTransactionTimestamp(),
       };
 
-      await sendRespondToFileRequestAsset(wallet.passphrase, txAsset);
-
-      const requestsToRemove =
-        (request.type === FileRequestType.Transfer || request.type === FileRequestType.Ownership) && account && accept
-          ? account.storage.incomingFileRequests.filter(r => r.fileId === fileId).map(r => r.requestId)
-          : [request.requestId];
-
-      removeRequests(requestsToRemove);
-
-      toast.success(`${requestTypeMap[type]} request successfully ${accept ? 'accepted' : 'declined'}!`);
-
-      if (accept && (request.type === FileRequestType.Transfer || request.type === FileRequestType.TimedTransfer)) {
-        navigate(`/dashboard?ref=${fileId}`);
-      } else {
-        setIgnoreRefresh(true);
-      }
+      mutate({ passphrase: wallet.passphrase, txAsset, request, accept });
     } catch (err) {
-      // Todo: create proper error handler
-      // @ts-ignore
-      toast.error(err.message);
+      handleError(err);
+      setDamIsProcessing(false);
     }
-
-    setIsLoading(false);
-    setDisableInteraction(false);
   };
 
+  const { isLoading, mutate } = useMutation({
+    mutationFn: ({
+      passphrase,
+      txAsset,
+    }: {
+      passphrase: string;
+      txAsset: RespondToFileRequestAssetProps;
+      request: FileRequest;
+      accept: boolean;
+    }) => sendRespondToFileRequestAsset(passphrase, txAsset),
+    onSuccess: (_, { request, txAsset, accept }) => {
+      const ids =
+        (request.type === FileRequestType.Transfer || request.type === FileRequestType.Ownership) && account && accept
+          ? account.storage.incomingFileRequests.filter(r => r.fileId === txAsset.fileId).map(r => r.requestId)
+          : [request.requestId];
+
+      removeRequests(ids);
+      toast.success('Request successfully processed');
+
+      if (accept) {
+        if (request.type === FileRequestType.Transfer || request.type === FileRequestType.TimedTransfer) {
+          navigate(`/dashboard?ref=${txAsset.fileId}`);
+        }
+      } else {
+        toast('Request successfully declined', { icon: 'ℹ️ ' });
+      }
+    },
+    onError: handleError,
+    onSettled: () => {
+      setDisableInteraction(false);
+    },
+  });
+
   if (!account) {
-    return null;
+    return <Unauthorized />;
   }
 
   const requests = prepareFileRequests(files, account.storage.incomingFileRequests);
@@ -127,7 +143,7 @@ const IncomingFileRequests = ({ files }: Props) => {
             request={request}
             asset={file}
             handleResponse={handleResponse}
-            isLoading={isLoading}
+            isLoading={isLoading || damIsProcessing}
             disableInteraction={disableInteraction}
           />
         ))}

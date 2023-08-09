@@ -15,7 +15,7 @@ const Statistic = ({ value, label }: Props) => {
   return (
     <div className="space-y-3 text-center">
       <h3>{label}</h3>
-      <span className="uppercase underline decoration-8 decoration-primary-400 underline-offset-4 text-6xl block">
+      <span className="uppercase underline decoration-8 decoration-primary-400 underline-offset-4 text-5xl  block">
         {getValue()}
       </span>
     </div>

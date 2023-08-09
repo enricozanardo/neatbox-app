@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import { sendRequestFileAccessPermissionAsset, sendRequestFileOwnershipAsset } from 'services/transactions';
 import { useWalletStore } from 'stores/useWalletStore';
 import { File, RequestFileAccessPermissionAssetProps, RequestFileOwnershipAssetProps } from 'types';
+import { handleError } from 'utils/errors';
 import { getTransactionTimestamp } from 'utils/helpers';
 
 type Props = {
@@ -33,9 +34,7 @@ const FileRequests = ({ file, isAllowed }: Props) => {
       await sendRequestFileOwnershipAsset(wallet.passphrase, txAsset);
       toast.success('Ownership successfully requested!');
     } catch (err) {
-      // Todo: create proper error handler
-      // @ts-ignore
-      toast.error(err.message);
+      handleError(err);
     }
 
     setOwnershipRequestModalIsOpen(false);
@@ -56,9 +55,7 @@ const FileRequests = ({ file, isAllowed }: Props) => {
       await sendRequestFileAccessPermissionAsset(wallet.passphrase, txAsset);
       toast.success('Access Permission successfully requested!');
     } catch (err) {
-      // Todo: create proper error handler
-      // @ts-ignore
-      toast.error(err.message);
+      handleError(err);
     }
 
     setPermissionRequestModalIsOpen(false);

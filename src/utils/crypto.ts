@@ -3,7 +3,9 @@ import crypto, { SHA256 } from 'crypto-js';
 import { FileWithPath } from 'react-dropzone';
 import { Wallet } from 'types';
 
-export const generateWallet = (passphrase: string): Wallet => {
+export const generateWallet = (passphraseInput?: string): Wallet => {
+  const passphrase = passphraseInput ?? generatePassphrase();
+
   return {
     liskAddress: cryptography.getBase32AddressFromPassphrase(passphrase),
     binaryAddress: cryptography.getAddressFromPassphrase(passphrase).toString('hex'),
@@ -26,6 +28,10 @@ export const bufferToHex = (input: Buffer) => {
   return cryptography.bufferToHex(input);
 };
 
+export const hexToBuffer = (input: string) => {
+  return cryptography.hexToBuffer(input);
+};
+
 export const generateChecksum = (file: FileWithPath): Promise<string> => {
   return new Promise(resolve => {
     const reader = new FileReader();
@@ -38,10 +44,6 @@ export const generateChecksum = (file: FileWithPath): Promise<string> => {
       resolve(hash);
     };
   });
-};
-
-export const getPublicKeyFromPassphrase = (passphrase: string) => {
-  return cryptography.getAddressAndPublicKeyFromPassphrase(passphrase).publicKey.toString('hex');
 };
 
 export const hashEmail = (input: string) => SHA256(input.toLocaleLowerCase()).toString(crypto.enc.Hex);

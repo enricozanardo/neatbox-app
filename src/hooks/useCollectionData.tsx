@@ -1,24 +1,34 @@
-import { useEffect, useState } from 'react';
-import { getCollectionById } from 'services/api';
-import { Collection } from 'types';
+import { useQuery } from '@tanstack/react-query';
+import { getCollectionsByIds } from 'services/api';
+import { ApiOptions } from 'types';
+import { handleError } from 'utils/errors';
+import { devLog } from 'utils/helpers';
 
-export const useCollectionData = (id: string) => {
-  const [collection, setCollection] = useState<Collection | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+import useAccountData from './useAccountData';
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await getCollectionById(id);
-      setCollection(data);
-      setIsLoading(false);
-    };
+export const useCollectionData = (
+  collectionIds: string[],
+  options: ApiOptions = {},
+  queryKeyBase: string[] = [],
+  queryKeyOverride?: string[],
+  refetchInterval?: number,
+) => {
+  const { account } = useAccountData();
 
-    try {
-      fetchData();
-    } catch (err) {
-      setIsLoading(false);
-    }
-  }, [id]);
+  const queryKey = queryKeyOverride || [...queryKeyBase, 'collections', options];
 
-  return { collection, isLoading };
+  const { isLoading, isFetching, data } = useQuery({
+    queryKey,
+    queryFn: () => getCollectionsByIds(collectionIds, options),
+    onSuccess: data => devLog(data),
+    onError: handleError,
+    enabled: !!account,
+    refetchInterval,
+  });
+
+  return {
+    collections: data?.collections ?? [],
+    total: data?.total ?? 0,
+    isLoading: isLoading || isFetching,
+  };
 };

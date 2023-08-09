@@ -1,0 +1,7 @@
+{
+  "ignore": {
+    "files": [
+      "/Users/pmbp/code/neatbox-app/src/utils/mocks.ts"
+    ]
+  }
+}

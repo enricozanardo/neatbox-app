@@ -1,6 +1,6 @@
+import useAccountData from 'hooks/useAccountData';
 import { useEffect, useState } from 'react';
 import { getCollectionsByIds, getFilesByIds } from 'services/api';
-import { useAccountStore } from 'stores/useAccountStore';
 import { Collection, File } from 'types';
 import { removeDuplicates } from 'utils/helpers';
 
@@ -9,9 +9,10 @@ import IncomingFileRequests from './IncomingFileRequests';
 import PendingRequests from './PendingRequests';
 
 const Requests = () => {
-  const account = useAccountStore(state => state.account);
   const [filesInRequests, setFilesInRequests] = useState<File[]>([]);
   const [collectionsInRequests, setCollectionsInRequests] = useState<Collection[]>([]);
+
+  const { account } = useAccountData();
 
   useEffect(() => {
     if (!account) {

@@ -1,7 +1,8 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import PageTitle from 'components/ui/PageTitle';
 import SuccessScreen from 'components/ui/SuccessScreen';
-import { useOwnedFilesData } from 'hooks/useOwnedFilesData';
+import useAccountData from 'hooks/useAccountData';
+import { useFileData } from 'hooks/useFileData';
 import { useState } from 'react';
 import { useWalletStore } from 'stores/useWalletStore';
 
@@ -13,9 +14,17 @@ type Props = {
 
 const TransferFile = ({ defaultValue }: Props) => {
   const [success, setSuccess] = useState(false);
+
   const wallet = useWalletStore(state => state.wallet);
   const { isAuthenticated } = useAuth0();
-  const { files } = useOwnedFilesData({ limit: -1 });
+  const { account } = useAccountData();
+  const { files } = useFileData(
+    account?.storage.filesOwned ?? [],
+    { limit: -1 },
+    ['account', 'filesOwned'],
+    undefined,
+    defaultValue ? 5000 : undefined, // refetch collections if being referred from other page
+  );
 
   const reset = () => {
     setSuccess(false);

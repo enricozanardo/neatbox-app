@@ -1,4 +1,3 @@
-import { cryptography } from '@liskhq/lisk-client/browser';
 import { Buffer } from 'buffer';
 import { DateTime } from 'luxon';
 import { AccountProps, Collection, CollectionRequest, File, FileRequest } from 'types';
@@ -26,55 +25,6 @@ export const bufferToJson = (input: Buffer) => {
   return JSON.parse(buffer.toString());
 };
 
-export const generateDefaultAccount = (address: string): AccountProps => {
-  const account = {
-    address: cryptography.hexToBuffer(address),
-    token: { balance: BigInt('0') },
-    storage: {
-      filesOwned: [],
-      filesAllowed: [],
-      incomingFileRequests: [],
-      outgoingFileRequests: [],
-      collectionsOwned: [],
-      collectionsAllowed: [],
-      incomingCollectionRequests: [],
-      outgoingCollectionRequests: [],
-      map: '',
-    },
-  };
-
-  return account;
-};
-
-/** Inspired by: https://stackoverflow.com/a/12646864 */
-export const shuffleArray = <T>(array: T[]) => {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-};
-
-export const sanitizeAmount = (input: string | number, maxAllowed?: number) => {
-  const num = Number(input);
-  const max = maxAllowed || 1000000000000;
-
-  if (typeof num !== 'number') {
-    return;
-  }
-
-  let amount = num;
-
-  if (num > max) {
-    amount = max;
-  }
-
-  if (num < 1) {
-    amount = 1;
-  }
-
-  return Math.floor(amount);
-};
-
 export const fileIsTimedTransfer = (file: File) => {
   return file.meta.expiration.unix > 0;
 };
@@ -92,7 +42,7 @@ export const accountHasEnoughBalance = (required: number, account: AccountProps 
   const totalRequired = required + minRemainingBalance;
   const accountBalance = Number(beddowsToLsk(account.token.balance));
 
-  return accountBalance > totalRequired;
+  return accountBalance >= totalRequired;
 };
 
 export const isEmail = (input: unknown) => {

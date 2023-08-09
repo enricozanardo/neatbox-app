@@ -1,7 +1,7 @@
 import Button from 'components/ui/Button';
 import Icon from 'components/ui/Icon';
+import useAccountData from 'hooks/useAccountData';
 import { TX_FEES } from 'services/transactions';
-import { useAccountStore } from 'stores/useAccountStore';
 import { Wallet } from 'types';
 import { beddowsToLsk } from 'utils/formatting';
 
@@ -12,7 +12,7 @@ type Props = {
 };
 
 const UploadButton = ({ isAuthenticated, wallet, isTimedTransfer }: Props) => {
-  const account = useAccountStore(state => state.account);
+  const { account } = useAccountData();
 
   const accountIsMapped = account?.storage.map;
 

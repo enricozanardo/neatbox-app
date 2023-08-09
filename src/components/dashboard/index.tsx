@@ -1,31 +1,22 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import Hr from 'components/ui/Hr';
-import Icon from 'components/ui/Icon';
 import PageTitle from 'components/ui/PageTitle';
-import Unauthorized from 'components/ui/Unauthorized';
+import useAccountData from 'hooks/useAccountData';
 import { useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useAccountStore } from 'stores/useAccountStore';
 import { useWalletStore } from 'stores/useWalletStore';
 import { devLog } from 'utils/helpers';
 
-import AccountStatistics from './AccountStatistics';
-import DangerZone from './DangerZone';
-import DashboardFileTable from './DashboardFileTable';
-import MyFilesTransfersIndicator from './MyFilesTransfersIndicator';
-import UserProfile from './UserProfile';
-import Wallet from './Wallet';
-
-const NoWalletFeedback = () => {
-  return (
-    <div className="text-center text-gray-400 text-sm">
-      <Icon type="faBug" /> Create or import a wallet to view this data
-    </div>
-  );
-};
+import AccountInformation from './account-information/AccountInformation';
+import DangerZone from './danger-zone/DangerZone';
+import FilesDisplay from './files/FilesDisplay';
+import MyFilesTransfersIndicator from './files/MyFilesTransfersIndicator';
+import DashboardDivider from './shared/DashboardDivider';
+import { NoWalletFeedback } from './shared/NoWalletFeedback';
+import UserProfile from './wallet/UserProfile';
+import Wallet from './wallet/Wallet';
 
 const Dashboard = () => {
-  const account = useAccountStore(state => state.account);
+  const { account } = useAccountData();
   const wallet = useWalletStore(state => state.wallet);
   const { user } = useAuth0();
   const myFilesRef = useRef<HTMLDivElement>(null);
@@ -39,58 +30,42 @@ const Dashboard = () => {
   }, [ref]);
 
   devLog(account?.storage);
-
-  if (!user) {
-    return <Unauthorized />;
-  }
+  const accountIsRegistered = account?.storage.map.emailHash;
 
   return (
     <div className="mb-32">
       <PageTitle text="My Dashboard" />
 
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 items-center">
-        <UserProfile user={user} />
+        <UserProfile user={user!} account={account} />
 
         <Wallet />
 
-        <div className="col-span-1 lg:col-span-2">
-          <Hr />
-        </div>
+        <DashboardDivider />
 
         <div className="col-span-1 lg:col-span-2">
           <PageTitle text="Account Information" />
-          {account && <AccountStatistics account={account} />}
-          {!wallet && <NoWalletFeedback />}
+          {accountIsRegistered ? <AccountInformation account={account} /> : <NoWalletFeedback />}
         </div>
 
-        <div className="col-span-1 lg:col-span-2">
-          <Hr />
-        </div>
+        <DashboardDivider />
 
         <div className="col-span-1 lg:col-span-2" id="myFiles" ref={myFilesRef}>
           <PageTitle text="My Files" />
-          {account && <DashboardFileTable fileIds={account.storage.filesOwned} />}
+          {accountIsRegistered ? <FilesDisplay fileIds={account.storage.filesOwned} /> : <NoWalletFeedback />}
           <MyFilesTransfersIndicator fileId={ref} />
-
-          {!wallet && <NoWalletFeedback />}
         </div>
 
-        <div className="col-span-1 lg:col-span-2">
-          <Hr />
-        </div>
+        <DashboardDivider />
 
         <div className="col-span-1 lg:col-span-2">
           <PageTitle text="Files Shared With Me" />
-          {account && <DashboardFileTable fileIds={account.storage.filesAllowed} />}
-
-          {!wallet && <NoWalletFeedback />}
+          {accountIsRegistered ? <FilesDisplay fileIds={account.storage.filesAllowed} /> : <NoWalletFeedback />}
         </div>
 
         {wallet && (
           <>
-            <div className="col-span-1 lg:col-span-2">
-              <Hr />
-            </div>
+            <DashboardDivider />
             <div className="col-span-1 lg:col-span-2">
               <PageTitle text="Additional Settings" />
               <DangerZone />

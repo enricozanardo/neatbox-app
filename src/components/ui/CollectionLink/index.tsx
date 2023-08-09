@@ -10,30 +10,30 @@ type Props = {
 };
 
 const CollectionLink = ({ type, file }: Props) => {
-  const [initialized, setInitialized] = useState(false);
-  const [modalIsOpen, setModalIsOpen] = useState(true);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalIsMounted, setModalIsMounted] = useState(false);
 
-  /** utilize initialize value to avoid excess amounts of API requests from CollectionModal */
-  const handleButtonClick = () => {
-    if (!initialized) {
-      setInitialized(true);
+  const handleMouseHover = () => {
+    if (modalIsMounted) {
       return;
     }
 
-    setModalIsOpen(true);
+    setModalIsMounted(true);
   };
 
   return (
     <>
-      <Button link onClick={handleButtonClick}>
-        {type === 'text' ? file.meta.collection.title : <Icon type="faList" className=" ml-2" />}
-      </Button>
+      <div onMouseEnter={handleMouseHover} className="inline">
+        <Button link onClick={() => setModalIsOpen(true)}>
+          {type === 'text' ? file.meta.collection.title : <Icon type="faList" className=" ml-2" />}
+        </Button>
+      </div>
 
-      {initialized && (
+      {modalIsMounted && (
         <CollectionModal
           collectionMeta={file.meta.collection}
           modalIsOpen={modalIsOpen}
-          closeHandler={() => setModalIsOpen(false)}
+          setModalIsOpen={setModalIsOpen}
         />
       )}
     </>

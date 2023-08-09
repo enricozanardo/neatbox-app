@@ -1,5 +1,6 @@
 import axios from 'axios';
 import config from 'config';
+import { devLog } from 'utils/helpers';
 
 export const getAxios = () => {
   return axios;
@@ -28,12 +29,18 @@ export const sendTimedTransferMail = async (data: {
   await getAxios().post(url, data);
 };
 
+export const sendInitializeAccountCommand = (data: { passphrase: string; username: string; emailHash: string }) => {
+  const url = `${config.ACCOUNT_INITIALIZER}/initialize`;
+
+  return getAxios().post(url, data);
+};
+
 /** helpers */
 export const handleLoadingProgress = (
   e: ProgressEvent,
   setLoadingProgress: (value: React.SetStateAction<number>) => void,
 ) => {
   const progress = (e.loaded / e.total) * 100;
-  console.debug('Loaded: ', e.loaded, 'Total: ', e.total, 'Progress: ', progress);
+  devLog(`Loaded: ${e.loaded}, Total: ${e.total}, Progress: ${progress}`);
   setLoadingProgress(Math.round(progress));
 };

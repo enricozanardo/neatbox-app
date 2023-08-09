@@ -1,10 +1,10 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import logoBox from 'assets/img/neatbox-logo-box.png';
 import logoFull from 'assets/img/neatbox-logo-full.png';
-import { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { useAccountStore } from 'stores/useAccountStore';
-import { getClasses } from 'utils/helpers';
+import useAccountData from 'hooks/useAccountData';
+import { useEffect, useState, useTransition } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { devLog, getClasses } from 'utils/helpers';
 
 import LogInButton from './LogInButton';
 
@@ -19,9 +19,11 @@ const navigation = [
 
 const Header = () => {
   const [menuIsOpen, setMenuIsOpen] = useState(true);
-  const account = useAccountStore(state => state.account);
+  const { account } = useAccountData();
   const { pathname } = useLocation();
   const { isAuthenticated } = useAuth0();
+  const navigate = useNavigate();
+  const [pending, startTransition] = useTransition();
 
   const toggleMenu = () => {
     setMenuIsOpen(!menuIsOpen);
@@ -40,15 +42,21 @@ const Header = () => {
     : 0;
   const navItems = navigation.filter(n => n.requiresAuth === false || (isAuthenticated && n.requiresAuth));
 
+  const handleNavigate = (href: string) => {
+    devLog({ pending });
+    startTransition(() => {
+      navigate(href);
+    });
+  };
+
   return (
     <header>
       <nav className="bg-white border-gray-200 px-2 sm:px-4 py-2.5 rounded">
         <div className="container flex flex-wrap items-center justify-between mx-auto">
-          <Link to="/">
-            <img src={logoFull} alt="logo" className="md:h-16  hidden lg:block" />
-
+          <div onClick={() => handleNavigate('/')} className="cursor-pointer">
+            <img src={logoFull} alt="logo" className="md:h-16  hidden lg:block " />
             <img src={logoBox} alt="logo" className="ml-2 h-12 lg:hidden" />
-          </Link>
+          </div>
 
           <button
             data-collapse-toggle="navbar-default"
@@ -79,15 +87,15 @@ const Header = () => {
             <ul className="flex flex-col p-4 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:bg-transparent md:flex-row md:space-x-5 lg:space-x-6 xl:space-x-8 md:mt-0 md:text-sm md:border-0">
               {navItems.map(nav => (
                 <li className="mb-2 md:mb-0 md:mt-1 lg:scale-110" key={nav.name}>
-                  <Link
-                    to={nav.href}
+                  <div
+                    onClick={() => handleNavigate(nav.href)}
                     className={getClasses(
                       isActivePage(nav.href) ? 'underline' : '',
-                      'relative underline-offset-2 uppercase decoration-4 active:underline hover:underline decoration-primary-400 text-black z-10',
+                      'relative underline-offset-2 uppercase decoration-4 active:underline hover:underline decoration-primary-400 text-black z-10 cursor-pointer',
                     )}
                   >
                     <div className="z-20">{nav.name}</div>
-                  </Link>
+                  </div>
 
                   {nav.name === 'Requests' && openRequests > 0 && (
                     <div className="opacity-70 inline-flex absolute ml-20 -mt-8 md:-mt-[3.5em] md:ml-[7.6em] lg:mt-1 lg:ml-0 lg:mb-0 lg:-top-3 lg:-right-3 justify-center items-center w-4 h-4 text-xxs font-bold text-white bg-red-500 rounded-full z-0">

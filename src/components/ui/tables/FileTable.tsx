@@ -1,7 +1,9 @@
+import { useQueryClient } from '@tanstack/react-query';
 import config from 'config';
+import useAccountData from 'hooks/useAccountData';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useAccountStore } from 'stores/useAccountStore';
+import { getFileById } from 'services/api';
 import { File } from 'types';
 import { displayFileSize } from 'utils/formatting';
 import { fileIsPArtOfCollection, fileIsTimedTransfer } from 'utils/helpers';
@@ -21,12 +23,22 @@ type Props = {
 };
 
 const FileTable = ({ handlePageChange, total, data, showLegend, isLoading }: Props) => {
-  const account = useAccountStore(state => state.account);
   const [currentPage, setCurrentPage] = useState(1);
+
+  const queryClient = useQueryClient();
+  const { account } = useAccountData();
 
   const handleChange = (page: number) => {
     setCurrentPage(page);
     handlePageChange(page);
+  };
+
+  const prefetchFileData = (id: string) => {
+    queryClient.prefetchQuery({
+      queryKey: ['view', id],
+      queryFn: () => getFileById(id),
+      staleTime: 60000,
+    });
   };
 
   const ownedItems = account ? account.storage.filesOwned.filter(f => data.find(d => d.data.id === f)) : [];
@@ -34,6 +46,7 @@ const FileTable = ({ handlePageChange, total, data, showLegend, isLoading }: Pro
   return (
     <>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <LoadingOverlay isLoading={isLoading} />
         <table className="w-full text-sm text-left text-gray-500">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 whitespace-nowrap">
             <tr>
@@ -55,9 +68,7 @@ const FileTable = ({ handlePageChange, total, data, showLegend, isLoading }: Pro
               )}
             </tr>
           </thead>
-          <tbody className="bg-white relative">
-            <LoadingOverlay isLoading={isLoading} />
-
+          <tbody className="bg-white">
             {data.length === 0 && (
               <tr>
                 <td colSpan={4} className="text-center">
@@ -73,11 +84,15 @@ const FileTable = ({ handlePageChange, total, data, showLegend, isLoading }: Pro
 
               return (
                 <tr className="bg-white" key={item.data.id}>
-                  <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                  <td
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                    onMouseEnter={() => prefetchFileData(item.data.id)}
+                  >
                     <Link to={`/view/${item.data.id}`} className="font-bold">
                       {item.data.title}
                     </Link>
 
+                    {fileIsTimedTransfer(item) && <Icon type="faClock" className="text-gray-300 ml-2" />}
                     {isPartOfCollection && <CollectionLink file={item} type="icon" />}
                     {isOwnerOfItem && <Icon type="faUserTie" className="text-gray-300 ml-2" />}
                     {itemIsAllowed && <Icon type="faUserGroup" className="text-gray-300 ml-2" />}
@@ -89,7 +104,16 @@ const FileTable = ({ handlePageChange, total, data, showLegend, isLoading }: Pro
                     <td className="px-6 py-4 text-right">
                       {isOwnerOfItem && !fileIsTimedTransfer(item) && !isPartOfCollection && (
                         <Link to={`/transfer/file?defaultValue=${item.data.id}`} className="font-medium">
-                          Transfer
+                          <Icon type="faRightLeft" />
+                        </Link>
+                      )}
+
+                      {isOwnerOfItem && isPartOfCollection && (
+                        <Link
+                          to={`/transfer/collection?defaultValue=${item.meta.collection.id}`}
+                          className="font-medium"
+                        >
+                          <Icon type="faRightLeft" />
                         </Link>
                       )}
                     </td>
@@ -107,6 +131,7 @@ const FileTable = ({ handlePageChange, total, data, showLegend, isLoading }: Pro
             <Icon type="faUserTie" className="text-gray-200 mr-1" /> Owner
             <Icon type="faUserGroup" className="ml-8 text-gray-200 mr-1" /> Shared With
             <Icon type="faList" className="ml-8 text-gray-200 mr-1" /> Part of Collection
+            <Icon type="faClock" className="ml-8 text-gray-200 mr-1" /> Timed Transfer
           </div>
         </div>
       )}

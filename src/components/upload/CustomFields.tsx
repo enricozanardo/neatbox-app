@@ -12,7 +12,7 @@ export type CustomField = {
   value: string;
 };
 
-export type Template = {
+type Template = {
   id: string;
   customFields: CustomField[];
 };

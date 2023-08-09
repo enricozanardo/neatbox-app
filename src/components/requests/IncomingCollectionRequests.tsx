@@ -1,13 +1,17 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Empty from 'components/ui/Empty';
+import useAccountData from 'hooks/useAccountData';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { getFilesByIds, getPublicKeyFromTransaction } from 'services/api';
 import { buildDamUrl, getAxios } from 'services/axios';
 import { sendRespondToCollectionRequestAsset } from 'services/transactions';
-import { useAccountStore } from 'stores/useAccountStore';
 import { useWalletStore } from 'stores/useWalletStore';
-import { Collection, CollectionRequest, RespondToCollectionRequestAssetProps } from 'types';
+import { Collection, CollectionRequest, CollectionRequestType, RespondToCollectionRequestAssetProps } from 'types';
+import { optimisticallyAddCollection, optimisticallyRemoveCollection } from 'utils/cache';
+import { hexToBuffer } from 'utils/crypto';
+import { handleError } from 'utils/errors';
 import { getTransactionTimestamp } from 'utils/helpers';
 
 import { CollectionRequestItem } from './CollectionRequestItem';
@@ -16,16 +20,19 @@ type Props = {
   collections: Collection[];
 };
 
-const IncomingCollectionRequests = ({ collections }: Props) => {
-  const wallet = useWalletStore(state => state.wallet);
-  const { removeRequests, setIgnoreRefresh } = useAccountStore(state => ({
-    removeRequests: state.removeRequests,
-    setIgnoreRefresh: state.setIgnoreRefresh,
-  }));
-  const [isLoading, setIsLoading] = useState(false);
-  const [disableInteraction, setDisableInteraction] = useState(false);
+export const requestTypeMap = {
+  [CollectionRequestType.Ownership]: 'Ownership',
+  [CollectionRequestType.Transfer]: 'Transfer',
+};
 
+const IncomingCollectionRequests = ({ collections }: Props) => {
+  const [disableInteraction, setDisableInteraction] = useState(false);
+  const [damIsProcessing, setDamIsProcessing] = useState(false);
+
+  const wallet = useWalletStore(state => state.wallet);
+  const { removeRequests } = useAccountData();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const handleResponse = async (request: CollectionRequest, collection: Collection, accept: boolean) => {
     if (!wallet?.passphrase) {
@@ -35,22 +42,21 @@ const IncomingCollectionRequests = ({ collections }: Props) => {
 
     let updatedFileData: { fileId: string; newHash: string }[] = [];
 
-    setIsLoading(true);
-
-    const { collectionId, requestId } = request;
+    const { collectionId, requestId, type } = request;
 
     try {
-      /** if accepted, make a request to retrieve, decrypt and re-encrypt the file on the DAM server */
+      /** if accepted, make a request to retrieve, decrypt and re-encrypt the collection on the DAM server */
       if (accept) {
         setDisableInteraction(true);
 
         const requesterPublicKey = await getPublicKeyFromTransaction(requestId);
         const responderPublicKey = wallet.publicKey;
 
-        const formData = new FormData();
+        const requesterIsOldOwner = type === CollectionRequestType.Transfer;
 
-        formData.append('password', requesterPublicKey);
-        formData.append('newPassword', responderPublicKey);
+        const formData = new FormData();
+        formData.append('password', requesterIsOldOwner ? requesterPublicKey : responderPublicKey);
+        formData.append('newPassword', requesterIsOldOwner ? responderPublicKey : requesterPublicKey);
 
         const { files } = await getFilesByIds(collection.fileIds);
         const fileData = files.map(file => ({ fileId: file.data.id, encryptedHash: file.data.hash }));
@@ -58,11 +64,13 @@ const IncomingCollectionRequests = ({ collections }: Props) => {
         formData.append('fileData', JSON.stringify(fileData));
 
         /** let the DAM transfer all files and utilize new hashes in tx */
+        setDamIsProcessing(true);
         const response: { updatedFileData: { fileId: string; newHash: string }[] } = await getAxios()
           .post(buildDamUrl('transfer-collection'), formData)
           .then(res => res.data);
 
         updatedFileData = response.updatedFileData;
+        setDamIsProcessing(false);
 
         /** validate if DAM processed all files */
         files.forEach(f => {
@@ -87,27 +95,50 @@ const IncomingCollectionRequests = ({ collections }: Props) => {
         timestamp: getTransactionTimestamp(),
       };
 
-      await sendRespondToCollectionRequestAsset(wallet.passphrase, txAsset);
+      mutate({ passphrase: wallet.passphrase, txAsset, request, accept, collection });
+    } catch (err) {
+      handleError(err);
+      setDamIsProcessing(false);
+    }
+  };
 
-      /** Optimistically remove request from account's incoming requests */
+  const { isLoading, mutate } = useMutation({
+    mutationFn: ({
+      passphrase,
+      txAsset,
+    }: {
+      passphrase: string;
+      txAsset: RespondToCollectionRequestAssetProps;
+      request: CollectionRequest;
+      accept: boolean;
+      collection: Collection;
+    }) => sendRespondToCollectionRequestAsset(passphrase, txAsset),
+    onSuccess: (_, { request, accept, collection }) => {
       removeRequests([request.requestId]);
 
-      toast.success(`Transfer request successfully ${accept ? 'accepted' : 'declined'}!`);
-
       if (accept) {
-        navigate(`/collections?ref=${collectionId}`);
+        toast.success('Request successfully processed');
+        if (request.type === CollectionRequestType.Transfer) {
+          optimisticallyAddCollection(
+            queryClient,
+            ['account', 'collectionsOwned'],
+            collection.id,
+            hexToBuffer(wallet!.binaryAddress),
+            { title: collection.title, fileIds: collection.fileIds, transferFee: collection.transferFee },
+          );
+          navigate(`/collections?ref=${collection.id}`);
+        } else {
+          optimisticallyRemoveCollection(queryClient, ['account', 'collectionsOwned'], collection.id);
+        }
       } else {
-        setIgnoreRefresh(true);
+        toast('Request successfully declined', { icon: 'ℹ️ ' });
       }
-    } catch (err) {
-      // Todo: create proper error handler
-      // @ts-ignore
-      toast.error(err.message);
-    }
-
-    setIsLoading(false);
-    setDisableInteraction(false);
-  };
+    },
+    onError: handleError,
+    onSettled: () => {
+      setDisableInteraction(false);
+    },
+  });
 
   return (
     <section>
@@ -123,7 +154,7 @@ const IncomingCollectionRequests = ({ collections }: Props) => {
               request={r}
               collection={c}
               handleResponse={handleResponse}
-              isLoading={isLoading}
+              isLoading={isLoading || damIsProcessing}
               disableInteraction={disableInteraction}
             />
           ))}
