@@ -6,13 +6,13 @@ import Toggle from 'components/ui/Toggle';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { sendUpdateFileAsset } from 'services/transactions';
-import { useWalletStore } from 'stores/useWalletStore';
 import { File, UpdateFileAssetProps } from 'types';
 import { optimisticallyUpdateFile } from 'utils/cache';
 import { handleError } from 'utils/errors';
 import { bufferToJson, fileIsTimedTransfer, getTransactionTimestamp, jsonToBuffer } from 'utils/helpers';
 
 import CustomFields, { CustomField } from '../upload/CustomFields';
+import useWallet from 'hooks/useWallet';
 
 type Props = {
   file: File;
@@ -25,7 +25,7 @@ const UpdateFile = ({ file }: Props) => {
   const [isPrivate, setIsPrivate] = useState(file.data.private);
   const [customFields, setCustomFields] = useState<CustomField[]>(bufferToJson(file.data.customFields));
 
-  const wallet = useWalletStore(state => state.wallet);
+  const { wallet } = useWallet();
   const queryClient = useQueryClient();
 
   const updateFileMutation = useMutation({

@@ -4,7 +4,7 @@ import Modal from 'components/ui/Modal';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { fetchUser } from 'services/api';
-import { useWalletStore } from 'stores/useWalletStore';
+import useWallet from 'hooks/useWallet';
 import { AccountMapEntry } from 'types';
 import { validatePassphrase } from 'utils/crypto';
 import { devLog } from 'utils/helpers';
@@ -18,7 +18,7 @@ type Props = {
 const ImportWalletModal = ({ isOpen, handleClose, accountMap }: Props) => {
   const [passphrase, setPassphrase] = useState('');
   const [error, setError] = useState('');
-  const addWalletViaPassphrase = useWalletStore(state => state.addWalletViaPassphrase);
+  const { addWalletViaPassphrase } = useWallet();
 
   const handleImportWallet = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -33,6 +33,8 @@ const ImportWalletModal = ({ isOpen, handleClose, accountMap }: Props) => {
     }
 
     const binaryAddress = cryptography.getAddressFromPassphrase(passphrase).toString('hex');
+
+    console.log({ accountMap }, { binaryAddress });
 
     if (accountMap && accountMap.binaryAddress && binaryAddress !== accountMap.binaryAddress) {
       setError('Passphrase does not match wallet registered to account');

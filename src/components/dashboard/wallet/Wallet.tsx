@@ -2,7 +2,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import useAccountData from 'hooks/useAccountData';
 import { useAccountMapEntry } from 'hooks/useAccountMapEntry';
 import { useEffect, useState } from 'react';
-import { useWalletStore } from 'stores/useWalletStore';
+import useWallet from 'hooks/useWallet';
 
 import WalletDialog from './WalletDialog';
 import WalletDisplay from './WalletDisplay';
@@ -10,7 +10,7 @@ import WalletDisplay from './WalletDisplay';
 const Wallet = () => {
   const [accountHasMappedWallet, setAccountHasMappedWallet] = useState(true);
 
-  const wallet = useWalletStore(state => state.wallet);
+  const { wallet } = useWallet();
   const { account } = useAccountData();
   const { user } = useAuth0();
   const { map } = useAccountMapEntry(user?.email);

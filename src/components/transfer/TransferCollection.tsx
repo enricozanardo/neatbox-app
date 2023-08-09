@@ -4,7 +4,7 @@ import SuccessScreen from 'components/ui/SuccessScreen';
 import useAccountData from 'hooks/useAccountData';
 import { useCollectionData } from 'hooks/useCollectionData';
 import { useState } from 'react';
-import { useWalletStore } from 'stores/useWalletStore';
+import useWallet from 'hooks/useWallet';
 
 import TransferCollectionForm from './TransferCollectionForm';
 
@@ -15,7 +15,7 @@ type Props = {
 const TransferCollection = ({ defaultValue }: Props) => {
   const [success, setSuccess] = useState(false);
 
-  const wallet = useWalletStore(state => state.wallet);
+  const { wallet } = useWallet();
   const { isAuthenticated } = useAuth0();
   const { account } = useAccountData();
   const { collections } = useCollectionData(

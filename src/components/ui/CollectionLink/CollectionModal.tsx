@@ -5,7 +5,7 @@ import { toast } from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import { getCollectionById, getFilesByIds } from 'services/api';
 import { sendRequestCollectionOwnershipAsset } from 'services/transactions';
-import { useWalletStore } from 'stores/useWalletStore';
+import useWallet from 'hooks/useWallet';
 import { RequestCollectionOwnershipAssetProps } from 'types';
 import { handleError } from 'utils/errors';
 import { getTransactionTimestamp } from 'utils/helpers';
@@ -36,7 +36,7 @@ const CollectionModal = ({
     queryKey: ['collection', collectionMeta.id],
     queryFn: () => getCollectionById(collectionMeta.id),
   });
-  const wallet = useWalletStore(state => state.wallet);
+  const { wallet } = useWallet();
 
   useEffect(() => {
     const prefetch = async () => {

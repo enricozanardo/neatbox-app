@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { getFilesByIds, getPublicKeyFromTransaction } from 'services/api';
 import { buildDamUrl, getAxios } from 'services/axios';
 import { sendRespondToCollectionRequestAsset } from 'services/transactions';
-import { useWalletStore } from 'stores/useWalletStore';
+import useWallet from 'hooks/useWallet';
 import { Collection, CollectionRequest, CollectionRequestType, RespondToCollectionRequestAssetProps } from 'types';
 import { optimisticallyAddCollection, optimisticallyRemoveCollection } from 'utils/cache';
 import { hexToBuffer } from 'utils/crypto';
@@ -29,7 +29,7 @@ const IncomingCollectionRequests = ({ collections }: Props) => {
   const [disableInteraction, setDisableInteraction] = useState(false);
   const [damIsProcessing, setDamIsProcessing] = useState(false);
 
-  const wallet = useWalletStore(state => state.wallet);
+  const { wallet } = useWallet();
   const { removeRequests } = useAccountData();
   const navigate = useNavigate();
   const queryClient = useQueryClient();

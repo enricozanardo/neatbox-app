@@ -6,34 +6,31 @@ import Toast from 'components/layout/Toast';
 import SEO from 'components/ui/SEO';
 import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter } from 'react-router-dom';
-import { useWalletStore } from 'stores/useWalletStore';
 
-import { AccountDataFetcher } from './AccountDataFetcher';
+import AccountDataFetcher from './AccountDataFetcher';
 import Layout from './components/layout';
 import Routes from './Routes';
 
 const queryClient = new QueryClient();
 
 function App() {
-  const wallet = useWalletStore(state => state.wallet);
-
   return (
-    <HelmetProvider>
-      <SEO rootMetadata />
-      <QueryClientProvider client={queryClient}>
-        <ReactQueryDevtools />
-        <BrowserRouter>
-          {wallet && <AccountDataFetcher wallet={wallet} />}
-          <Toast />
-          <ScrollToTop />
-          <Authentication>
+    <BrowserRouter>
+      <Authentication>
+        <HelmetProvider>
+          <SEO rootMetadata />
+          <QueryClientProvider client={queryClient}>
+            <ReactQueryDevtools />
+            <AccountDataFetcher />
+            <Toast />
+            <ScrollToTop />
             <Layout>
               <Routes />
             </Layout>
-          </Authentication>
-        </BrowserRouter>
-      </QueryClientProvider>
-    </HelmetProvider>
+          </QueryClientProvider>
+        </HelmetProvider>
+      </Authentication>
+    </BrowserRouter>
   );
 }
 
