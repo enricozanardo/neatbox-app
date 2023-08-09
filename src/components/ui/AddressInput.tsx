@@ -3,7 +3,7 @@ import useAccountData from 'hooks/useAccountData';
 import { cloneDeep } from 'lodash';
 import { useEffect, useState } from 'react';
 import { fetchAccountMapEntryByEmailHash, fetchAccountMapEntryByUsername, fetchUser } from 'services/api';
-import { useWalletStore } from 'stores/useWalletStore';
+import useWallet from 'hooks/useWallet';
 import { AccountProps } from 'types';
 import { hashEmail } from 'utils/crypto';
 import { isEmail } from 'utils/helpers';
@@ -33,7 +33,7 @@ const AddressInput = ({ disabled, setAddressResult, isTimedTransfer }: Props) =>
   const [success, setSuccess] = useState('');
 
   const { account: userAccount } = useAccountData();
-  const wallet = useWalletStore(state => state.wallet);
+  const { wallet } = useWallet();
   const { user } = useAuth0();
 
   useEffect(() => {

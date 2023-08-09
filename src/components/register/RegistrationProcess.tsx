@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchAccountMapEntryByUsername } from 'services/api';
 import { sendInitializeAccountCommand } from 'services/axios';
-import { useWalletStore } from 'stores/useWalletStore';
+import useWallet from 'hooks/useWallet';
 import { generateWallet, hashEmail } from 'utils/crypto';
 import { handleError } from 'utils/errors';
 
@@ -21,7 +21,7 @@ type Props = {
 };
 
 const RegistrationProcess = ({ email }: Props) => {
-  const { addWallet } = useWalletStore(state => ({ wallet: state.wallet, addWallet: state.addWallet }));
+  const { addWallet } = useWallet();
   const [screen, setScreen] = useState<Screen>('start');
 
   const [username, setUsername] = useState('');

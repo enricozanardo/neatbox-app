@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import { sendUpdateCollectionAsset } from 'services/transactions';
-import { useWalletStore } from 'stores/useWalletStore';
+import useWallet from 'hooks/useWallet';
 import { Collection, File, UpdateCollectionAssetProps } from 'types';
 import { optimisticallyUpdateCollection, optimisticallyUpdateFileCollection } from 'utils/cache';
 import { handleError } from 'utils/errors';
@@ -21,7 +21,7 @@ type Props = {
 };
 
 const UpdateCollection = ({ collection, ownedFiles }: Props) => {
-  const wallet = useWalletStore(state => state.wallet);
+  const { wallet } = useWallet();
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [title, setTitle] = useState(collection.title);
   const [transferFee, setTransferFee] = useState(collection.transferFee);

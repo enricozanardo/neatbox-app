@@ -3,7 +3,7 @@ import Empty from 'components/ui/Empty';
 import useAccountData from 'hooks/useAccountData';
 import { toast } from 'react-hot-toast';
 import { sendCancelRequestAsset } from 'services/transactions';
-import { useWalletStore } from 'stores/useWalletStore';
+import useWallet from 'hooks/useWallet';
 import { CancelRequestAssetProps, Collection, File } from 'types';
 import { handleError } from 'utils/errors';
 import { prepareCollectionRequests, prepareFileRequests } from 'utils/helpers';
@@ -16,7 +16,7 @@ type Props = {
 };
 
 const PendingRequests = ({ files, collections }: Props) => {
-  const wallet = useWalletStore(state => state.wallet);
+  const { wallet } = useWallet();
   const { removeRequests, account } = useAccountData();
 
   const handleCancelRequest = async (data: CancelRequestAssetProps) => {

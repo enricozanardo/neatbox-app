@@ -3,7 +3,7 @@ import Modal from 'components/ui/Modal';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { sendRequestFileAccessPermissionAsset, sendRequestFileOwnershipAsset } from 'services/transactions';
-import { useWalletStore } from 'stores/useWalletStore';
+import useWallet from 'hooks/useWallet';
 import { File, RequestFileAccessPermissionAssetProps, RequestFileOwnershipAssetProps } from 'types';
 import { handleError } from 'utils/errors';
 import { getTransactionTimestamp } from 'utils/helpers';
@@ -17,7 +17,7 @@ const FileRequests = ({ file, isAllowed }: Props) => {
   const [ownershipRequestIsOpen, setOwnershipRequestModalIsOpen] = useState(false);
   const [permissionRequestModalIsOpen, setPermissionRequestModalIsOpen] = useState(false);
 
-  const wallet = useWalletStore(state => state.wallet);
+  const { wallet } = useWallet();
 
   const handleOwnershipRequest = async () => {
     if (!wallet?.passphrase) {

@@ -3,7 +3,7 @@ import Modal from 'components/ui/Modal';
 import useAccountData from 'hooks/useAccountData';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { useWalletStore } from 'stores/useWalletStore';
+import useWallet from 'hooks/useWallet';
 
 import { PassphraseValidator } from './PassphraseValidator';
 
@@ -12,10 +12,7 @@ const DangerZone = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const { removeAccountCache } = useAccountData();
 
-  const { wallet, removeWallet } = useWalletStore(state => ({
-    wallet: state.wallet,
-    removeWallet: state.removeWallet,
-  }));
+  const { wallet, removeWallet } = useWallet();
 
   const handleRemoveWallet = () => {
     removeWallet();

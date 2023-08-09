@@ -7,6 +7,8 @@ export type Wallet = {
   passphrase: string;
 };
 
+export type WalletMap = { [key: string]: Wallet };
+
 export enum ApiAction {
   GetAccount = 'app:getAccount',
   GetFiles = 'apiPlugin:getFiles',

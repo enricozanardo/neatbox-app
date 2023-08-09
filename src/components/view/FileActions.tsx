@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchTx, getPublicKeyFromTransaction } from 'services/api';
 import { buildDamUrl, getAxios, handleLoadingProgress } from 'services/axios';
-import { useWalletStore } from 'stores/useWalletStore';
+import useWallet from 'hooks/useWallet';
 import { File, HistoryItemType, RespondToFileRequestAssetProps } from 'types';
 import { handleError } from 'utils/errors';
 import { fileIsPArtOfCollection } from 'utils/helpers';
@@ -18,7 +18,7 @@ type Props = {
 };
 
 const FileActions = ({ file, isOwner, isAllowed, isTransferrable }: Props) => {
-  const wallet = useWalletStore(state => state.wallet);
+  const { wallet } = useWallet();
   const [isDownloading, setIsDownloading] = useState(false);
   const [loadingProgress, setLoadingProgress] = useState(0);
   const isPartOfCollection = fileIsPArtOfCollection(file);

@@ -13,7 +13,7 @@ import toast from 'react-hot-toast';
 import { invokeAction } from 'services/api';
 import { buildDamUrl, getAxios, handleLoadingProgress, sendTimedTransferMail } from 'services/axios';
 import { sendCreateFileAsset, sendTimedTransferAsset } from 'services/transactions';
-import { useWalletStore } from 'stores/useWalletStore';
+import useWallet from 'hooks/useWallet';
 import { ApiAction, CreateFileAssetProps, TimedTransferAssetProps } from 'types';
 import { handleError } from 'utils/errors';
 import { getTransactionTimestamp, isEmail, jsonToBuffer } from 'utils/helpers';
@@ -34,7 +34,7 @@ const FORM_INIT = {
 };
 
 const Upload = () => {
-  const wallet = useWalletStore(state => state.wallet);
+  const { wallet } = useWallet();
   const { isAuthenticated, user } = useAuth0();
 
   const [form, setForm] = useState(cloneDeep(FORM_INIT));

@@ -5,7 +5,7 @@ import Modal from 'components/ui/Modal';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { sendCreateCollectionAsset, TX_FEES } from 'services/transactions';
-import { useWalletStore } from 'stores/useWalletStore';
+import useWallet from 'hooks/useWallet';
 import { CreateCollectionAssetProps } from 'types';
 import { optimisticallyAddCollection } from 'utils/cache';
 import { hexToBuffer } from 'utils/crypto';
@@ -20,7 +20,7 @@ type Props = {
 const DEFAULT_FEE = 100;
 
 const CreateCollection = ({ accountHasCollections }: Props) => {
-  const wallet = useWalletStore(state => state.wallet);
+  const { wallet } = useWallet();
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [transferFee, setTransferFee] = useState(DEFAULT_FEE);

@@ -4,10 +4,12 @@ import { AccountMapEntry } from 'types';
 import { hashEmail } from 'utils/crypto';
 
 export const useAccountMapEntry = (email?: string) => {
+  const [loading, setLoading] = useState(true);
   const [map, setMap] = useState<AccountMapEntry | undefined>();
 
   useEffect(() => {
     if (!email) {
+      setLoading(false);
       return;
     }
 
@@ -16,10 +18,11 @@ export const useAccountMapEntry = (email?: string) => {
     const fetchData = async () => {
       const data = await fetchAccountMapEntryByEmailHash(emailHash);
       setMap(data);
+      setLoading(false);
     };
 
     fetchData();
   }, [email]);
 
-  return { map };
+  return { map, loading };
 };

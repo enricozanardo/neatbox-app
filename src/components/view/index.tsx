@@ -7,10 +7,10 @@ import SEO from 'components/ui/SEO';
 import useAccountData from 'hooks/useAccountData';
 import NotFoundPage from 'pages/NotFoundPage';
 import { getFileById } from 'services/api';
-import { useWalletStore } from 'stores/useWalletStore';
 import { bufferToHex } from 'utils/crypto';
 import { handleError } from 'utils/errors';
 import { devLog, fileIsTimedTransfer } from 'utils/helpers';
+import useWallet from 'hooks/useWallet';
 
 import FileCard from './FileCard';
 import FileHistory from './FileHistory';
@@ -21,7 +21,7 @@ type Props = {
 };
 
 const View = ({ id }: Props) => {
-  const wallet = useWalletStore(state => state.wallet);
+  const { wallet } = useWallet();
   const { account } = useAccountData();
   const { isAuthenticated } = useAuth0();
 

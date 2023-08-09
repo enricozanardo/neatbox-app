@@ -1,4 +1,4 @@
-export type StorageKey = 'wallet' | 'templates';
+export type StorageKey = 'neatbox-wallet-map' | 'templates';
 
 export const setToLocalStorage = (data: string | Object | boolean, key: StorageKey) => {
   const processed = typeof data === 'string' ? data : JSON.stringify(data);

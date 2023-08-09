@@ -3,7 +3,7 @@ import PageTitle from 'components/ui/PageTitle';
 import useAccountData from 'hooks/useAccountData';
 import { useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useWalletStore } from 'stores/useWalletStore';
+import useWallet from 'hooks/useWallet';
 import { devLog } from 'utils/helpers';
 
 import AccountInformation from './account-information/AccountInformation';
@@ -17,7 +17,7 @@ import Wallet from './wallet/Wallet';
 
 const Dashboard = () => {
   const { account } = useAccountData();
-  const wallet = useWalletStore(state => state.wallet);
+  const { wallet } = useWallet();
   const { user } = useAuth0();
   const myFilesRef = useRef<HTMLDivElement>(null);
   const [searchParams] = useSearchParams();

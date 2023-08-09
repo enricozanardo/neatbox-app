@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { getFileById, getPublicKeyFromTransaction } from 'services/api';
 import { buildDamUrl, getAxios } from 'services/axios';
 import { sendRespondToFileRequestAsset } from 'services/transactions';
-import { useWalletStore } from 'stores/useWalletStore';
+import useWallet from 'hooks/useWallet';
 import { File, FileRequest, FileRequestType, RespondToFileRequestAssetProps } from 'types';
 import { handleError } from 'utils/errors';
 import { getTransactionTimestamp, prepareFileRequests } from 'utils/helpers';
@@ -30,7 +30,7 @@ const IncomingFileRequests = ({ files }: Props) => {
   const [disableInteraction, setDisableInteraction] = useState(false);
   const [damIsProcessing, setDamIsProcessing] = useState(false);
 
-  const wallet = useWalletStore(state => state.wallet);
+  const { wallet } = useWallet();
   const { removeRequests, account } = useAccountData();
   const navigate = useNavigate();
 

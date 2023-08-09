@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { sendRequestCollectionOwnershipAsset } from 'services/transactions';
-import { useWalletStore } from 'stores/useWalletStore';
+import useWallet from 'hooks/useWallet';
 import { RequestCollectionOwnershipAssetProps } from 'types';
 import { handleError } from 'utils/errors';
 import { getTransactionTimestamp } from 'utils/helpers';
@@ -17,7 +17,7 @@ type Props = {
 const RequestOwnership = ({ collectionMeta, setModalIsOpen: setParentModalIsOpen }: Props) => {
   const [requestModalIsOpen, setRequestModalIsOpen] = useState(false);
 
-  const wallet = useWalletStore(state => state.wallet);
+  const { wallet } = useWallet();
 
   const handleOwnershipRequest = async () => {
     if (!wallet?.passphrase) {
