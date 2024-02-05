@@ -8,7 +8,9 @@ export const handleError = (error: unknown) => {
 
   devLog(error);
 
-  if (typeof error === 'string') {
+  if (!error) {
+    // keep standard message
+  } else if (typeof error === 'string') {
     message = error;
   } else if (error instanceof AxiosError) {
     message = error.response?.data || error.message;
