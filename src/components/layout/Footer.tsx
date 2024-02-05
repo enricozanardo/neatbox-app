@@ -2,8 +2,11 @@ import secureLogo from 'assets/img/neatbox-secure-logo.png';
 import config from 'config';
 
 import Icon from '../ui/Icon';
+import { useClientStatusStore } from 'stores/useClientStatusStore';
 
 const Footer = () => {
+  const { clientIsOnline } = useClientStatusStore();
+
   return (
     <footer className="flex justify-center items-center bg-primary-50">
       <div className="text-center">
@@ -12,9 +15,16 @@ const Footer = () => {
         </div>
 
         <div className="text-sm font-thin">
-          <p className="mb-8">
+          <p className="mb-4">
             Neatbox - Secure cloud storage built on{' '}
             <span className="block md:inline">distributed storage system and blockchain technologies</span>
+          </p>
+
+          <p className="mb-8">
+            Network Status:{' '}
+            <span className="text-xs">
+              <Icon type="faCircle" className={clientIsOnline ? 'text-green-400' : 'text-red-400'} />
+            </span>
           </p>
 
           <div className="text-2xl mb-8 flex justify-center gap-8">

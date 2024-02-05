@@ -27,6 +27,19 @@ export const getClient = async () => {
   return clientCache;
 };
 
+export const clientIsOnline = async () => {
+  if (!clientCache) {
+    return false;
+  }
+
+  // @ts-ignore
+  if (!clientCache.node._channel.isAlive) {
+    return false;
+  }
+
+  return true;
+};
+
 export const subscribeToEvent = async (handler: (data?: any) => void, event: EventType) => {
   const client = await getClient();
   client.subscribe(event, data => handler(data));

@@ -7,6 +7,7 @@ import SEO from 'components/ui/SEO';
 import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter } from 'react-router-dom';
 
+import ClientStatusFetcher from './ClientStatusFetcher';
 import AccountDataFetcher from './AccountDataFetcher';
 import Layout from './components/layout';
 import Routes from './Routes';
@@ -21,6 +22,7 @@ function App() {
           <SEO rootMetadata />
           <QueryClientProvider client={queryClient}>
             <ReactQueryDevtools />
+            <ClientStatusFetcher />
             <AccountDataFetcher />
             <Toast />
             <ScrollToTop />
