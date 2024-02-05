@@ -1,6 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import useAccountData from 'hooks/useAccountData';
-import { useClientStatus } from 'hooks/useClientStatus';
 import BrowsePage from 'pages/BrowsePage';
 import ForbiddenPage from 'pages/ForbiddenPage';
 import LandingPage from 'pages/LandingPage';
@@ -8,6 +7,7 @@ import ViewPage from 'pages/ViewPage';
 import WelcomePage from 'pages/WelcomePage';
 import { lazy, Suspense } from 'react';
 import { Outlet, Route, Routes as BrowserRoutes } from 'react-router-dom';
+import { useClientStatusStore } from 'stores/useClientStatusStore';
 
 const CollectionsPage = lazy(() => import('pages/CollectionsPage'));
 const DashboardPage = lazy(() => import('pages/DashboardPage'));
@@ -50,7 +50,7 @@ const Routes = () => {
   const { isAuthenticated } = useAuth0();
   const { account } = useAccountData();
   const accountExists = !!account?.storage.map.emailHash;
-  const { clientIsOnline } = useClientStatus();
+  const { clientIsOnline } = useClientStatusStore();
 
   return (
     <Suspense fallback={null}>
