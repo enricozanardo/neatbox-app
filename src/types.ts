@@ -23,7 +23,7 @@ export enum ApiAction {
   GetStorageStatistics = 'apiPlugin:getStatistics',
   GetAccountMapEntryByEmailHash = 'apiPlugin:getAccountMapEntryByEmailHash',
   getAccountMapEntryByUsername = 'apiPlugin:getAccountMapEntryByUsername',
-  AccountExists = 'apiPlugin:accountExists',
+  // AccountExists = 'apiPlugin:accountExists',
 }
 
 export enum EventType {
