@@ -5,12 +5,16 @@ export const validateCustomFields = (data: unknown) => {
     throw Error('Input is not an array');
   }
 
+  // Remove empty entries
+  // Note: empty entries shouldn't be allowed at all
+  const filtered = data.filter(field => field?.name && field?.value);
+
   if (
-    data.every(entry => typeof entry === 'object') &&
-    !data.every((entry: Record<string, string>) => entry.name && entry.value)
+    filtered.every(entry => typeof entry === 'object') &&
+    !filtered.every((entry: Record<string, string>) => entry.name && entry.value)
   ) {
     throw Error('Array entries are not of Custom Field type');
   }
 
-  return data as CustomField[];
+  return filtered as CustomField[];
 };
