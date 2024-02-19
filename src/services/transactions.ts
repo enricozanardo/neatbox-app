@@ -20,6 +20,7 @@ export const TX_FEES = {
   create: BigInt('10000000000'),
   timedTransfer: BigInt('2500000000'),
   createCollection: BigInt('5000000000'),
+  base: BigInt('500000'),
 };
 
 export const sendCreateFileAsset = async (passphrase: string, asset: CreateFileAssetProps) => {
@@ -45,7 +46,7 @@ export const sendRequestFileOwnershipAsset = async (passphrase: string, asset: R
     {
       moduleID: 1000,
       assetID: 2,
-      fee: BigInt(300000),
+      fee: TX_FEES.base,
       asset,
     },
     passphrase,
@@ -64,7 +65,7 @@ export const sendRequestFileAccessPermissionAsset = async (
     {
       moduleID: 1000,
       assetID: 3,
-      fee: BigInt(300000),
+      fee: TX_FEES.base,
       asset,
     },
     passphrase,
@@ -80,7 +81,7 @@ export const sendRequestFileTransferAsset = async (passphrase: string, asset: Re
     {
       moduleID: 1000,
       assetID: 4,
-      fee: BigInt(300000),
+      fee: TX_FEES.base,
       asset,
     },
     passphrase,
@@ -96,7 +97,7 @@ export const sendRespondToFileRequestAsset = async (passphrase: string, asset: R
     {
       moduleID: 1000,
       assetID: 5,
-      fee: BigInt(300000),
+      fee: TX_FEES.base,
       asset,
     },
     passphrase,
@@ -112,7 +113,7 @@ export const sendUpdateFileAsset = async (passphrase: string, asset: UpdateFileA
     {
       moduleID: 1000,
       assetID: 6,
-      fee: BigInt(300000),
+      fee: TX_FEES.base * BigInt(2),
       asset,
     },
     passphrase,
@@ -233,7 +234,7 @@ export const sendCancelRequestAsset = async (passphrase: string, asset: CancelRe
     {
       moduleID: 1000,
       assetID: 13,
-      fee: BigInt(300000),
+      fee: TX_FEES.base,
       asset,
     },
     passphrase,
