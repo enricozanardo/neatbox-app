@@ -56,10 +56,10 @@ export const isEmail = (input: unknown) => {
   return regex.test(input);
 };
 
-export const isDev = process.env.NODE_ENV !== 'development';
+export const isDev = process.env.NODE_ENV === 'development';
 
 export const devLog = (input: any) => {
-  if (isDev) {
+  if (!isDev) {
     return;
   }
 

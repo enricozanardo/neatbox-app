@@ -10,7 +10,7 @@ import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
 import { FileWithPath } from 'react-dropzone';
 import toast from 'react-hot-toast';
-import { invokeAction } from 'services/api';
+import { invokeAction, invokeSafeAction } from 'services/api';
 import { buildDamUrl, getAxios, handleLoadingProgress, sendTimedTransferMail } from 'services/axios';
 import { sendCreateFileAsset, sendTimedTransferAsset } from 'services/transactions';
 import useWallet from 'hooks/useWallet';
@@ -91,7 +91,7 @@ const Upload = () => {
         throw new Error('Fee must be at least 1');
       }
 
-      const fileExists = await invokeAction(ApiAction.GetFileByChecksum, { checksum });
+      const fileExists = await invokeSafeAction(ApiAction.GetFileByChecksum, { checksum });
 
       if (fileExists) {
         throw new Error('File already exists');

@@ -1,7 +1,7 @@
 const config = {
   PROJECT_TITLE: process.env.REACT_APP_PROJECT_TITLE || 'Project',
   BLOCKCHAIN_API: process.env.REACT_APP_BLOCKCHAIN_API || 'ws://localhost:8080/ws',
-  DAM_API: process.env.REACT_APP_DAM_API || 'http://localhost:4001',
+  DAM_API: process.env.REACT_APP_DAM_API || 'http://localhost:11001',
   EMAIL_API: process.env.REACT_APP_EMAIL_API || 'http://localhost:4444',
   ACCOUNT_INITIALIZER: process.env.REACT_APP_ACCOUNT_INITIALIZER || 'http://localhost:4445',
   GIT_SHA: process.env.REACT_APP_GIT_SHA,

@@ -60,10 +60,8 @@ const RegistrationProcess = ({ email }: Props) => {
       }
 
       const sanitizedInput = username.toLocaleLowerCase();
-
       const mapByUsername = await fetchMapByEmailOrUsername({ username: sanitizedInput });
 
-      console.log({ mapByUsername });
       if (mapByUsername) {
         setError('Username already exists');
         return;
@@ -106,7 +104,9 @@ const RegistrationProcess = ({ email }: Props) => {
         emailHash,
       });
 
-      setScreen('completed');
+      setTimeout(() => {
+        setScreen('completed');
+      }, 10000);
     } catch (err) {
       handleError(err);
       setScreen('start');

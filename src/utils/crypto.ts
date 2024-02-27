@@ -27,6 +27,11 @@ export const getLisk32AddressFromPassphrase = async (passphrase: string) => {
   return cryptography.address.getLisk32AddressFromAddress(address);
 };
 
+export const getLisk32AddressFromAddress = (address: Buffer) => {
+  // @ts-ignore
+  return cryptography.address.getLisk32AddressFromAddress(address.data);
+};
+
 export const generatePassphrase = () => {
   return passphrase.Mnemonic.generateMnemonic();
 };

@@ -1,5 +1,5 @@
 import { HistoryItem, HistoryItemType } from 'types';
-import { bufferToHex } from 'utils/crypto';
+import { bufferToHex, getLisk32AddressFromAddress } from 'utils/crypto';
 import { displayDateTime } from 'utils/formatting';
 
 type Props = {
@@ -73,7 +73,7 @@ const FileHistoryItem = ({ item }: Props) => {
         <div className="text-xs text-gray-400 mb-2">{displayDateTime(item.createdAt.human)}</div>
 
         <div className="text-sm ">
-          {content.body} {bufferToHex(item.userAddress)}
+          {content.body} {getLisk32AddressFromAddress(item.userAddress)}
         </div>
       </div>
     </div>

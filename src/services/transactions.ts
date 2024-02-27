@@ -15,12 +15,20 @@ import {
 } from 'types';
 
 import * as api from './api';
+import { cryptography } from '@liskhq/lisk-client/browser';
+import config from 'config';
+import { bufferToHex } from 'utils/crypto';
 
 export const TX_FEES = {
   create: BigInt('10000000000'),
   timedTransfer: BigInt('2500000000'),
   createCollection: BigInt('5000000000'),
   base: BigInt('500000'),
+};
+
+const getPrivateKey = async (passphrase: string) => {
+  const privateKey = await cryptography.ed.getPrivateKeyFromPhraseAndPath(passphrase, config.DERIVATION_PATH);
+  return bufferToHex(privateKey);
 };
 
 export const sendCreateFileAsset = async (passphrase: string, params: CreateFileAssetProps) => {
@@ -33,7 +41,7 @@ export const sendCreateFileAsset = async (passphrase: string, params: CreateFile
       fee: TX_FEES.create,
       params,
     },
-    passphrase,
+    await getPrivateKey(passphrase),
   );
 
   return client.transaction.send(tx);
@@ -49,7 +57,7 @@ export const sendRequestFileOwnershipAsset = async (passphrase: string, params: 
       fee: TX_FEES.base,
       params,
     },
-    passphrase,
+    await getPrivateKey(passphrase),
   );
 
   return client.transaction.send(tx);
@@ -68,7 +76,7 @@ export const sendRequestFileAccessPermissionAsset = async (
       fee: TX_FEES.base,
       params,
     },
-    passphrase,
+    await getPrivateKey(passphrase),
   );
 
   return client.transaction.send(tx);
@@ -84,7 +92,7 @@ export const sendRequestFileTransferAsset = async (passphrase: string, params: R
       fee: TX_FEES.base,
       params,
     },
-    passphrase,
+    await getPrivateKey(passphrase),
   );
 
   return client.transaction.send(tx);
@@ -100,7 +108,7 @@ export const sendRespondToFileRequestAsset = async (passphrase: string, params: 
       fee: TX_FEES.base,
       params,
     },
-    passphrase,
+    await getPrivateKey(passphrase),
   );
 
   return client.transaction.send(tx);
@@ -116,7 +124,7 @@ export const sendUpdateFileAsset = async (passphrase: string, params: UpdateFile
       fee: TX_FEES.base,
       params,
     },
-    passphrase,
+    await getPrivateKey(passphrase),
   );
 
   return client.transaction.send(tx);
@@ -132,7 +140,7 @@ export const sendTimedTransferAsset = async (passphrase: string, params: TimedTr
       fee: TX_FEES.timedTransfer,
       params,
     },
-    passphrase,
+    await getPrivateKey(passphrase),
   );
 
   return client.transaction.send(tx);
@@ -148,7 +156,7 @@ export const sendCreateCollectionAsset = async (passphrase: string, params: Crea
       fee: TX_FEES.createCollection,
       params,
     },
-    passphrase,
+    await getPrivateKey(passphrase),
   );
 
   return client.transaction.send(tx);
@@ -164,7 +172,7 @@ export const sendUpdateCollectionAsset = async (passphrase: string, params: Upda
       fee: BigInt(10000000),
       params,
     },
-    passphrase,
+    await getPrivateKey(passphrase),
   );
 
   return client.transaction.send(tx);
@@ -183,7 +191,7 @@ export const sendRequestCollectionOwnershipAsset = async (
       fee: BigInt(10000000),
       params,
     },
-    passphrase,
+    await getPrivateKey(passphrase),
   );
 
   return client.transaction.send(tx);
@@ -202,7 +210,7 @@ export const sendRequestCollectionTransferAsset = async (
       fee: BigInt(10000000),
       params,
     },
-    passphrase,
+    await getPrivateKey(passphrase),
   );
 
   return client.transaction.send(tx);
@@ -221,7 +229,7 @@ export const sendRespondToCollectionRequestAsset = async (
       fee: BigInt(10000000),
       params,
     },
-    passphrase,
+    await getPrivateKey(passphrase),
   );
 
   return client.transaction.send(tx);
@@ -237,7 +245,7 @@ export const sendCancelRequestAsset = async (passphrase: string, params: CancelR
       fee: TX_FEES.base,
       params,
     },
-    passphrase,
+    await getPrivateKey(passphrase),
   );
 
   return client.transaction.send(tx);

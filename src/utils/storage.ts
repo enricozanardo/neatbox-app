@@ -2,6 +2,7 @@ import { isDev } from './helpers';
 
 export type StorageKey = 'neatbox-wallet-map' | 'templates';
 
+console.log({ isDev });
 export const setToLocalStorage = (data: string | Object | boolean, keyInput: StorageKey) => {
   let key = keyInput;
 
