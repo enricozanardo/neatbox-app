@@ -9,7 +9,7 @@ const Register = () => {
   const { user } = useAuth0();
   const { map } = useAccountMapEntry(user?.email);
 
-  if (map) {
+  if (map?.username) {
     return <AlreadyRegistered />;
   }
 
