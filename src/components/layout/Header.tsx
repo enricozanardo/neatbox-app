@@ -37,9 +37,7 @@ const Header = () => {
     return pathname === path;
   };
 
-  const openRequests = account
-    ? account.storage.incomingFileRequests.length + account.storage.incomingCollectionRequests.length
-    : 0;
+  const openRequests = account ? account.incomingFileRequests.length + account.incomingCollectionRequests.length : 0;
   const navItems = navigation.filter(n => n.requiresAuth === false || (isAuthenticated && n.requiresAuth));
 
   const handleNavigate = (href: string) => {

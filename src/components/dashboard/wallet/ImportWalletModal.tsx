@@ -1,25 +1,26 @@
-import { cryptography } from '@liskhq/lisk-client/browser';
+import { useAuth0 } from '@auth0/auth0-react';
 import Button from 'components/ui/Button';
 import Modal from 'components/ui/Modal';
-import { useState } from 'react';
-import { toast } from 'react-hot-toast';
-import { fetchUser } from 'services/api';
 import useWallet from 'hooks/useWallet';
-import { AccountMapEntry } from 'types';
-import { validatePassphrase } from 'utils/crypto';
-import { devLog } from 'utils/helpers';
+import { useState } from 'react';
+import { fetchAggregatedAccount } from 'services/api';
+import { getLisk32AddressFromPassphrase, validatePassphrase } from 'utils/crypto';
 
 type Props = {
   isOpen: boolean;
   handleClose: () => void;
-  accountMap?: AccountMapEntry;
 };
 
-const ImportWalletModal = ({ isOpen, handleClose, accountMap }: Props) => {
+const ImportWalletModal = ({ isOpen, handleClose }: Props) => {
   const [passphrase, setPassphrase] = useState('');
   const [error, setError] = useState('');
+  const { user } = useAuth0();
+
   const { addWalletViaPassphrase } = useWallet();
 
+  /**
+   * Verify if passphrase matches on-chain account
+   */
   const handleImportWallet = async (e: React.SyntheticEvent) => {
     e.preventDefault();
 
@@ -32,20 +33,10 @@ const ImportWalletModal = ({ isOpen, handleClose, accountMap }: Props) => {
       return;
     }
 
-    const binaryAddress = cryptography.getAddressFromPassphrase(passphrase).toString('hex');
+    const account = await fetchAggregatedAccount(await getLisk32AddressFromPassphrase(passphrase));
 
-    if (accountMap && accountMap.binaryAddress && binaryAddress !== accountMap.binaryAddress) {
+    if (account?.email !== user?.email) {
       setError('Passphrase does not match wallet registered to account');
-      return;
-    }
-
-    const account = await fetchUser(binaryAddress).catch(err => {
-      devLog(err);
-      return undefined;
-    });
-
-    if (!account?.storage.map.emailHash) {
-      toast.error('Account has no wallet linked to it');
       return;
     }
 

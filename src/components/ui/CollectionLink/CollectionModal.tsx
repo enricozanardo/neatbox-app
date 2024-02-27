@@ -57,7 +57,7 @@ const CollectionModal = ({
     setParentModalIsOpen(false);
   };
 
-  const isOwner = !!account?.storage.collectionsOwned.includes(collectionMeta.id);
+  const isOwner = !!account?.collectionsOwned.includes(collectionMeta.id);
 
   const handleOwnershipRequest = async () => {
     if (!wallet?.passphrase) {

@@ -63,7 +63,6 @@ const SearchForm = ({ filters, setFilters }: Props) => {
           <label className="block">
             <select
               className="base-input"
-              placeholder="Select a type"
               value={filters.mimeType}
               onChange={e => handleChange('mimeType', e.target.value)}
             >
@@ -83,7 +82,6 @@ const SearchForm = ({ filters, setFilters }: Props) => {
           <label className="block">
             <select
               className="base-input"
-              placeholder="Select a type"
               value={filters.sortType}
               onChange={e => handleChange('sortType', e.target.value)}
             >

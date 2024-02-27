@@ -33,14 +33,14 @@ export const fileIsPArtOfCollection = (file: File) => {
   return !!file.meta.collection.id;
 };
 
-export const accountHasEnoughBalance = (required: number, account: AccountProps | undefined | null) => {
-  if (!account) {
-    throw Error('No Account supplied');
+export const accountHasEnoughBalance = (required: number, balance: string | BigInt | undefined) => {
+  if (!balance) {
+    throw Error('No balance supplied');
   }
 
   const minRemainingBalance = 0.05;
   const totalRequired = required + minRemainingBalance;
-  const accountBalance = Number(beddowsToLsk(account.token.balance));
+  const accountBalance = Number(beddowsToLsk(balance));
 
   return accountBalance >= totalRequired;
 };
@@ -56,8 +56,10 @@ export const isEmail = (input: unknown) => {
   return regex.test(input);
 };
 
+export const isDev = process.env.NODE_ENV !== 'development';
+
 export const devLog = (input: any) => {
-  if (process.env.NODE_ENV !== 'development') {
+  if (isDev) {
     return;
   }
 
@@ -116,4 +118,19 @@ export const prepareCollectionRequests = (
 
 export const getTransactionTimestamp = () => {
   return DateTime.now().toUTC().toUnixInteger() - 10;
+};
+
+/**
+ * Ridiculous mandatory helper function to circumvent silly behavior from Lisk SDK
+ */
+export const cleanupMessySDKResponse = <T>(value: T) => {
+  if (value === null || value === '{}') {
+    return null;
+  }
+
+  if (typeof value === 'object' && Object.keys(value).length === 0) {
+    return null;
+  }
+
+  return value;
 };

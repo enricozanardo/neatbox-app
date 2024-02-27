@@ -34,7 +34,7 @@ export const optimisticallyAddCollection = (
     }
 
     const updatedData = cloneDeep(prevData);
-    updatedData.storage.collectionsOwned.push(collectionId);
+    updatedData.collectionsOwned.push(collectionId);
 
     return updatedData;
   });
@@ -82,7 +82,7 @@ export const optimisticallyRemoveCollection = (queryClient: QueryClient, queryKe
     }
 
     const updatedData = cloneDeep(prevData);
-    updatedData.storage.collectionsOwned.push(collectionId);
+    updatedData.collectionsOwned.push(collectionId);
 
     return updatedData;
   });
@@ -163,16 +163,12 @@ export const removeRequests = (queryClient: QueryClient, ids: string[]) => {
 
     const updatedAccount = { ...oldAccount };
 
-    updatedAccount.storage.incomingFileRequests = updatedAccount.storage.incomingFileRequests.filter(
+    updatedAccount.incomingFileRequests = updatedAccount.incomingFileRequests.filter(r => !ids.includes(r.requestId));
+    updatedAccount.outgoingFileRequests = updatedAccount.outgoingFileRequests.filter(r => !ids.includes(r.requestId));
+    updatedAccount.incomingCollectionRequests = updatedAccount.incomingCollectionRequests.filter(
       r => !ids.includes(r.requestId),
     );
-    updatedAccount.storage.outgoingFileRequests = updatedAccount.storage.outgoingFileRequests.filter(
-      r => !ids.includes(r.requestId),
-    );
-    updatedAccount.storage.incomingCollectionRequests = updatedAccount.storage.incomingCollectionRequests.filter(
-      r => !ids.includes(r.requestId),
-    );
-    updatedAccount.storage.outgoingCollectionRequests = updatedAccount.storage.outgoingCollectionRequests.filter(
+    updatedAccount.outgoingCollectionRequests = updatedAccount.outgoingCollectionRequests.filter(
       r => !ids.includes(r.requestId),
     );
 

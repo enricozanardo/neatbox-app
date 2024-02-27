@@ -1,19 +1,15 @@
 import Button from 'components/ui/Button';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AccountMapEntry } from 'types';
 
 import ImportWalletModal from './ImportWalletModal';
 
 type Props = {
-  email?: string;
-  map?: AccountMapEntry;
   accountHasMappedWallet: boolean;
 };
 
-const WalletDialog = ({ email, map, accountHasMappedWallet }: Props) => {
+const WalletDialog = ({ accountHasMappedWallet }: Props) => {
   const [showImportWalletModal, setShowImportWalletModal] = useState(false);
-
   const navigate = useNavigate();
 
   if (accountHasMappedWallet) {
@@ -27,11 +23,7 @@ const WalletDialog = ({ email, map, accountHasMappedWallet }: Props) => {
           </div>
         </div>
 
-        <ImportWalletModal
-          accountMap={map}
-          isOpen={showImportWalletModal}
-          handleClose={() => setShowImportWalletModal(false)}
-        />
+        <ImportWalletModal isOpen={showImportWalletModal} handleClose={() => setShowImportWalletModal(false)} />
       </div>
     );
   }

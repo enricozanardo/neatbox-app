@@ -20,7 +20,7 @@ const Requests = () => {
     }
 
     const { incomingFileRequests, outgoingFileRequests, incomingCollectionRequests, outgoingCollectionRequests } =
-      account.storage;
+      account;
 
     const fileIdsToRequest = [...incomingFileRequests, ...outgoingFileRequests].map(req => req.fileId);
 
@@ -52,7 +52,7 @@ const Requests = () => {
 
       <IncomingCollectionRequests
         collections={collectionsInRequests.filter(c =>
-          account.storage.incomingCollectionRequests.map(req => req.collectionId).includes(c.id),
+          account.incomingCollectionRequests.map(req => req.collectionId).includes(c.id),
         )}
       />
 

@@ -43,7 +43,7 @@ const View = ({ id }: Props) => {
   }
 
   const isOwner = !!(isAuthenticated && file && bufferToHex(file.data.owner) === wallet?.binaryAddress);
-  const isAllowed = !!account?.storage.filesAllowed.includes(id);
+  const isAllowed = !!account?.filesAllowed.includes(id);
 
   return (
     <div>

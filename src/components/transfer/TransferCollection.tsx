@@ -19,7 +19,7 @@ const TransferCollection = ({ defaultValue }: Props) => {
   const { isAuthenticated } = useAuth0();
   const { account } = useAccountData();
   const { collections } = useCollectionData(
-    account?.storage.collectionsOwned ?? [],
+    account?.collectionsOwned ?? [],
     { limit: -1 },
     ['account', 'collectionsOwned'],
     undefined,

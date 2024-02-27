@@ -14,10 +14,8 @@ type Props = {
 const UploadButton = ({ isAuthenticated, wallet, isTimedTransfer }: Props) => {
   const { account } = useAccountData();
 
-  const accountIsMapped = account?.storage.map;
-
   const getText = () => {
-    if (wallet && isAuthenticated && accountIsMapped) {
+    if (wallet && isAuthenticated && account) {
       if (isTimedTransfer) {
         return `Sending a timed transfer requires ${beddowsToLsk(TX_FEES.timedTransfer)} tokens`;
       }
@@ -31,7 +29,7 @@ const UploadButton = ({ isAuthenticated, wallet, isTimedTransfer }: Props) => {
       return 'Please log in to upload a file';
     }
 
-    if (!accountIsMapped) {
+    if (!account) {
       return 'Please initialize your account before uploading';
     }
 
@@ -44,7 +42,7 @@ const UploadButton = ({ isAuthenticated, wallet, isTimedTransfer }: Props) => {
 
   return (
     <div className="text-center">
-      <Button size="lg" type="submit" disabled={!isAuthenticated || !wallet || !accountIsMapped}>
+      <Button size="lg" type="submit" disabled={!isAuthenticated || !wallet || !account}>
         Upload File
       </Button>
 

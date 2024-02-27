@@ -41,7 +41,7 @@ const FileTable = ({ handlePageChange, total, data, showLegend, isLoading }: Pro
     });
   };
 
-  const ownedItems = account ? account.storage.filesOwned.filter(f => data.find(d => d.data.id === f)) : [];
+  const ownedItems = account ? account.filesOwned.filter(f => data.find(d => d.data.id === f)) : [];
 
   return (
     <>
@@ -78,8 +78,8 @@ const FileTable = ({ handlePageChange, total, data, showLegend, isLoading }: Pro
             )}
 
             {data.map((item, i) => {
-              const isOwnerOfItem = account ? account.storage.filesOwned.includes(item.data.id) : false;
-              const itemIsAllowed = account ? account.storage.filesAllowed.includes(item.data.id) : false;
+              const isOwnerOfItem = account ? account.filesOwned.includes(item.data.id) : false;
+              const itemIsAllowed = account ? account.filesAllowed.includes(item.data.id) : false;
               const isPartOfCollection = fileIsPArtOfCollection(item);
 
               return (

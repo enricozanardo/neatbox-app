@@ -2,14 +2,15 @@ import Button from 'components/ui/Button';
 import PageTitle from 'components/ui/PageTitle';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { fetchAccountMapEntryByUsername } from 'services/api';
-import { sendInitializeAccountCommand } from 'services/axios';
+
 import useWallet from 'hooks/useWallet';
+import { sendInitializeAccountCommand } from 'services/axios';
 import { generateWallet, hashEmail } from 'utils/crypto';
 import { handleError } from 'utils/errors';
 
 import CompletedScreen from './CompletedScreen';
 import InitializationIndicator from './LoadingScreen';
+import { fetchMapByEmailOrUsername } from 'services/api';
 
 const regex = /^[a-zA-Z]{1}[a-zA-Z0-9]{2,17}$/;
 const DEBOUNCE = 500;
@@ -59,9 +60,11 @@ const RegistrationProcess = ({ email }: Props) => {
       }
 
       const sanitizedInput = username.toLocaleLowerCase();
-      const map = await fetchAccountMapEntryByUsername(sanitizedInput);
 
-      if (map) {
+      const mapByUsername = await fetchMapByEmailOrUsername({ username: sanitizedInput });
+
+      console.log({ mapByUsername });
+      if (mapByUsername) {
         setError('Username already exists');
         return;
       }
@@ -90,17 +93,19 @@ const RegistrationProcess = ({ email }: Props) => {
   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
 
-    const newWallet = generateWallet();
+    const newWallet = await generateWallet();
     const emailHash = hashEmail(email);
 
     try {
       setScreen('initializing');
       addWallet(newWallet);
+
       await sendInitializeAccountCommand({
         passphrase: newWallet.passphrase,
         username: username.toLowerCase(),
         emailHash,
       });
+
       setScreen('completed');
     } catch (err) {
       handleError(err);

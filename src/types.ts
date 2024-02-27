@@ -10,20 +10,16 @@ export type Wallet = {
 export type WalletMap = { [key: string]: Wallet };
 
 export enum ApiAction {
-  GetAccount = 'app:getAccount',
-  GetFiles = 'apiPlugin:getFiles',
-  GetFileById = 'apiPlugin:getFileById',
-  GetFilesByIds = 'apiPlugin:getFilesByIds',
-  GetFileByHash = 'apiPlugin:getFileByHash',
-  GetFilesByHashes = 'apiPlugin:getFilesByHashes',
-  GetFileByChecksum = 'apiPlugin:getFileByChecksum',
-  GetCollections = 'apiPlugin:getCollections',
-  GetCollectionById = 'apiPlugin:getCollectionById',
-  GetCollectionsByIds = 'apiPlugin:getCollectionsByIds',
-  GetStorageStatistics = 'apiPlugin:getStatistics',
-  GetAccountMapEntryByEmailHash = 'apiPlugin:getAccountMapEntryByEmailHash',
-  getAccountMapEntryByUsername = 'apiPlugin:getAccountMapEntryByUsername',
-  // AccountExists = 'apiPlugin:accountExists',
+  GetAggregatedAccount = 'api_getAggregatedAccount',
+  GetFiles = 'api_getFiles',
+  GetFileById = 'api_getFileById',
+  GetFilesByIds = 'api_getFilesByIds',
+  GetFileByChecksum = 'api_getFileByChecksum',
+  GetCollections = 'api_getCollections',
+  GetCollectionById = 'api_getCollectionById',
+  GetCollectionsByIds = 'api_getCollectionsByIds',
+  GetStorageStatistics = 'api_getStatistics',
+  GetEmailOrUsernameMap = 'storage_getEmailOrUsernameMap',
 }
 
 export enum EventType {
@@ -177,24 +173,20 @@ export type CancelRequestAssetProps = {
   timestamp: number;
 };
 
-export type StorageModuleAccountProps = {
-  storage: {
-    filesOwned: string[];
-    filesAllowed: string[];
-    collectionsOwned: string[];
-    collectionsAllowed: string[];
-    incomingFileRequests: { fileId: string; requestId: string }[];
-    outgoingFileRequests: { fileId: string; requestId: string }[];
-    incomingCollectionRequests: { collectionId: string; requestId: string }[];
-    outgoingCollectionRequests: { collectionId: string; requestId: string }[];
-    map: {
-      username: string;
-      emailHash: string;
-    };
-  };
+export type AccountStoreData = {
+  filesOwned: string[];
+  filesAllowed: string[];
+  collectionsOwned: string[];
+  collectionsAllowed: string[];
+  incomingFileRequests: { fileId: string; requestId: string }[];
+  outgoingFileRequests: { fileId: string; requestId: string }[];
+  incomingCollectionRequests: { collectionId: string; requestId: string }[];
+  outgoingCollectionRequests: { collectionId: string; requestId: string }[];
+  email: string;
+  username: string;
 };
 
-export type AccountProps = StorageModuleAccountProps & {
+export type AccountProps = AccountStoreData & {
   address: Buffer;
   token: {
     balance: bigint;
@@ -271,3 +263,11 @@ export type Filters = {
 };
 
 export type ApiOptions = { offset?: number; limit?: number; filters?: Filters };
+
+export type MapStoreData = {
+  address: Buffer;
+  binaryAddress: string;
+  lsk32address: string;
+  username: string;
+  email: string;
+};

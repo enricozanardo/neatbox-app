@@ -29,11 +29,11 @@ const MyFilesTransfersIndicator = ({ fileId }: Props) => {
   }, [fileId]);
 
   useEffect(() => {
-    if (fileId && account?.storage.filesOwned && account.storage.filesOwned.includes(fileId)) {
+    if (fileId && account?.filesOwned && account.filesOwned.includes(fileId)) {
       setIsProcessing(false);
       clearTimer();
     }
-  }, [account?.storage.filesOwned, fileId]);
+  }, [account?.filesOwned, fileId]);
 
   useEffect(() => {
     return () => clearTimer();

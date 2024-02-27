@@ -9,7 +9,7 @@ type TableProps = { data: Collection[] };
 
 const CollectionTable = ({ data }: TableProps) => {
   const { account } = useAccountData();
-  const { files } = useFileData(account?.storage.filesOwned ?? [], { limit: -1 }, undefined, ['account', 'filesOwned']);
+  const { files } = useFileData(account?.filesOwned ?? [], { limit: -1 }, undefined, ['account', 'filesOwned']);
 
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">

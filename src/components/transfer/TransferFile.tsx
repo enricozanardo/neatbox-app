@@ -19,7 +19,7 @@ const TransferFile = ({ defaultValue }: Props) => {
   const { isAuthenticated } = useAuth0();
   const { account } = useAccountData();
   const { files } = useFileData(
-    account?.storage.filesOwned ?? [],
+    account?.filesOwned ?? [],
     { limit: -1 },
     ['account', 'filesOwned'],
     undefined,

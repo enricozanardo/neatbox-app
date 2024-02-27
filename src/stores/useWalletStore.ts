@@ -40,15 +40,16 @@ export const useWalletStore = create<WalletState>(set => ({
 
       return { ...state, walletMap: updatedMap };
     }),
-  addWalletViaPassphrase: (email, passphrase) =>
+  addWalletViaPassphrase: async (email, passphrase) => {
+    const wallet = await generateWallet(passphrase);
     set(state => {
-      const wallet = generateWallet(passphrase);
       const updatedMap = { ...state.walletMap };
       updatedMap[email] = wallet;
 
       setToLocalStorage(updatedMap, 'neatbox-wallet-map');
       return { ...state, walletMap: updatedMap };
-    }),
+    });
+  },
   clearWalletMap: () =>
     set(() => {
       const emptyMap = {};

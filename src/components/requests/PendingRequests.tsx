@@ -42,8 +42,8 @@ const PendingRequests = ({ files, collections }: Props) => {
     return null;
   }
 
-  const fileRequests = prepareFileRequests(files, account.storage.outgoingFileRequests);
-  const collectionRequests = prepareCollectionRequests(collections, account.storage.outgoingCollectionRequests);
+  const fileRequests = prepareFileRequests(files, account.outgoingFileRequests);
+  const collectionRequests = prepareCollectionRequests(collections, account.outgoingCollectionRequests);
 
   return (
     <section className="mt-16">

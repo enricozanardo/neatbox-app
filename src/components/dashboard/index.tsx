@@ -29,8 +29,8 @@ const Dashboard = () => {
     }
   }, [ref]);
 
-  devLog(account?.storage);
-  const accountIsRegistered = account?.storage.map.emailHash;
+  devLog(account);
+  const accountIsRegistered = account?.email;
 
   return (
     <div className="mb-32">
@@ -52,7 +52,7 @@ const Dashboard = () => {
 
         <div className="col-span-1 lg:col-span-2" id="myFiles" ref={myFilesRef}>
           <PageTitle text="My Files" />
-          {accountIsRegistered ? <FilesDisplay fileIds={account.storage.filesOwned} /> : <NoWalletFeedback />}
+          {accountIsRegistered ? <FilesDisplay fileIds={account.filesOwned} /> : <NoWalletFeedback />}
           <MyFilesTransfersIndicator fileId={ref} />
         </div>
 
@@ -60,7 +60,7 @@ const Dashboard = () => {
 
         <div className="col-span-1 lg:col-span-2">
           <PageTitle text="Files Shared With Me" />
-          {accountIsRegistered ? <FilesDisplay fileIds={account.storage.filesAllowed} /> : <NoWalletFeedback />}
+          {accountIsRegistered ? <FilesDisplay fileIds={account.filesAllowed} /> : <NoWalletFeedback />}
         </div>
 
         {wallet && (

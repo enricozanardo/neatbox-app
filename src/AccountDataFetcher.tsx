@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import useWallet from 'hooks/useWallet';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { fetchUser } from 'services/api';
+import { fetchAggregatedAccount } from 'services/api';
 
 import { devLog } from 'utils/helpers';
 
@@ -12,7 +12,7 @@ const AccountDataFetcher = () => {
 
   const { refetch } = useQuery({
     queryKey: ['account'],
-    queryFn: () => (wallet ? fetchUser(wallet.binaryAddress) : null),
+    queryFn: () => (wallet ? fetchAggregatedAccount(wallet.liskAddress) : null),
     refetchInterval: 10000,
     keepPreviousData: true,
     staleTime: 10000,

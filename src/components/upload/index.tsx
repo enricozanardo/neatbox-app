@@ -130,9 +130,7 @@ const Upload = () => {
           customFields: finalCustomFields,
           transferFee,
           accessPermissionFee: 0,
-          recipientEmailHash: addressResult.account
-            ? addressResult.account.storage.map.emailHash
-            : addressResult.emailHash,
+          recipientEmailHash: addressResult.account ? addressResult.account.email : addressResult.emailHash,
           timestamp,
           private: isPrivate,
         };

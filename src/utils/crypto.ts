@@ -1,17 +1,30 @@
 import { cryptography, passphrase } from '@liskhq/lisk-client/browser';
+import config from 'config';
 import crypto, { SHA256 } from 'crypto-js';
 import { FileWithPath } from 'react-dropzone';
 import { Wallet } from 'types';
 
-export const generateWallet = (passphraseInput?: string): Wallet => {
+export const generateWallet = async (passphraseInput?: string): Promise<Wallet> => {
   const passphrase = passphraseInput ?? generatePassphrase();
 
+  const privateKey = await cryptography.ed.getPrivateKeyFromPhraseAndPath(passphrase, config.DERIVATION_PATH);
+
+  const publicKey = cryptography.ed.getPublicKeyFromPrivateKey(privateKey);
+  const address = cryptography.address.getAddressFromPrivateKey(privateKey);
+
   return {
-    liskAddress: cryptography.getBase32AddressFromPassphrase(passphrase),
-    binaryAddress: cryptography.getAddressFromPassphrase(passphrase).toString('hex'),
-    publicKey: cryptography.getAddressAndPublicKeyFromPassphrase(passphrase).publicKey.toString('hex'),
+    liskAddress: cryptography.address.getLisk32AddressFromAddress(address),
+    binaryAddress: bufferToHex(address),
+    publicKey: bufferToHex(publicKey),
     passphrase: passphrase,
   };
+};
+
+export const getLisk32AddressFromPassphrase = async (passphrase: string) => {
+  const privateKey = await cryptography.ed.getPrivateKeyFromPhraseAndPath(passphrase, config.DERIVATION_PATH);
+  const address = cryptography.address.getAddressFromPrivateKey(privateKey);
+
+  return cryptography.address.getLisk32AddressFromAddress(address);
 };
 
 export const generatePassphrase = () => {
@@ -25,11 +38,11 @@ export const validatePassphrase = (input: string) => {
 };
 
 export const bufferToHex = (input: Buffer) => {
-  return cryptography.bufferToHex(input);
+  return input.toString('hex');
 };
 
 export const hexToBuffer = (input: string) => {
-  return cryptography.hexToBuffer(input);
+  return cryptography.utils.hexToBuffer(input);
 };
 
 export const generateChecksum = (file: FileWithPath): Promise<string> => {

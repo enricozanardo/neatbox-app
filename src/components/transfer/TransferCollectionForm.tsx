@@ -42,7 +42,7 @@ const TransferCollectionForm = ({ collections, defaultValue, wallet, isAuthentic
       return;
     }
 
-    if (!accountHasEnoughBalance(selectedCollectionData.transferFee, recipient)) {
+    if (!accountHasEnoughBalance(selectedCollectionData.transferFee, recipient.token.balance)) {
       toast.error('Recipient has insufficient balance');
       return;
     }
@@ -78,12 +78,7 @@ const TransferCollectionForm = ({ collections, defaultValue, wallet, isAuthentic
     <form onSubmit={onSubmit} className="w-full">
       <label className="block mb-8 md:mb-10 lg:mb-12">
         <Label text="Collection" />
-        <select
-          className="base-input"
-          placeholder="Select a collection"
-          value={selectedCollectionId}
-          onChange={handleChange}
-        >
+        <select className="base-input" value={selectedCollectionId} onChange={handleChange}>
           <option value=""></option>
           {collections.map(c => (
             <option value={c.id} key={c.id}>

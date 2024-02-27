@@ -10,7 +10,7 @@ import CreateCollection from './CreateCollection';
 
 const Collections = () => {
   const { account } = useAccountData();
-  const { collections } = useCollectionData(account?.storage.collectionsOwned ?? [], { limit: -1 }, undefined, [
+  const { collections } = useCollectionData(account?.collectionsOwned ?? [], { limit: -1 }, undefined, [
     'account',
     'collectionsOwned',
   ]);
@@ -38,17 +38,17 @@ const Collections = () => {
   }, [ref]);
 
   useEffect(() => {
-    if (account?.storage.collectionsOwned && account.storage.collectionsOwned.includes(ref || '')) {
+    if (account?.collectionsOwned && account.collectionsOwned.includes(ref || '')) {
       setIsProcessing(false);
       clearTimer();
     }
-  }, [account?.storage.collectionsOwned, ref]);
+  }, [account?.collectionsOwned, ref]);
 
   useEffect(() => {
     return () => clearTimer();
   }, []);
 
-  const accountHasCollections = !!(account && account.storage.collectionsOwned.length > 0);
+  const accountHasCollections = !!(account && account.collectionsOwned.length > 0);
 
   return (
     <div className="mb-32">

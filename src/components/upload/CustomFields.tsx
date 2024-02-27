@@ -102,12 +102,7 @@ const CustomFields = ({ customFields, setCustomFields, isUpdate }: Props) => {
       {!isUpdate && (
         <label className="block">
           <Label text="Template" />
-          <select
-            className="base-input"
-            placeholder="Select a template"
-            value={selectedTemplate}
-            onChange={e => handleTemplateChange(e.target.value)}
-          >
+          <select className="base-input" value={selectedTemplate} onChange={e => handleTemplateChange(e.target.value)}>
             <option value="">New template</option>
 
             {templates.map(t => (

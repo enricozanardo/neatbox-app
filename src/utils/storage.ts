@@ -1,11 +1,25 @@
+import { isDev } from './helpers';
+
 export type StorageKey = 'neatbox-wallet-map' | 'templates';
 
-export const setToLocalStorage = (data: string | Object | boolean, key: StorageKey) => {
+export const setToLocalStorage = (data: string | Object | boolean, keyInput: StorageKey) => {
+  let key = keyInput;
+
+  if (isDev) {
+    key += '_dev';
+  }
+
   const processed = typeof data === 'string' ? data : JSON.stringify(data);
   localStorage.setItem(key, processed);
 };
 
-export const getFromLocalStorage = <T>(key: StorageKey): T | null => {
+export const getFromLocalStorage = <T>(keyInput: StorageKey): T | null => {
+  let key = keyInput;
+
+  if (isDev) {
+    key += '_dev';
+  }
+
   const data = localStorage.getItem(key);
 
   let parsed;

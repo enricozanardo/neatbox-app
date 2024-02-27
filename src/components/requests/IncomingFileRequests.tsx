@@ -104,7 +104,7 @@ const IncomingFileRequests = ({ files }: Props) => {
     onSuccess: (_, { request, txAsset, accept }) => {
       const ids =
         (request.type === FileRequestType.Transfer || request.type === FileRequestType.Ownership) && account && accept
-          ? account.storage.incomingFileRequests.filter(r => r.fileId === txAsset.fileId).map(r => r.requestId)
+          ? account.incomingFileRequests.filter(r => r.fileId === txAsset.fileId).map(r => r.requestId)
           : [request.requestId];
 
       removeRequests(ids);
@@ -128,7 +128,7 @@ const IncomingFileRequests = ({ files }: Props) => {
     return <Unauthorized />;
   }
 
-  const requests = prepareFileRequests(files, account.storage.incomingFileRequests);
+  const requests = prepareFileRequests(files, account.incomingFileRequests);
 
   return (
     <section>

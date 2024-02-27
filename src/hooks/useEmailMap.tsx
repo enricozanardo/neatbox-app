@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { fetchAccountMapEntryByEmailHash } from 'services/api';
-import { AccountMapEntry } from 'types';
+
+import { fetchMapByEmailOrUsername } from 'services/api';
+import { MapStoreData } from 'types';
 import { hashEmail } from 'utils/crypto';
 
-export const useAccountMapEntry = (email?: string) => {
+export const useEmailMap = (email?: string) => {
   const [loading, setLoading] = useState(true);
-  const [map, setMap] = useState<AccountMapEntry | undefined>();
+  const [map, setMap] = useState<MapStoreData | null>();
 
   useEffect(() => {
     if (!email) {
@@ -16,7 +17,7 @@ export const useAccountMapEntry = (email?: string) => {
     const emailHash = hashEmail(email);
 
     const fetchData = async () => {
-      const data = await fetchAccountMapEntryByEmailHash(emailHash);
+      const data = await fetchMapByEmailOrUsername({ email: emailHash });
       setMap(data);
       setLoading(false);
     };

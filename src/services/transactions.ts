@@ -23,15 +23,15 @@ export const TX_FEES = {
   base: BigInt('500000'),
 };
 
-export const sendCreateFileAsset = async (passphrase: string, asset: CreateFileAssetProps) => {
+export const sendCreateFileAsset = async (passphrase: string, params: CreateFileAssetProps) => {
   const client = await api.getClient();
 
   const tx = await client.transaction.create(
     {
-      moduleID: 1000,
-      assetID: 1,
+      module: 'storage',
+      command: 'createFile',
       fee: TX_FEES.create,
-      asset,
+      params,
     },
     passphrase,
   );
@@ -39,15 +39,15 @@ export const sendCreateFileAsset = async (passphrase: string, asset: CreateFileA
   return client.transaction.send(tx);
 };
 
-export const sendRequestFileOwnershipAsset = async (passphrase: string, asset: RequestFileOwnershipAssetProps) => {
+export const sendRequestFileOwnershipAsset = async (passphrase: string, params: RequestFileOwnershipAssetProps) => {
   const client = await api.getClient();
 
   const tx = await client.transaction.create(
     {
-      moduleID: 1000,
-      assetID: 2,
+      module: 'storage',
+      command: 'requestFileOwnership',
       fee: TX_FEES.base,
-      asset,
+      params,
     },
     passphrase,
   );
@@ -57,16 +57,16 @@ export const sendRequestFileOwnershipAsset = async (passphrase: string, asset: R
 
 export const sendRequestFileAccessPermissionAsset = async (
   passphrase: string,
-  asset: RequestFileAccessPermissionAssetProps,
+  params: RequestFileAccessPermissionAssetProps,
 ) => {
   const client = await api.getClient();
 
   const tx = await client.transaction.create(
     {
-      moduleID: 1000,
-      assetID: 3,
+      module: 'storage',
+      command: 'requestFilePermission',
       fee: TX_FEES.base,
-      asset,
+      params,
     },
     passphrase,
   );
@@ -74,15 +74,15 @@ export const sendRequestFileAccessPermissionAsset = async (
   return client.transaction.send(tx);
 };
 
-export const sendRequestFileTransferAsset = async (passphrase: string, asset: RequestFileTransferAssetProps) => {
+export const sendRequestFileTransferAsset = async (passphrase: string, params: RequestFileTransferAssetProps) => {
   const client = await api.getClient();
 
   const tx = await client.transaction.create(
     {
-      moduleID: 1000,
-      assetID: 4,
+      module: 'storage',
+      command: 'requestFileTransfer',
       fee: TX_FEES.base,
-      asset,
+      params,
     },
     passphrase,
   );
@@ -90,15 +90,15 @@ export const sendRequestFileTransferAsset = async (passphrase: string, asset: Re
   return client.transaction.send(tx);
 };
 
-export const sendRespondToFileRequestAsset = async (passphrase: string, asset: RespondToFileRequestAssetProps) => {
+export const sendRespondToFileRequestAsset = async (passphrase: string, params: RespondToFileRequestAssetProps) => {
   const client = await api.getClient();
 
   const tx = await client.transaction.create(
     {
-      moduleID: 1000,
-      assetID: 5,
+      module: 'storage',
+      command: 'respondToFileRequest',
       fee: TX_FEES.base,
-      asset,
+      params,
     },
     passphrase,
   );
@@ -106,15 +106,15 @@ export const sendRespondToFileRequestAsset = async (passphrase: string, asset: R
   return client.transaction.send(tx);
 };
 
-export const sendUpdateFileAsset = async (passphrase: string, asset: UpdateFileAssetProps) => {
+export const sendUpdateFileAsset = async (passphrase: string, params: UpdateFileAssetProps) => {
   const client = await api.getClient();
 
   const tx = await client.transaction.create(
     {
-      moduleID: 1000,
-      assetID: 6,
-      fee: TX_FEES.base * BigInt(2),
-      asset,
+      module: 'storage',
+      command: 'updateFile',
+      fee: TX_FEES.base,
+      params,
     },
     passphrase,
   );
@@ -122,15 +122,15 @@ export const sendUpdateFileAsset = async (passphrase: string, asset: UpdateFileA
   return client.transaction.send(tx);
 };
 
-export const sendTimedTransferAsset = async (passphrase: string, asset: TimedTransferAssetProps) => {
+export const sendTimedTransferAsset = async (passphrase: string, params: TimedTransferAssetProps) => {
   const client = await api.getClient();
 
   const tx = await client.transaction.create(
     {
-      moduleID: 1000,
-      assetID: 7,
+      module: 'storage',
+      command: 'timedTransfer',
       fee: TX_FEES.timedTransfer,
-      asset,
+      params,
     },
     passphrase,
   );
@@ -138,15 +138,15 @@ export const sendTimedTransferAsset = async (passphrase: string, asset: TimedTra
   return client.transaction.send(tx);
 };
 
-export const sendCreateCollectionAsset = async (passphrase: string, asset: CreateCollectionAssetProps) => {
+export const sendCreateCollectionAsset = async (passphrase: string, params: CreateCollectionAssetProps) => {
   const client = await api.getClient();
 
   const tx = await client.transaction.create(
     {
-      moduleID: 1000,
-      assetID: 8,
+      module: 'storage',
+      command: 'createCollection',
       fee: TX_FEES.createCollection,
-      asset,
+      params,
     },
     passphrase,
   );
@@ -154,34 +154,15 @@ export const sendCreateCollectionAsset = async (passphrase: string, asset: Creat
   return client.transaction.send(tx);
 };
 
-export const sendUpdateCollectionAsset = async (passphrase: string, asset: UpdateCollectionAssetProps) => {
+export const sendUpdateCollectionAsset = async (passphrase: string, params: UpdateCollectionAssetProps) => {
   const client = await api.getClient();
 
   const tx = await client.transaction.create(
     {
-      moduleID: 1000,
-      assetID: 9,
+      module: 'storage',
+      command: 'updateCollection',
       fee: BigInt(10000000),
-      asset,
-    },
-    passphrase,
-  );
-
-  return client.transaction.send(tx);
-};
-
-export const sendRequestCollectionTransferAsset = async (
-  passphrase: string,
-  asset: RequestCollectionTransferAssetProps,
-) => {
-  const client = await api.getClient();
-
-  const tx = await client.transaction.create(
-    {
-      moduleID: 1000,
-      assetID: 10,
-      fee: BigInt(10000000),
-      asset,
+      params,
     },
     passphrase,
   );
@@ -191,16 +172,35 @@ export const sendRequestCollectionTransferAsset = async (
 
 export const sendRequestCollectionOwnershipAsset = async (
   passphrase: string,
-  asset: RequestCollectionOwnershipAssetProps,
+  params: RequestCollectionOwnershipAssetProps,
 ) => {
   const client = await api.getClient();
 
   const tx = await client.transaction.create(
     {
-      moduleID: 1000,
-      assetID: 14,
+      module: 'storage',
+      command: 'requestCollectionOwnership',
       fee: BigInt(10000000),
-      asset,
+      params,
+    },
+    passphrase,
+  );
+
+  return client.transaction.send(tx);
+};
+
+export const sendRequestCollectionTransferAsset = async (
+  passphrase: string,
+  params: RequestCollectionTransferAssetProps,
+) => {
+  const client = await api.getClient();
+
+  const tx = await client.transaction.create(
+    {
+      module: 'storage',
+      command: 'requestCollectionTransfer',
+      fee: BigInt(10000000),
+      params,
     },
     passphrase,
   );
@@ -210,16 +210,16 @@ export const sendRequestCollectionOwnershipAsset = async (
 
 export const sendRespondToCollectionRequestAsset = async (
   passphrase: string,
-  asset: RespondToCollectionRequestAssetProps,
+  params: RespondToCollectionRequestAssetProps,
 ) => {
   const client = await api.getClient();
 
   const tx = await client.transaction.create(
     {
-      moduleID: 1000,
-      assetID: 11,
+      module: 'storage',
+      command: 'respondToCollectionRequest',
       fee: BigInt(10000000),
-      asset,
+      params,
     },
     passphrase,
   );
@@ -227,15 +227,15 @@ export const sendRespondToCollectionRequestAsset = async (
   return client.transaction.send(tx);
 };
 
-export const sendCancelRequestAsset = async (passphrase: string, asset: CancelRequestAssetProps) => {
+export const sendCancelRequestAsset = async (passphrase: string, params: CancelRequestAssetProps) => {
   const client = await api.getClient();
 
   const tx = await client.transaction.create(
     {
-      moduleID: 1000,
-      assetID: 13,
+      module: 'storage',
+      command: 'cancelRequest',
       fee: TX_FEES.base,
-      asset,
+      params,
     },
     passphrase,
   );

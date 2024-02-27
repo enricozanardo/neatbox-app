@@ -2,7 +2,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import useAccountData from 'hooks/useAccountData';
 import { cloneDeep } from 'lodash';
 import { useEffect, useState } from 'react';
-import { fetchAccountMapEntryByEmailHash, fetchAccountMapEntryByUsername, fetchUser } from 'services/api';
+import { fetchMapByEmailOrUsername, fetchAggregatedAccount } from 'services/api';
 import useWallet from 'hooks/useWallet';
 import { AccountProps } from 'types';
 import { hashEmail } from 'utils/crypto';
@@ -51,33 +51,35 @@ const AddressInput = ({ disabled, setAddressResult, isTimedTransfer }: Props) =>
 
       const emailHash = hashEmail(sanitizedInput);
 
-      const map = await fetchAccountMapEntryByEmailHash(emailHash);
+      const mapByEmail = await fetchMapByEmailOrUsername({ email: emailHash });
+
+      console.log({ accountByEmail: mapByEmail });
 
       /** unknown e-mails may proceed in case of timed transfers */
-      if (!map && isTimedTransfer) {
+      if (!mapByEmail && isTimedTransfer) {
         setSuccess('Valid new e-mail');
         setAddressResult({ ...cloneDeep(ADDRESS_RESULT_INIT), emailHash, rawInput: sanitizedInput });
         return;
       }
 
-      if (!map) {
+      if (!mapByEmail) {
         setError('Recipient not found');
         setAddressResult({ ...cloneDeep(ADDRESS_RESULT_INIT) });
         return;
       }
 
       /** File has been sent here before, but account has not been initialized yet */
-      if (!map.binaryAddress) {
+      if (!mapByEmail) {
         setSuccess('Valid email');
         setAddressResult({ ...cloneDeep(ADDRESS_RESULT_INIT), emailHash, rawInput: sanitizedInput });
         return;
       }
 
-      const account = await fetchUser(map.binaryAddress);
+      const account = await fetchAggregatedAccount(mapByEmail.lsk32address);
 
       if (account) {
         setSuccess('Valid address');
-        setAddressResult({ emailHash, account, rawInput: sanitizedInput, username: map.username });
+        setAddressResult({ emailHash, account, rawInput: sanitizedInput, username: mapByEmail.username });
         return;
       }
 
@@ -89,23 +91,29 @@ const AddressInput = ({ disabled, setAddressResult, isTimedTransfer }: Props) =>
     const validateInputAsUsername = async () => {
       const sanitizedInput = input.toLocaleLowerCase();
 
-      if (userAccount?.storage.map.username.toLocaleLowerCase() === sanitizedInput) {
+      if (userAccount?.username.toLocaleLowerCase() === sanitizedInput) {
         setError('Can not use own address');
         setAddressResult({ ...cloneDeep(ADDRESS_RESULT_INIT) });
         return;
       }
 
-      const map = await fetchAccountMapEntryByUsername(sanitizedInput);
+      const mapByUsername = await fetchMapByEmailOrUsername({ username: sanitizedInput });
 
-      if (!map) {
+      if (!mapByUsername) {
         setError('Recipient not found');
         setAddressResult({ ...cloneDeep(ADDRESS_RESULT_INIT) });
         return;
       }
 
-      const account = await fetchUser(map.binaryAddress);
+      const account = await fetchAggregatedAccount(mapByUsername.lsk32address);
+
       if (account) {
-        setAddressResult({ emailHash: map.emailHash, account, rawInput: sanitizedInput, username: map.username });
+        setAddressResult({
+          emailHash: mapByUsername.email,
+          account,
+          rawInput: sanitizedInput,
+          username: mapByUsername.username,
+        });
         setSuccess('Valid username');
         return;
       }
@@ -130,7 +138,7 @@ const AddressInput = ({ disabled, setAddressResult, isTimedTransfer }: Props) =>
     return () => {
       clearTimeout(id);
     };
-  }, [input, user?.email, setAddressResult, isTimedTransfer, wallet?.binaryAddress, userAccount?.storage.map.username]);
+  }, [input, user?.email, setAddressResult, isTimedTransfer, wallet?.binaryAddress, userAccount?.username]);
 
   return (
     <label className="block">

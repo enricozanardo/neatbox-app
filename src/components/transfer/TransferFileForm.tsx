@@ -42,7 +42,7 @@ const TransferFileForm = ({ files, defaultValue, wallet, isAuthenticated, setSuc
       return;
     }
 
-    if (!accountHasEnoughBalance(selectedFileData.data.transferFee, recipient)) {
+    if (!accountHasEnoughBalance(selectedFileData.data.transferFee, recipient.token.balance)) {
       toast.error('Recipient has insufficient balance');
       return;
     }
@@ -78,7 +78,7 @@ const TransferFileForm = ({ files, defaultValue, wallet, isAuthenticated, setSuc
     <form onSubmit={onSubmit} className="w-full">
       <label className="block mb-8 md:mb-10 lg:mb-12">
         <Label text="File" />
-        <select className="base-input" placeholder="Select a file" value={selectedFileId} onChange={handleChange}>
+        <select className="base-input" value={selectedFileId} onChange={handleChange}>
           <option value=""></option>
           {files.map(a => (
             <option value={a.data.id} key={a.data.id}>

@@ -1,8 +1,9 @@
 import { APIClient } from '@liskhq/lisk-api-client';
 import { apiClient } from '@liskhq/lisk-client/browser';
 import config from 'config';
-import { AccountMapEntry, AccountProps, ApiAction, ApiOptions, Collection, EventType, File, Transaction } from 'types';
+import { AccountProps, ApiOptions, ApiAction, Collection, EventType, File, MapStoreData, Transaction } from 'types';
 import { bufferToHex } from 'utils/crypto';
+import { cleanupMessySDKResponse } from 'utils/helpers';
 
 const RPC_ENDPOINT = config.BLOCKCHAIN_API;
 
@@ -45,16 +46,26 @@ export const subscribeToEvent = async (handler: (data?: any) => void, event: Eve
   client.subscribe(event, data => handler(data));
 };
 
-export const invokeAction = async <T>(action: ApiAction, args: Record<string, unknown> = {}): Promise<T> => {
+export const invokeAction = async <T>(action: ApiAction, args: Record<string, unknown> = {}) => {
   const client = await getClient();
   const response = await client.invoke<T>(action, args);
   return response;
 };
 
-export const fetchUser = async (address: string): Promise<AccountProps> => {
+export const invokeSafeAction = async <T>(action: ApiAction, args: Record<string, unknown> = {}) => {
   const client = await getClient();
-  const response: unknown = await client.account.get(address);
-  return response as AccountProps;
+  const response = await client.invoke<T>(action, args);
+
+  if (Array.isArray(response)) {
+    return response;
+  }
+
+  return cleanupMessySDKResponse(response);
+};
+
+export const fetchAggregatedAccount = async (address: string) => {
+  const result = await invokeSafeAction<AccountProps>(ApiAction.GetAggregatedAccount, { address });
+  return result;
 };
 
 export const fetchTx = async <T>(id: string): Promise<Transaction<T>> => {
@@ -63,12 +74,9 @@ export const fetchTx = async <T>(id: string): Promise<Transaction<T>> => {
   return tx;
 };
 
-export const fetchAccountMapEntryByEmailHash = async (emailHash: string) => {
-  return invokeAction<AccountMapEntry>(ApiAction.GetAccountMapEntryByEmailHash, { emailHash });
-};
-
-export const fetchAccountMapEntryByUsername = async (username: string) => {
-  return invokeAction<AccountMapEntry>(ApiAction.getAccountMapEntryByUsername, { username });
+export const fetchMapByEmailOrUsername = async (data: { username: string } | { email: string }) => {
+  const result = await invokeSafeAction<MapStoreData>(ApiAction.GetEmailOrUsernameMap, data);
+  return result;
 };
 
 export const getPublicKeyFromTransaction = async (txId: string) => {

@@ -1,23 +1,20 @@
-import { cryptography } from '@liskhq/lisk-client/browser';
 import { AccountProps, Collection } from 'types';
 
 export const generateDefaultAccount = (address: string): AccountProps => {
   const account: AccountProps = {
-    address: cryptography.hexToBuffer(address),
-    token: { balance: BigInt('0') },
-    storage: {
-      filesOwned: [],
-      filesAllowed: [],
-      incomingFileRequests: [],
-      outgoingFileRequests: [],
-      collectionsOwned: [],
-      collectionsAllowed: [],
-      incomingCollectionRequests: [],
-      outgoingCollectionRequests: [],
-      map: {
-        username: '',
-        emailHash: '',
-      },
+    filesOwned: [],
+    filesAllowed: [],
+    incomingFileRequests: [],
+    outgoingFileRequests: [],
+    collectionsOwned: [],
+    collectionsAllowed: [],
+    incomingCollectionRequests: [],
+    outgoingCollectionRequests: [],
+    username: '',
+    email: '',
+    address: Buffer.from(''),
+    token: {
+      balance: BigInt(0),
     },
   };
 

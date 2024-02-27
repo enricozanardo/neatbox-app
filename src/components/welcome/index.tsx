@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 const Welcome = () => {
   const { isAuthenticated } = useAuth0();
   const { account } = useAccountData();
-  const accountExists = !!account?.storage.map.emailHash;
+  const accountExists = !!account?.email;
 
   return (
     <div className="flex justify-center items-center h-full">
