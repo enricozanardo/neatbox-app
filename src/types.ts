@@ -138,6 +138,7 @@ export type CreateCollectionAssetProps = {
   title: string;
   transferFee: number;
   timestamp: number;
+  fileIds: [];
 };
 
 export type UpdateCollectionAssetProps = {
@@ -267,4 +268,11 @@ export type MapStoreData = {
   lsk32address: string;
   username: string;
   email: string;
+};
+
+export type StatisticStoreData = {
+  accounts: number;
+  files: number;
+  transfers: number;
+  collections: number;
 };

@@ -9,7 +9,7 @@ type Props = {
 
 const StatCard = ({ image, label, value }: Props) => {
   return (
-    <div className="rounded-xl shadow-lg bg-white border-2 border-gray-00 p-4 w-full mb-24 lg:mb-0">
+    <div className="rounded-xl shadow-lg bg-white border-2 border-gray-0 p-4 w-full mb-24 lg:mb-0">
       <div className="flex justify-center">
         <Image
           src={

@@ -42,6 +42,7 @@ const CreateCollection = ({ accountHasCollections }: Props) => {
       title: title.trim(),
       transferFee,
       timestamp: getTransactionTimestamp(),
+      fileIds: [],
     };
 
     mutate({ passphrase: wallet.passphrase, asset });

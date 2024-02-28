@@ -150,44 +150,51 @@ export const isJsonBuffer = (input: any) => {
   return input && typeof input === 'object' && input.constructor === Object && input.type === 'Buffer';
 };
 
-export const loopThroughObject = (input: any) => {
-  const obj = { ...input };
-
-  for (let key in obj) {
-    if (typeof obj[key] === 'object' && !isJsonBuffer(obj[key])) {
-      if (Array.isArray(obj[key])) {
-        for (let i = 0; i < obj[key].length; i++) {
-          loopThroughObject(obj[key][i]);
-        }
-      } else {
-        loopThroughObject(obj[key]);
-      }
-    } else {
-      console.log(key);
-      obj[key] = isJsonBuffer(obj[key]) ? convertJsonBufferToRegularBuffer(obj[key]) : obj[key];
-    }
-  }
-
-  return obj;
-};
-
 export const convertJsonBufferToRegularBuffer = (input: JsonBuffer) => {
   const buff = Buffer.from(input.data);
   return buff;
 };
 
+export const replaceBuffersRecursively = (obj: any) => {
+  const errors: any[] = [];
+
+  for (let key in obj) {
+    if (typeof obj[key] === 'object' && !isJsonBuffer(obj[key])) {
+      if (Array.isArray(obj[key])) {
+        for (let i = 0; i < obj[key].length; i++) {
+          replaceBuffersRecursively(obj[key][i]);
+        }
+      } else {
+        if (typeof obj[key] !== 'string') {
+          replaceBuffersRecursively(obj[key]);
+        }
+      }
+    } else {
+      try {
+        obj[key] = isJsonBuffer(obj[key]) ? convertJsonBufferToRegularBuffer(obj[key]) : obj[key];
+      } catch (err) {
+        // Todo: resolve (non-harmful) error
+        errors.push(errors);
+      }
+    }
+  }
+
+  if (errors.length > 0) {
+    console.log('Errors while iterating over object: ', { errors });
+  }
+
+  return obj;
+};
+
+/**
+ * Replaces JSON buffers with regular buffers
+ */
 export const sanitizeBuffers = <T>(input: T): T => {
   if (typeof input !== 'object' || input === null) {
     return input;
   }
 
-  // const output: any = {};
-
-  // Object.entries(input).forEach(([key, value]) => {
-  //   output[key] = isJsonBuffer(value) ? value.data : value;
-  // });
-
-  const output = loopThroughObject(input);
+  const output = replaceBuffersRecursively(input);
 
   return output;
 };
