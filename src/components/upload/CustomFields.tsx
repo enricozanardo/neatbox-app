@@ -1,8 +1,9 @@
+import React, { useState } from 'react';
+import toast from 'react-hot-toast';
+
 import Button from 'components/ui/Button';
 import Icon from 'components/ui/Icon';
 import Label from 'components/ui/Label';
-import React, { useState } from 'react';
-import toast from 'react-hot-toast';
 import * as storage from 'utils/storage';
 
 import SaveTemplateModal from './SaveTemplateModal';

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+
 import { getClasses } from 'utils/helpers';
 
 import Icon from './Icon';

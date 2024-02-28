@@ -1,16 +1,16 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+
 import Empty from 'components/ui/Empty';
 import useAccountData from 'hooks/useAccountData';
-import { useState } from 'react';
-import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
+import useWallet from 'hooks/useWallet';
 import { getFilesByIds, getPublicKeyFromTransaction } from 'services/api';
 import { buildDamUrl, getAxios } from 'services/axios';
 import { sendRespondToCollectionRequestAsset } from 'services/transactions';
-import useWallet from 'hooks/useWallet';
 import { Collection, CollectionRequest, CollectionRequestType, RespondToCollectionRequestAssetProps } from 'types';
 import { optimisticallyAddCollection, optimisticallyRemoveCollection } from 'utils/cache';
-import { hexToBuffer } from 'utils/crypto';
 import { handleError } from 'utils/errors';
 import { getTransactionTimestamp } from 'utils/helpers';
 

@@ -1,9 +1,10 @@
+import { Link } from 'react-router-dom';
+
 import Button from 'components/ui/Button';
 import Hr from 'components/ui/Hr';
 import Icon from 'components/ui/Icon';
 import Spinner from 'components/ui/Spinner';
 import { useFileData } from 'hooks/useFileData';
-import { Link } from 'react-router-dom';
 import { Collection, CollectionRequest, CollectionRequestType } from 'types';
 import { bufferToHex } from 'utils/crypto';
 import { displayNumber } from 'utils/formatting';

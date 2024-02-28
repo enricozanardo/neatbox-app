@@ -1,6 +1,7 @@
+import { useEffect, useState } from 'react';
+
 import Button from 'components/ui/Button';
 import Modal from 'components/ui/Modal';
-import { useEffect, useState } from 'react';
 
 type Props = {
   modalIsOpen: boolean;

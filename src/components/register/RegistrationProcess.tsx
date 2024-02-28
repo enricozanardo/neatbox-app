@@ -1,16 +1,16 @@
-import Button from 'components/ui/Button';
-import PageTitle from 'components/ui/PageTitle';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import Button from 'components/ui/Button';
+import PageTitle from 'components/ui/PageTitle';
 import useWallet from 'hooks/useWallet';
+import { fetchMapByEmailOrUsername } from 'services/api';
 import { sendInitializeAccountCommand } from 'services/axios';
 import { generateWallet, hashEmail } from 'utils/crypto';
 import { handleError } from 'utils/errors';
 
 import CompletedScreen from './CompletedScreen';
 import InitializationIndicator from './LoadingScreen';
-import { fetchMapByEmailOrUsername } from 'services/api';
 
 const regex = /^[a-zA-Z]{1}[a-zA-Z0-9]{2,17}$/;
 const DEBOUNCE = 500;

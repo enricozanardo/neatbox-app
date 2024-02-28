@@ -1,3 +1,6 @@
+import { cryptography } from '@liskhq/lisk-client/browser';
+
+import config from 'config';
 import {
   CancelRequestAssetProps,
   CreateCollectionAssetProps,
@@ -13,11 +16,8 @@ import {
   UpdateCollectionAssetProps,
   UpdateFileAssetProps,
 } from 'types';
-
-import * as api from './api';
-import { cryptography } from '@liskhq/lisk-client/browser';
-import config from 'config';
 import { bufferToHex } from 'utils/crypto';
+import * as api from './api';
 
 export const TX_FEES = {
   create: BigInt('10000000000'),

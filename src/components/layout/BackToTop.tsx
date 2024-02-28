@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { getClasses } from 'utils/helpers';
 
-import Icon from '../ui/Icon';
+import Icon from 'components/ui/Icon';
+import { getClasses } from 'utils/helpers';
 
 const BackToTop = () => {
   const [isVisible, setIsVisible] = useState(false);

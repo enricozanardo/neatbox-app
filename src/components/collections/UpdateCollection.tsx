@@ -1,11 +1,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import Button from 'components/ui/Button';
-import Modal from 'components/ui/Modal';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { Link } from 'react-router-dom';
-import { sendUpdateCollectionAsset } from 'services/transactions';
+
+import Button from 'components/ui/Button';
+import Modal from 'components/ui/Modal';
 import useWallet from 'hooks/useWallet';
+import { sendUpdateCollectionAsset } from 'services/transactions';
 import { Collection, File, UpdateCollectionAssetProps } from 'types';
 import { optimisticallyUpdateCollection, optimisticallyUpdateFileCollection } from 'utils/cache';
 import { handleError } from 'utils/errors';

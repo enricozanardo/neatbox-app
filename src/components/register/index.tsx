@@ -1,5 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import Unauthorized from 'components/ui/Unauthorized';
+
 import { useEmailMap } from 'hooks/useEmailMap';
 
 import AlreadyRegistered from './AlreadyRegistered';

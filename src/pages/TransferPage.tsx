@@ -1,7 +1,8 @@
+import { useNavigate } from 'react-router-dom';
+
 import Button from 'components/ui/Button';
 import PageTitle from 'components/ui/PageTitle';
 import SEO from 'components/ui/SEO';
-import { useNavigate } from 'react-router-dom';
 
 const TransferPage = () => {
   const navigate = useNavigate();

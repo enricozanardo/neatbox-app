@@ -1,14 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
-import useDebounce from 'hooks/useDebounce';
-import useTablePagination from 'hooks/useTablePagination';
 import { cloneDeep } from 'lodash';
 import { useState } from 'react';
+
+import FileTable from 'components/ui/tables/FileTable';
+import useDebounce from 'hooks/useDebounce';
+import useTablePagination from 'hooks/useTablePagination';
 import { getFiles } from 'services/api';
 import { Filters } from 'types';
 import { handleError } from 'utils/errors';
 import { devLog } from 'utils/helpers';
 
-import FileTable from '../ui/tables/FileTable';
 import SearchForm from './SearchForm';
 
 const FILTERS_INIT = { searchInput: '', mimeType: '', sortType: '', isUpdated: false };

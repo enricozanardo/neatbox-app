@@ -1,10 +1,11 @@
+import { useEffect, useRef, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+
 import CollectionTable from 'components/collections/CollectionTable';
 import PageTitle from 'components/ui/PageTitle';
 import TransferConfirmationSpinner from 'components/ui/TransferConfirmationSpinner';
 import useAccountData from 'hooks/useAccountData';
 import { useCollectionData } from 'hooks/useCollectionData';
-import { useEffect, useRef, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
 
 import CreateCollection from './CreateCollection';
 

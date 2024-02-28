@@ -1,6 +1,7 @@
+import { useEffect, useRef, useState } from 'react';
+
 import TransferConfirmationSpinner from 'components/ui/TransferConfirmationSpinner';
 import useAccountData from 'hooks/useAccountData';
-import { useEffect, useRef, useState } from 'react';
 
 type Props = {
   fileId: string | null;

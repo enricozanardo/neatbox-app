@@ -1,7 +1,8 @@
+import { useState } from 'react';
+
 import Button from 'components/ui/Button';
 import CollectionModal from 'components/ui/CollectionLink/CollectionModal';
 import Icon from 'components/ui/Icon';
-import { useState } from 'react';
 import { File } from 'types';
 
 type Props = {

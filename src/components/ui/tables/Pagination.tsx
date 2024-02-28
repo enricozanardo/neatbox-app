@@ -1,4 +1,5 @@
 import range from 'lodash.range';
+
 import { getClasses } from 'utils/helpers';
 
 type Props = {

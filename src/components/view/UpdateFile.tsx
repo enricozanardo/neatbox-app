@@ -1,18 +1,18 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
+import { toast } from 'react-hot-toast';
+
 import Button from 'components/ui/Button';
 import Icon from 'components/ui/Icon';
 import Modal from 'components/ui/Modal';
 import Toggle from 'components/ui/Toggle';
-import { useState } from 'react';
-import { toast } from 'react-hot-toast';
+import CustomFields, { CustomField } from 'components/upload/CustomFields';
+import useWallet from 'hooks/useWallet';
 import { sendUpdateFileAsset } from 'services/transactions';
 import { File, UpdateFileAssetProps } from 'types';
 import { optimisticallyUpdateFile } from 'utils/cache';
 import { handleError } from 'utils/errors';
 import { bufferToJson, fileIsTimedTransfer, getTransactionTimestamp, jsonToBuffer } from 'utils/helpers';
-
-import CustomFields, { CustomField } from '../upload/CustomFields';
-import useWallet from 'hooks/useWallet';
 
 type Props = {
   file: File;

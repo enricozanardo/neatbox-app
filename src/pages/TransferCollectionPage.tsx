@@ -1,6 +1,7 @@
+import { useSearchParams } from 'react-router-dom';
+
 import TransferCollection from 'components/transfer/TransferCollection';
 import SEO from 'components/ui/SEO';
-import { useSearchParams } from 'react-router-dom';
 
 const TransferCollectionPage = () => {
   const [searchParams] = useSearchParams();

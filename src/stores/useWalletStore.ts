@@ -1,7 +1,8 @@
+import { create } from 'zustand';
+
 import { Wallet, WalletMap } from 'types';
 import { generateWallet } from 'utils/crypto';
 import { getFromLocalStorage, setToLocalStorage } from 'utils/storage';
-import { create } from 'zustand';
 
 type WalletState = {
   walletMap: WalletMap;

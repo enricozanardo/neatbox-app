@@ -1,7 +1,6 @@
 import secureLogo from 'assets/img/neatbox-secure-logo.png';
+import Icon from 'components/ui/Icon';
 import config from 'config';
-
-import Icon from '../ui/Icon';
 import { useClientStatusStore } from 'stores/useClientStatusStore';
 
 const Footer = () => {

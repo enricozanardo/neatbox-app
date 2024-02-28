@@ -1,4 +1,4 @@
-import Spinner from '../Spinner';
+import Spinner from 'components/ui/Spinner';
 
 type Props = {
   isLoading?: boolean;

@@ -1,9 +1,10 @@
-import Button from 'components/ui/Button';
-import Modal from 'components/ui/Modal';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { sendRequestFileAccessPermissionAsset, sendRequestFileOwnershipAsset } from 'services/transactions';
+
+import Button from 'components/ui/Button';
+import Modal from 'components/ui/Modal';
 import useWallet from 'hooks/useWallet';
+import { sendRequestFileAccessPermissionAsset, sendRequestFileOwnershipAsset } from 'services/transactions';
 import { File, RequestFileAccessPermissionAssetProps, RequestFileOwnershipAssetProps } from 'types';
 import { handleError } from 'utils/errors';
 import { getTransactionTimestamp } from 'utils/helpers';

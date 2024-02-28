@@ -1,13 +1,13 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { sendRequestCollectionOwnershipAsset } from 'services/transactions';
+
+import Button from 'components/ui/Button';
+import Modal from 'components/ui/Modal';
 import useWallet from 'hooks/useWallet';
+import { sendRequestCollectionOwnershipAsset } from 'services/transactions';
 import { RequestCollectionOwnershipAssetProps } from 'types';
 import { handleError } from 'utils/errors';
 import { getTransactionTimestamp } from 'utils/helpers';
-
-import Button from '../Button';
-import Modal from '../Modal';
 
 type Props = {
   collectionMeta: { id: string; title: string };

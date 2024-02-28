@@ -1,5 +1,6 @@
-import LogInButton from 'components/layout/LogInButton';
 import { useNavigate } from 'react-router-dom';
+
+import LogInButton from 'components/layout/LogInButton';
 
 import Button from './Button';
 

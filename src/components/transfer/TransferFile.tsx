@@ -1,9 +1,10 @@
 import { useAuth0 } from '@auth0/auth0-react';
+import { useState } from 'react';
+
 import PageTitle from 'components/ui/PageTitle';
 import SuccessScreen from 'components/ui/SuccessScreen';
 import useAccountData from 'hooks/useAccountData';
 import { useFileData } from 'hooks/useFileData';
-import { useState } from 'react';
 import useWallet from 'hooks/useWallet';
 
 import TransferFileForm from './TransferFileForm';

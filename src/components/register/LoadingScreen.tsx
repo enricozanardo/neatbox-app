@@ -1,5 +1,6 @@
-import Spinner from 'components/ui/Spinner';
 import { useEffect, useState } from 'react';
+
+import Spinner from 'components/ui/Spinner';
 import { devLog } from 'utils/helpers';
 
 const LoadingScreen = () => {

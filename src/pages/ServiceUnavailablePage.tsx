@@ -1,4 +1,4 @@
-import SEO from '../components/ui/SEO';
+import SEO from 'components/ui/SEO';
 
 const ServiceUnavailable = () => {
   return (

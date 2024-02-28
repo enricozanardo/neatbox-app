@@ -1,6 +1,7 @@
+import { useSearchParams } from 'react-router-dom';
+
 import TransferFile from 'components/transfer/TransferFile';
 import SEO from 'components/ui/SEO';
-import { useSearchParams } from 'react-router-dom';
 
 const TransferFilePage = () => {
   const [searchParams] = useSearchParams();

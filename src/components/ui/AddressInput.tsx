@@ -1,9 +1,9 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import useAccountData from 'hooks/useAccountData';
 import { cloneDeep } from 'lodash';
 import { useEffect, useState } from 'react';
-import { fetchMapByEmailOrUsername, fetchAggregatedAccount } from 'services/api';
-import useWallet from 'hooks/useWallet';
+
+import useAccountData from 'hooks/useAccountData';
+import { fetchAggregatedAccount, fetchMapByEmailOrUsername } from 'services/api';
 import { AccountProps } from 'types';
 import { hashEmail } from 'utils/crypto';
 import { isEmail } from 'utils/helpers';
@@ -33,7 +33,6 @@ const AddressInput = ({ disabled, setAddressResult, isTimedTransfer }: Props) =>
   const [success, setSuccess] = useState('');
 
   const { account: userAccount } = useAccountData();
-  const { wallet } = useWallet();
   const { user } = useAuth0();
 
   useEffect(() => {

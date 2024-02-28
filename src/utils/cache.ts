@@ -1,12 +1,13 @@
+import { cryptography } from '@liskhq/lisk-client/browser';
 import { QueryClient } from '@tanstack/react-query';
-import { CustomField } from 'components/upload/CustomFields';
 import { cloneDeep } from 'lodash';
+
+import { CustomField } from 'components/upload/CustomFields';
 import { getCollectionsByIds, getFilesByIds } from 'services/api';
 import { AccountProps, Collection, File, UpdateCollectionAssetProps, UpdateFileAssetProps } from 'types';
 
 import { jsonToBuffer } from './helpers';
 import { createDummyCollection } from './mocks';
-import { cryptography } from '@liskhq/lisk-client/browser';
 
 export const optimisticallyAddCollection = (
   queryClient: QueryClient,

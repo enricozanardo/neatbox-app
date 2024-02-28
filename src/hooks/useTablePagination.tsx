@@ -1,5 +1,6 @@
-import config from 'config';
 import { useState } from 'react';
+
+import config from 'config';
 
 const useTablePagination = () => {
   const [offset, setOffset] = useState(0);

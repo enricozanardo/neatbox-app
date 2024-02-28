@@ -1,6 +1,7 @@
-import Button from 'components/ui/Button';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import Button from 'components/ui/Button';
 
 import ImportWalletModal from './ImportWalletModal';
 

@@ -1,5 +1,6 @@
-import useAccountData from 'hooks/useAccountData';
 import { useEffect, useState } from 'react';
+
+import useAccountData from 'hooks/useAccountData';
 import { getCollectionsByIds, getFilesByIds } from 'services/api';
 import { Collection, File } from 'types';
 import { removeDuplicates } from 'utils/helpers';

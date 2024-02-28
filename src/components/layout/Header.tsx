@@ -1,9 +1,10 @@
 import { useAuth0 } from '@auth0/auth0-react';
+import { useEffect, useState, useTransition } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+
 import logoBox from 'assets/img/neatbox-logo-box.png';
 import logoFull from 'assets/img/neatbox-logo-full.png';
 import useAccountData from 'hooks/useAccountData';
-import { useEffect, useState, useTransition } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
 import { devLog, getClasses } from 'utils/helpers';
 
 import LogInButton from './LogInButton';

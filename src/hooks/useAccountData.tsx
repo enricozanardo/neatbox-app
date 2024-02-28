@@ -1,4 +1,5 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+
 import { AccountProps } from 'types';
 import { removeAccountCache, removeRequests } from 'utils/cache';
 

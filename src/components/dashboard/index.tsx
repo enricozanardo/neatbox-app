@@ -1,8 +1,9 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import PageTitle from 'components/ui/PageTitle';
-import useAccountData from 'hooks/useAccountData';
 import { useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
+
+import PageTitle from 'components/ui/PageTitle';
+import useAccountData from 'hooks/useAccountData';
 import useWallet from 'hooks/useWallet';
 import { devLog } from 'utils/helpers';
 

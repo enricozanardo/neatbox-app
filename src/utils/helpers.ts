@@ -1,9 +1,10 @@
+import { cryptography } from '@liskhq/lisk-client/browser';
 import { Buffer } from 'buffer';
 import { DateTime } from 'luxon';
+
 import { Collection, CollectionRequest, File, FileRequest, JsonBuffer } from 'types';
 
 import { beddowsToLsk } from './formatting';
-import { cryptography } from '@liskhq/lisk-client/browser';
 
 export const getClasses = (...classes: (string | undefined)[]) => {
   return classes.filter(c => c !== undefined).join(' ');

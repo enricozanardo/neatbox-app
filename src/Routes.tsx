@@ -1,4 +1,7 @@
 import { useAuth0 } from '@auth0/auth0-react';
+import { lazy, Suspense } from 'react';
+import { Routes as BrowserRoutes, Outlet, Route } from 'react-router-dom';
+
 import useAccountData from 'hooks/useAccountData';
 import BrowsePage from 'pages/BrowsePage';
 import ForbiddenPage from 'pages/ForbiddenPage';
@@ -7,8 +10,6 @@ import LoadingPage from 'pages/LoadingPage';
 import ServiceUnavailable from 'pages/ServiceUnavailablePage';
 import ViewPage from 'pages/ViewPage';
 import WelcomePage from 'pages/WelcomePage';
-import { lazy, Suspense } from 'react';
-import { Outlet, Route, Routes as BrowserRoutes } from 'react-router-dom';
 import { useClientStatusStore } from 'stores/useClientStatusStore';
 
 const CollectionsPage = lazy(() => import('pages/CollectionsPage'));

@@ -1,8 +1,9 @@
+import { useState } from 'react';
+import { toast } from 'react-hot-toast';
+
 import Button from 'components/ui/Button';
 import Modal from 'components/ui/Modal';
 import useAccountData from 'hooks/useAccountData';
-import { useState } from 'react';
-import { toast } from 'react-hot-toast';
 import useWallet from 'hooks/useWallet';
 
 import { PassphraseValidator } from './PassphraseValidator';

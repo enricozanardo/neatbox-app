@@ -1,6 +1,7 @@
+import { useParams } from 'react-router-dom';
+
 import View from 'components/view';
 import NotFoundPage from 'pages/NotFoundPage';
-import { useParams } from 'react-router-dom';
 
 const ViewPage = () => {
   const { id } = useParams();

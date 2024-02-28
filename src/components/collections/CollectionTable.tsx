@@ -1,8 +1,8 @@
+import Empty from 'components/ui/Empty';
 import useAccountData from 'hooks/useAccountData';
 import { useFileData } from 'hooks/useFileData';
 import { Collection } from 'types';
 
-import Empty from '../ui/Empty';
 import { CollectionTableRow } from './CollectionTableRow';
 
 type TableProps = { data: Collection[] };

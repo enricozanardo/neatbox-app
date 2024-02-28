@@ -1,8 +1,9 @@
-import Home from 'components/home';
-import SEO from 'components/ui/SEO';
 import { useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useSearchParams } from 'react-router-dom';
+
+import Home from 'components/home';
+import SEO from 'components/ui/SEO';
 
 const HomePage = () => {
   const [searchParams] = useSearchParams();

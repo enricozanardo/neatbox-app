@@ -1,6 +1,7 @@
-import Button from 'components/ui/Button';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
+
+import Button from 'components/ui/Button';
 import { Wallet } from 'types';
 
 export const PassphraseValidator = ({ onSuccess, wallet }: { onSuccess: () => void; wallet: Wallet | null }) => {

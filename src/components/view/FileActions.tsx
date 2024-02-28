@@ -1,11 +1,12 @@
-import Button from 'components/ui/Button';
-import Spinner from 'components/ui/Spinner';
 import fileDownload from 'js-file-download';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+
+import Button from 'components/ui/Button';
+import Spinner from 'components/ui/Spinner';
+import useWallet from 'hooks/useWallet';
 import { fetchTx, getPublicKeyFromTransaction } from 'services/api';
 import { buildDamUrl, getAxios, handleLoadingProgress } from 'services/axios';
-import useWallet from 'hooks/useWallet';
 import { File, HistoryItemType, RespondToFileRequestAssetProps } from 'types';
 import { handleError } from 'utils/errors';
 import { fileIsPArtOfCollection } from 'utils/helpers';

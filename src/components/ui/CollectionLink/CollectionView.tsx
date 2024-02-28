@@ -1,13 +1,13 @@
-import { useFileData } from 'hooks/useFileData';
 import { Dispatch, SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import Button from 'components/ui/Button';
+import DetailInline from 'components/ui/DetailInline';
+import Empty from 'components/ui/Empty';
+import Spinner from 'components/ui/Spinner';
+import { useFileData } from 'hooks/useFileData';
 import { Collection } from 'types';
 import { displayNumber } from 'utils/formatting';
-
-import Button from '../Button';
-import DetailInline from '../DetailInline';
-import Empty from '../Empty';
-import Spinner from '../Spinner';
 
 type Props = {
   collection: Collection;

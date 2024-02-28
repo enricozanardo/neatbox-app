@@ -1,8 +1,8 @@
-import useWallet from 'hooks/useWallet';
+import { useAuth0 } from '@auth0/auth0-react';
 import { useEffect, useState } from 'react';
 
-import { useAuth0 } from '@auth0/auth0-react';
 import { useEmailMap } from 'hooks/useEmailMap';
+import useWallet from 'hooks/useWallet';
 import WalletDialog from './WalletDialog';
 import WalletDisplay from './WalletDisplay';
 

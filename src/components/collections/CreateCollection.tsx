@@ -1,14 +1,14 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
+import { toast } from 'react-hot-toast';
+
 import Button from 'components/ui/Button';
 import Icon from 'components/ui/Icon';
 import Modal from 'components/ui/Modal';
-import { useState } from 'react';
-import { toast } from 'react-hot-toast';
-import { sendCreateCollectionAsset, TX_FEES } from 'services/transactions';
 import useWallet from 'hooks/useWallet';
+import { sendCreateCollectionAsset, TX_FEES } from 'services/transactions';
 import { CreateCollectionAssetProps } from 'types';
 import { optimisticallyAddCollection } from 'utils/cache';
-import { hexToBuffer } from 'utils/crypto';
 import { handleError } from 'utils/errors';
 import { beddowsToLsk } from 'utils/formatting';
 import { getTransactionTimestamp } from 'utils/helpers';

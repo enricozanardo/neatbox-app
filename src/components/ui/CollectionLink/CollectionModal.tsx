@@ -1,6 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import useAccountData from 'hooks/useAccountData';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+
+import useAccountData from 'hooks/useAccountData';
 import { toast } from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import { getCollectionById, getFilesByIds } from 'services/api';
@@ -10,11 +11,11 @@ import { RequestCollectionOwnershipAssetProps } from 'types';
 import { handleError } from 'utils/errors';
 import { getTransactionTimestamp } from 'utils/helpers';
 
-import Button from '../Button';
-import Empty from '../Empty';
-import Hr from '../Hr';
-import Modal from '../Modal';
-import Spinner from '../Spinner';
+import Button from 'components/ui/Button';
+import Empty from 'components/ui/Empty';
+import Hr from 'components/ui/Hr';
+import Modal from 'components/ui/Modal';
+import Spinner from 'components/ui/Spinner';
 import CollectionView from './CollectionView';
 
 type Props = {

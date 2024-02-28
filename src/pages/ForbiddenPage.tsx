@@ -1,7 +1,7 @@
-import Button from 'components/ui/Button';
 import { useNavigate } from 'react-router-dom';
 
-import SEO from '../components/ui/SEO';
+import Button from 'components/ui/Button';
+import SEO from 'components/ui/SEO';
 
 const ForbiddenPage = () => {
   const navigate = useNavigate();

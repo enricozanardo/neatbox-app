@@ -1,7 +1,7 @@
-import { useFileData } from 'hooks/useFileData';
 import { Link } from 'react-router-dom';
 
-import Spinner from '../ui/Spinner';
+import Spinner from 'components/ui/Spinner';
+import { useFileData } from 'hooks/useFileData';
 
 type FileListProps = { fileIds: string[] };
 export const FileList = ({ fileIds }: FileListProps) => {

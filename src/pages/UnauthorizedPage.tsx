@@ -1,6 +1,5 @@
 import LogInButton from 'components/layout/LogInButton';
-
-import SEO from '../components/ui/SEO';
+import SEO from 'components/ui/SEO';
 
 const UnauthorizedPage = () => {
   return (

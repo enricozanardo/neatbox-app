@@ -1,7 +1,8 @@
-import Icon from 'components/ui/Icon';
-import config from 'config';
 import { useCallback, useEffect, useState } from 'react';
 import { FileWithPath, useDropzone } from 'react-dropzone';
+
+import Icon from 'components/ui/Icon';
+import config from 'config';
 import { generateChecksum } from 'utils/crypto';
 import { displayFileSize } from 'utils/formatting';
 

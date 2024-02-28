@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import useWallet from 'hooks/useWallet';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { fetchAggregatedAccount } from 'services/api';
 
+import useWallet from 'hooks/useWallet';
+import { fetchAggregatedAccount } from 'services/api';
 import { devLog } from 'utils/helpers';
 
 const AccountDataFetcher = () => {

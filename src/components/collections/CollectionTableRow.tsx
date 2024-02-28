@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Collapse } from 'react-collapse';
 import { Link } from 'react-router-dom';
+
+import Button from 'components/ui/Button';
 import { Collection, File } from 'types';
 import { displayNumber } from 'utils/formatting';
 
-import Button from '../ui/Button';
 import { FileList } from './FileList';
 import UpdateCollection from './UpdateCollection';
 

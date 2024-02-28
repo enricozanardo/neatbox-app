@@ -1,5 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { useEffect, useState } from 'react';
+
 import { useWalletStore } from 'stores/useWalletStore';
 import { Wallet } from 'types';
 

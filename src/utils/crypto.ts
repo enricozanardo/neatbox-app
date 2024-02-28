@@ -1,8 +1,9 @@
 import { cryptography, passphrase } from '@liskhq/lisk-client/browser';
 import { Buffer } from 'buffer';
-import config from 'config';
 import crypto, { SHA256 } from 'crypto-js';
 import { FileWithPath } from 'react-dropzone';
+
+import config from 'config';
 import { Wallet } from 'types';
 
 export const generateWallet = async (passphraseInput?: string): Promise<Wallet> => {

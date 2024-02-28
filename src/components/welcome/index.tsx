@@ -1,8 +1,9 @@
 import { useAuth0 } from '@auth0/auth0-react';
+import { Link } from 'react-router-dom';
+
 import requestsLocation from 'assets/img/requests-location.png';
 import LogInButton from 'components/layout/LogInButton';
 import useAccountData from 'hooks/useAccountData';
-import { Link } from 'react-router-dom';
 
 const Welcome = () => {
   const { isAuthenticated } = useAuth0();

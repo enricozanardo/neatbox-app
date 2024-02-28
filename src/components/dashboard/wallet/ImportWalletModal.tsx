@@ -1,8 +1,9 @@
 import { useAuth0 } from '@auth0/auth0-react';
+import { useState } from 'react';
+
 import Button from 'components/ui/Button';
 import Modal from 'components/ui/Modal';
 import useWallet from 'hooks/useWallet';
-import { useState } from 'react';
 import { fetchAggregatedAccount } from 'services/api';
 import { getLisk32AddressFromPassphrase, hashEmail, validatePassphrase } from 'utils/crypto';
 

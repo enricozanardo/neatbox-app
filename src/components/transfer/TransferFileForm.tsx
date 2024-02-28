@@ -1,8 +1,9 @@
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+
 import AddressInput, { ADDRESS_RESULT_INIT } from 'components/ui/AddressInput';
 import Button from 'components/ui/Button';
 import Label from 'components/ui/Label';
-import React, { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
 import { sendRequestFileTransferAsset } from 'services/transactions';
 import { File, RequestFileTransferAssetProps, Wallet } from 'types';
 import { handleError } from 'utils/errors';

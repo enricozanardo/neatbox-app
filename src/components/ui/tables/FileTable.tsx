@@ -1,16 +1,17 @@
 import { useQueryClient } from '@tanstack/react-query';
-import config from 'config';
-import useAccountData from 'hooks/useAccountData';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+
+import CollectionLink from 'components/ui/CollectionLink';
+import Empty from 'components/ui/Empty';
+import Icon from 'components/ui/Icon';
+import config from 'config';
+import useAccountData from 'hooks/useAccountData';
 import { getFileById } from 'services/api';
 import { File } from 'types';
 import { displayFileSize } from 'utils/formatting';
 import { fileIsPArtOfCollection, fileIsTimedTransfer } from 'utils/helpers';
 
-import CollectionLink from '../CollectionLink';
-import Empty from '../Empty';
-import Icon from '../Icon';
 import LoadingOverlay from './LoadingOverlay';
 import Pagination from './Pagination';
 

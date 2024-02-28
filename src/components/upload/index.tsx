@@ -1,4 +1,10 @@
 import { useAuth0 } from '@auth0/auth0-react';
+import { cloneDeep } from 'lodash';
+import { DateTime } from 'luxon';
+import React, { useEffect, useState } from 'react';
+import { FileWithPath } from 'react-dropzone';
+import toast from 'react-hot-toast';
+
 import AddressInput, { ADDRESS_RESULT_INIT } from 'components/ui/AddressInput';
 import Label from 'components/ui/Label';
 import PageTitle from 'components/ui/PageTitle';
@@ -6,11 +12,6 @@ import SuccessScreen from 'components/ui/SuccessScreen';
 import Toggle from 'components/ui/Toggle';
 import config from 'config';
 import useWallet from 'hooks/useWallet';
-import { cloneDeep } from 'lodash';
-import { DateTime } from 'luxon';
-import React, { useEffect, useState } from 'react';
-import { FileWithPath } from 'react-dropzone';
-import toast from 'react-hot-toast';
 import { invokeSafeAction } from 'services/api';
 import { buildDamUrl, getAxios, handleLoadingProgress, sendTimedTransferMail } from 'services/axios';
 import { sendCreateFileAsset, sendTimedTransferAsset } from 'services/transactions';
