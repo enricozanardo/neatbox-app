@@ -123,8 +123,12 @@ const IncomingCollectionRequests = ({ collections }: Props) => {
             queryClient,
             ['account', 'collectionsOwned'],
             collection.id,
-            hexToBuffer(wallet!.binaryAddress),
-            { title: collection.title, fileIds: collection.fileIds, transferFee: collection.transferFee },
+            wallet!.lsk32address,
+            {
+              title: collection.title,
+              fileIds: collection.fileIds,
+              transferFee: collection.transferFee,
+            },
           );
           navigate(`/collections?ref=${collection.id}`);
         } else {

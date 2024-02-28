@@ -1,24 +1,26 @@
-import useAccountData from 'hooks/useAccountData';
 import useWallet from 'hooks/useWallet';
 import { useEffect, useState } from 'react';
 
+import { useAuth0 } from '@auth0/auth0-react';
+import { useEmailMap } from 'hooks/useEmailMap';
 import WalletDialog from './WalletDialog';
 import WalletDisplay from './WalletDisplay';
 
 const Wallet = () => {
   const [accountHasMappedWallet, setAccountHasMappedWallet] = useState(true);
+  const { user } = useAuth0();
 
+  const { map } = useEmailMap(user?.email);
   const { wallet } = useWallet();
-  const { account } = useAccountData();
 
   useEffect(() => {
-    if (account?.email && account?.username) {
+    if (map?.lsk32address && map?.username) {
       setAccountHasMappedWallet(true);
       return;
     }
 
     setAccountHasMappedWallet(false);
-  }, [account]);
+  }, [map?.lsk32address, map?.username]);
 
   return (
     <div>

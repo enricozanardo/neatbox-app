@@ -4,7 +4,7 @@ import Modal from 'components/ui/Modal';
 import useWallet from 'hooks/useWallet';
 import { useState } from 'react';
 import { fetchAggregatedAccount } from 'services/api';
-import { getLisk32AddressFromPassphrase, validatePassphrase } from 'utils/crypto';
+import { getLisk32AddressFromPassphrase, hashEmail, validatePassphrase } from 'utils/crypto';
 
 type Props = {
   isOpen: boolean;
@@ -35,7 +35,7 @@ const ImportWalletModal = ({ isOpen, handleClose }: Props) => {
 
     const account = await fetchAggregatedAccount(await getLisk32AddressFromPassphrase(passphrase));
 
-    if (account?.email !== user?.email) {
+    if (account?.email !== hashEmail(user?.email ?? '')) {
       setError('Passphrase does not match wallet registered to account');
       return;
     }

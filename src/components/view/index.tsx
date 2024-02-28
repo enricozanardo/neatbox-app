@@ -5,12 +5,11 @@ import Error from 'components/ui/Error';
 import PageTitle from 'components/ui/PageTitle';
 import SEO from 'components/ui/SEO';
 import useAccountData from 'hooks/useAccountData';
+import useWallet from 'hooks/useWallet';
 import NotFoundPage from 'pages/NotFoundPage';
 import { getFileById } from 'services/api';
-import { bufferToHex } from 'utils/crypto';
 import { handleError } from 'utils/errors';
-import { devLog, fileIsTimedTransfer } from 'utils/helpers';
-import useWallet from 'hooks/useWallet';
+import { devLog, fileIsTimedTransfer, isSameAddress } from 'utils/helpers';
 
 import FileCard from './FileCard';
 import FileHistory from './FileHistory';
@@ -42,7 +41,7 @@ const View = ({ id }: Props) => {
     return <Error />;
   }
 
-  const isOwner = !!(isAuthenticated && file && bufferToHex(file.data.owner) === wallet?.binaryAddress);
+  const isOwner = !!(isAuthenticated && file && isSameAddress(file.data.owner, wallet?.lsk32address));
   const isAllowed = !!account?.filesAllowed.includes(id);
 
   return (

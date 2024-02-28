@@ -52,13 +52,11 @@ const CreateCollection = ({ accountHasCollections }: Props) => {
       sendCreateCollectionAsset(passphrase, asset),
     onSuccess: ({ transactionId }, { asset }) => {
       toast.success('Collection created!');
-      optimisticallyAddCollection(
-        queryClient,
-        ['account', 'collectionsOwned'],
-        transactionId,
-        hexToBuffer(wallet!.binaryAddress),
-        { title: asset.title, transferFee: asset.transferFee, fileIds: [] },
-      );
+      optimisticallyAddCollection(queryClient, ['account', 'collectionsOwned'], transactionId, wallet!.lsk32address, {
+        title: asset.title,
+        transferFee: asset.transferFee,
+        fileIds: [],
+      });
     },
     onError: handleError,
     onSettled: () => {

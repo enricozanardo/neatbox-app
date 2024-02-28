@@ -6,14 +6,17 @@ import { AccountProps, Collection, File, UpdateCollectionAssetProps, UpdateFileA
 
 import { jsonToBuffer } from './helpers';
 import { createDummyCollection } from './mocks';
+import { cryptography } from '@liskhq/lisk-client/browser';
 
 export const optimisticallyAddCollection = (
   queryClient: QueryClient,
   queryKey: string[],
   collectionId: string,
-  address: Buffer,
+  lsk32address: string,
   collectionData: { title: string; transferFee: number; fileIds: string[] },
 ) => {
+  const address = cryptography.address.getAddressFromLisk32Address(lsk32address);
+
   queryClient.setQueryData<Awaited<ReturnType<typeof getCollectionsByIds>>>(queryKey, prevData => {
     const prev = prevData || {
       collections: [],

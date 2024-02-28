@@ -1,9 +1,9 @@
 import { APIClient } from '@liskhq/lisk-api-client';
 import { apiClient } from '@liskhq/lisk-client/browser';
 import config from 'config';
-import { AccountProps, ApiOptions, ApiAction, Collection, EventType, File, MapStoreData, Transaction } from 'types';
+import { AccountProps, ApiAction, ApiOptions, Collection, EventType, File, MapStoreData, Transaction } from 'types';
 import { bufferToHex } from 'utils/crypto';
-import { cleanupMessySDKResponse } from 'utils/helpers';
+import { cleanupMessySDKResponse, sanitizeBuffers } from 'utils/helpers';
 
 const RPC_ENDPOINT = config.BLOCKCHAIN_API;
 
@@ -49,18 +49,14 @@ export const subscribeToEvent = async (handler: (data?: any) => void, event: Eve
 export const invokeAction = async <T>(action: ApiAction, args: Record<string, unknown> = {}) => {
   const client = await getClient();
   const response = await client.invoke<T>(action, args);
-  return response;
+  return sanitizeBuffers(response);
 };
 
 export const invokeSafeAction = async <T>(action: ApiAction, args: Record<string, unknown> = {}) => {
   const client = await getClient();
   const response = await client.invoke<T>(action, args);
 
-  if (Array.isArray(response)) {
-    return response;
-  }
-
-  return cleanupMessySDKResponse(response);
+  return sanitizeBuffers(cleanupMessySDKResponse(response));
 };
 
 export const fetchAggregatedAccount = async (address: string) => {

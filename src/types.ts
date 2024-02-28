@@ -1,13 +1,12 @@
 export type Params = Record<string, string | number>;
 
-export type BufferObject = {
+export type JsonBuffer = {
   data: Buffer;
-  type: string;
+  type: 'Buffer';
 };
 
 export type Wallet = {
-  liskAddress: string;
-  binaryAddress: string;
+  lsk32address: string;
   publicKey: string;
   passphrase: string;
 };
@@ -254,12 +253,6 @@ export type RequestCollectionOwnershipAssetProps = {
   timestamp: number;
 };
 
-export type AccountMapEntry = {
-  binaryAddress: string;
-  username: string;
-  emailHash: string;
-};
-
 export type Filters = {
   searchInput?: string;
   mimeType?: string;
@@ -271,7 +264,6 @@ export type ApiOptions = { offset?: number; limit?: number; filters?: Filters };
 
 export type MapStoreData = {
   address: Buffer;
-  binaryAddress: string;
   lsk32address: string;
   username: string;
   email: string;

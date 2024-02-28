@@ -31,7 +31,7 @@ type Props = { wallet: Wallet };
 const WalletDisplay = ({ wallet }: Props) => {
   return (
     <div className="space-y-10">
-      <Card label="Address" text={wallet.liskAddress} />
+      <Card label="Address" text={wallet.lsk32address} />
       <Card label="Passphrase" text={wallet.passphrase} isPassphrase />
     </div>
   );

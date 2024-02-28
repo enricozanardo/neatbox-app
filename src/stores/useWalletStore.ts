@@ -24,8 +24,14 @@ const getInitialMap = (): WalletMap => {
 
 export const useWalletStore = create<WalletState>(set => ({
   walletMap: getInitialMap(),
-  addWallet: (email, wallet) =>
+  addWallet: (email, walletInput) =>
     set(state => {
+      const wallet: Omit<Wallet, 'address'> = {
+        lsk32address: walletInput.lsk32address,
+        publicKey: walletInput.publicKey,
+        passphrase: walletInput.passphrase,
+      };
+
       const updatedMap = { ...state.walletMap };
       updatedMap[email] = wallet;
       setToLocalStorage(updatedMap, 'neatbox-wallet-map');

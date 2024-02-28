@@ -1,8 +1,9 @@
 import { Buffer } from 'buffer';
 import { DateTime } from 'luxon';
-import { AccountProps, Collection, CollectionRequest, File, FileRequest } from 'types';
+import { Collection, CollectionRequest, File, FileRequest, JsonBuffer } from 'types';
 
 import { beddowsToLsk } from './formatting';
+import { cryptography } from '@liskhq/lisk-client/browser';
 
 export const getClasses = (...classes: (string | undefined)[]) => {
   return classes.filter(c => c !== undefined).join(' ');
@@ -23,6 +24,16 @@ export const bufferToJson = (input: Buffer) => {
   }
 
   return JSON.parse(buffer.toString());
+};
+
+export const isSameAddress = (a: Buffer, lsk32address?: string) => {
+  if (!lsk32address) {
+    return false;
+  }
+
+  const address = cryptography.address.getAddressFromLisk32Address(lsk32address);
+
+  return Buffer.compare(a, address) === 0;
 };
 
 export const fileIsTimedTransfer = (file: File) => {
@@ -135,18 +146,48 @@ export const cleanupMessySDKResponse = <T>(value: T) => {
   return value;
 };
 
-/**
- * Buffer data is returned as an object by the new SDK. Therefore,
- * utilize this helper to get the Buffer data from the API responses.
- */
-export const convertToRegularBuffer = (input: any): Buffer => {
-  if (typeof input === 'object' && input?.type === 'Buffer') {
-    return input.data;
+export const isJsonBuffer = (input: any) => {
+  return input && typeof input === 'object' && input.constructor === Object && input.type === 'Buffer';
+};
+
+export const loopThroughObject = (input: any) => {
+  const obj = { ...input };
+
+  for (let key in obj) {
+    if (typeof obj[key] === 'object' && !isJsonBuffer(obj[key])) {
+      if (Array.isArray(obj[key])) {
+        for (let i = 0; i < obj[key].length; i++) {
+          loopThroughObject(obj[key][i]);
+        }
+      } else {
+        loopThroughObject(obj[key]);
+      }
+    } else {
+      console.log(key);
+      obj[key] = isJsonBuffer(obj[key]) ? convertJsonBufferToRegularBuffer(obj[key]) : obj[key];
+    }
   }
 
-  if (!Buffer.isBuffer(input)) {
-    throw new Error('Input is not a Buffer');
+  return obj;
+};
+
+export const convertJsonBufferToRegularBuffer = (input: JsonBuffer) => {
+  const buff = Buffer.from(input.data);
+  return buff;
+};
+
+export const sanitizeBuffers = <T>(input: T): T => {
+  if (typeof input !== 'object' || input === null) {
+    return input;
   }
 
-  return input;
+  // const output: any = {};
+
+  // Object.entries(input).forEach(([key, value]) => {
+  //   output[key] = isJsonBuffer(value) ? value.data : value;
+  // });
+
+  const output = loopThroughObject(input);
+
+  return output;
 };

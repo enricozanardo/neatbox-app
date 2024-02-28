@@ -138,7 +138,7 @@ const AddressInput = ({ disabled, setAddressResult, isTimedTransfer }: Props) =>
     return () => {
       clearTimeout(id);
     };
-  }, [input, user?.email, setAddressResult, isTimedTransfer, wallet?.binaryAddress, userAccount?.username]);
+  }, [input, user?.email, setAddressResult, isTimedTransfer, userAccount?.username]);
 
   return (
     <label className="block">

@@ -1,10 +1,9 @@
-import { Buffer } from 'buffer';
 import { cryptography, passphrase } from '@liskhq/lisk-client/browser';
+import { Buffer } from 'buffer';
 import config from 'config';
 import crypto, { SHA256 } from 'crypto-js';
 import { FileWithPath } from 'react-dropzone';
 import { Wallet } from 'types';
-import { convertToRegularBuffer } from './helpers';
 
 export const generateWallet = async (passphraseInput?: string): Promise<Wallet> => {
   const passphrase = passphraseInput ?? generatePassphrase();
@@ -15,8 +14,7 @@ export const generateWallet = async (passphraseInput?: string): Promise<Wallet> 
   const address = cryptography.address.getAddressFromPrivateKey(privateKey);
 
   return {
-    liskAddress: cryptography.address.getLisk32AddressFromAddress(address),
-    binaryAddress: bufferToHex(address),
+    lsk32address: cryptography.address.getLisk32AddressFromAddress(address),
     publicKey: bufferToHex(publicKey),
     passphrase: passphrase,
   };
@@ -30,9 +28,7 @@ export const getLisk32AddressFromPassphrase = async (passphrase: string) => {
 };
 
 export const getLisk32AddressFromAddress = (address: Buffer) => {
-  const buffer = convertToRegularBuffer(address);
-
-  return cryptography.address.getLisk32AddressFromAddress(buffer);
+  return cryptography.address.getLisk32AddressFromAddress(address);
 };
 
 export const generatePassphrase = () => {

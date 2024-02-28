@@ -12,12 +12,14 @@ const AccountDataFetcher = () => {
 
   const { refetch } = useQuery({
     queryKey: ['account'],
-    queryFn: () => (wallet ? fetchAggregatedAccount(wallet.liskAddress) : null),
+    queryFn: () => (wallet ? fetchAggregatedAccount(wallet.lsk32address) : null),
     refetchInterval: 10000,
     keepPreviousData: true,
     staleTime: 10000,
     onSuccess: () => devLog('Account data fetched'),
   });
+
+  console.log({ wallet });
 
   useEffect(() => {
     devLog('Refetching..');

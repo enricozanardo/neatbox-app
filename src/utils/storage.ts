@@ -1,8 +1,7 @@
-import { isDev } from './helpers';
+import { isDev, sanitizeBuffers } from './helpers';
 
 export type StorageKey = 'neatbox-wallet-map' | 'templates';
 
-console.log({ isDev });
 export const setToLocalStorage = (data: string | Object | boolean, keyInput: StorageKey) => {
   let key = keyInput;
 
@@ -21,6 +20,7 @@ export const getFromLocalStorage = <T>(keyInput: StorageKey): T | null => {
     key += '_dev';
   }
 
+  console.log(keyInput);
   const data = localStorage.getItem(key);
 
   let parsed;
@@ -30,7 +30,7 @@ export const getFromLocalStorage = <T>(keyInput: StorageKey): T | null => {
     parsed = data;
   }
 
-  return parsed;
+  return sanitizeBuffers(parsed);
 };
 
 export const removeItemFromStorage = (key: StorageKey) => {
