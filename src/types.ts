@@ -1,5 +1,10 @@
 export type Params = Record<string, string | number>;
 
+export type BufferObject = {
+  data: Buffer;
+  type: string;
+};
+
 export type Wallet = {
   liskAddress: string;
   binaryAddress: string;

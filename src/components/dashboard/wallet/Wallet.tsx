@@ -1,7 +1,6 @@
-import { useAuth0 } from '@auth0/auth0-react';
 import useAccountData from 'hooks/useAccountData';
-import { useEffect, useState } from 'react';
 import useWallet from 'hooks/useWallet';
+import { useEffect, useState } from 'react';
 
 import WalletDialog from './WalletDialog';
 import WalletDisplay from './WalletDisplay';
@@ -11,7 +10,6 @@ const Wallet = () => {
 
   const { wallet } = useWallet();
   const { account } = useAccountData();
-  const { user } = useAuth0();
 
   useEffect(() => {
     if (account?.email && account?.username) {

@@ -1,5 +1,5 @@
 import { HistoryItem, HistoryItemType } from 'types';
-import { bufferToHex, getLisk32AddressFromAddress } from 'utils/crypto';
+import { getLisk32AddressFromAddress } from 'utils/crypto';
 import { displayDateTime } from 'utils/formatting';
 
 type Props = {

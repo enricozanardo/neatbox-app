@@ -134,3 +134,19 @@ export const cleanupMessySDKResponse = <T>(value: T) => {
 
   return value;
 };
+
+/**
+ * Buffer data is returned as an object by the new SDK. Therefore,
+ * utilize this helper to get the Buffer data from the API responses.
+ */
+export const convertToRegularBuffer = (input: any): Buffer => {
+  if (typeof input === 'object' && input?.type === 'Buffer') {
+    return input.data;
+  }
+
+  if (!Buffer.isBuffer(input)) {
+    throw new Error('Input is not a Buffer');
+  }
+
+  return input;
+};
