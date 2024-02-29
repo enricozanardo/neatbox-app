@@ -5,14 +5,14 @@ import Empty from 'components/ui/Empty';
 import useAccountData from 'hooks/useAccountData';
 import useWallet from 'hooks/useWallet';
 import { sendCancelRequestAsset } from 'services/transactions';
-import { CancelRequestAssetProps, Collection, File } from 'types';
+import { CancelRequestAssetProps, Collection, NeatboxFile } from 'types';
 import { handleError } from 'utils/errors';
 import { prepareCollectionRequests, prepareFileRequests } from 'utils/helpers';
 
 import { RequestsTable } from './RequestsTable';
 
 type Props = {
-  files: File[];
+  files: NeatboxFile[];
   collections: Collection[];
 };
 

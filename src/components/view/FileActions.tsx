@@ -7,12 +7,12 @@ import Spinner from 'components/ui/Spinner';
 import useWallet from 'hooks/useWallet';
 import { fetchTx, getPublicKeyFromTransaction } from 'services/api';
 import { buildDamUrl, getAxios, handleLoadingProgress } from 'services/axios';
-import { File, HistoryItemType, RespondToFileRequestAssetProps } from 'types';
+import { NeatboxFile, HistoryItemType, RespondToFileRequestAssetProps } from 'types';
 import { handleError } from 'utils/errors';
 import { fileIsPArtOfCollection } from 'utils/helpers';
 
 type Props = {
-  file: File;
+  file: NeatboxFile;
   isOwner: boolean;
   isAllowed: boolean;
   isTransferrable: boolean;

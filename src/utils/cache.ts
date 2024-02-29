@@ -4,7 +4,7 @@ import { cloneDeep } from 'lodash';
 
 import { CustomField } from 'components/upload/CustomFields';
 import { getCollectionsByIds, getFilesByIds } from 'services/api';
-import { AccountProps, Collection, File, UpdateCollectionAssetProps, UpdateFileAssetProps } from 'types';
+import { AccountProps, Collection, NeatboxFile, UpdateCollectionAssetProps, UpdateFileAssetProps } from 'types';
 
 import { jsonToBuffer } from './helpers';
 import { createDummyCollection } from './mocks';
@@ -141,7 +141,7 @@ export const optimisticallyUpdateFile = (
 ) => {
   const { fileId, accessPermissionFee, transferFee } = asset;
 
-  queryClient.setQueryData<File>(['view', fileId], oldFile => {
+  queryClient.setQueryData<NeatboxFile>(['view', fileId], oldFile => {
     if (!oldFile) {
       return oldFile;
     }

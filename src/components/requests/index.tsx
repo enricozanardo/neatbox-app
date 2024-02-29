@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import useAccountData from 'hooks/useAccountData';
 import { getCollectionsByIds, getFilesByIds } from 'services/api';
-import { Collection, File } from 'types';
+import { Collection, NeatboxFile } from 'types';
 import { removeDuplicates } from 'utils/helpers';
 
 import IncomingCollectionRequests from './IncomingCollectionRequests';
@@ -10,7 +10,7 @@ import IncomingFileRequests from './IncomingFileRequests';
 import PendingRequests from './PendingRequests';
 
 const Requests = () => {
-  const [filesInRequests, setFilesInRequests] = useState<File[]>([]);
+  const [filesInRequests, setFilesInRequests] = useState<NeatboxFile[]>([]);
   const [collectionsInRequests, setCollectionsInRequests] = useState<Collection[]>([]);
 
   const { account } = useAccountData();
@@ -24,9 +24,11 @@ const Requests = () => {
       account;
 
     const fileIdsToRequest = [...incomingFileRequests, ...outgoingFileRequests].map(req => req.fileId);
+    console.log(fileIdsToRequest);
 
     const fetchFileData = async () => {
       const data = await getFilesByIds(removeDuplicates(fileIdsToRequest), { limit: -1 });
+
       setFilesInRequests(data.files);
     };
 

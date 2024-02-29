@@ -9,13 +9,13 @@ import Toggle from 'components/ui/Toggle';
 import CustomFields, { CustomField } from 'components/upload/CustomFields';
 import useWallet from 'hooks/useWallet';
 import { sendUpdateFileAsset } from 'services/transactions';
-import { File, UpdateFileAssetProps } from 'types';
+import { NeatboxFile, UpdateFileAssetProps } from 'types';
 import { optimisticallyUpdateFile } from 'utils/cache';
 import { handleError } from 'utils/errors';
 import { bufferToJson, fileIsTimedTransfer, getTransactionTimestamp, jsonToBuffer } from 'utils/helpers';
 
 type Props = {
-  file: File;
+  file: NeatboxFile;
 };
 
 const UpdateFile = ({ file }: Props) => {

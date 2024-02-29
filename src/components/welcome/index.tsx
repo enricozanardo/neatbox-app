@@ -8,7 +8,7 @@ import useAccountData from 'hooks/useAccountData';
 const Welcome = () => {
   const { isAuthenticated } = useAuth0();
   const { account } = useAccountData();
-  const accountExists = !!account?.email;
+  const accountExists = !!account?.emailHash;
 
   return (
     <div className="flex justify-center items-center h-full">

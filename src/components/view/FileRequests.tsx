@@ -5,12 +5,12 @@ import Button from 'components/ui/Button';
 import Modal from 'components/ui/Modal';
 import useWallet from 'hooks/useWallet';
 import { sendRequestFileAccessAsset, sendRequestFileOwnershipAsset } from 'services/transactions';
-import { File, RequestFileAccessAssetProps, RequestFileOwnershipAssetProps } from 'types';
+import { NeatboxFile, RequestFileAccessAssetProps, RequestFileOwnershipAssetProps } from 'types';
 import { handleError } from 'utils/errors';
 import { getTransactionTimestamp } from 'utils/helpers';
 
 type Props = {
-  file: File;
+  file: NeatboxFile;
   isAllowed: boolean;
 };
 

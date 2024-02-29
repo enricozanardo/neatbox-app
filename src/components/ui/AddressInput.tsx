@@ -3,7 +3,7 @@ import { cloneDeep } from 'lodash';
 import { useEffect, useState } from 'react';
 
 import useAccountData from 'hooks/useAccountData';
-import { fetchAggregatedAccount, fetchMapByEmailOrUsername } from 'services/api';
+import { fetchAggregatedAccount, fetchMapByEmailHashOrUsername } from 'services/api';
 import { AccountProps } from 'types';
 import { hashEmail } from 'utils/crypto';
 import { isEmail } from 'utils/helpers';
@@ -50,7 +50,7 @@ const AddressInput = ({ disabled, setAddressResult, isTimedTransfer }: Props) =>
 
       const emailHash = hashEmail(sanitizedInput);
 
-      const mapByEmail = await fetchMapByEmailOrUsername({ email: emailHash });
+      const mapByEmail = await fetchMapByEmailHashOrUsername({ emailHash });
 
       console.log({ accountByEmail: mapByEmail });
 
@@ -96,7 +96,7 @@ const AddressInput = ({ disabled, setAddressResult, isTimedTransfer }: Props) =>
         return;
       }
 
-      const mapByUsername = await fetchMapByEmailOrUsername({ username: sanitizedInput });
+      const mapByUsername = await fetchMapByEmailHashOrUsername({ username: sanitizedInput });
 
       if (!mapByUsername) {
         setError('Recipient not found');
@@ -108,7 +108,7 @@ const AddressInput = ({ disabled, setAddressResult, isTimedTransfer }: Props) =>
 
       if (account) {
         setAddressResult({
-          emailHash: mapByUsername.email,
+          emailHash: mapByUsername.emailHash,
           account,
           rawInput: sanitizedInput,
           username: mapByUsername.username,

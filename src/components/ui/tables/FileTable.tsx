@@ -8,7 +8,7 @@ import Icon from 'components/ui/Icon';
 import config from 'config';
 import useAccountData from 'hooks/useAccountData';
 import { getFileById } from 'services/api';
-import { File } from 'types';
+import { NeatboxFile } from 'types';
 import { displayFileSize } from 'utils/formatting';
 import { fileIsPArtOfCollection, fileIsTimedTransfer } from 'utils/helpers';
 
@@ -18,7 +18,7 @@ import Pagination from './Pagination';
 type Props = {
   handlePageChange: (page: number) => void;
   total: number;
-  data: File[];
+  data: NeatboxFile[];
   showLegend?: boolean;
   isLoading?: boolean;
 };

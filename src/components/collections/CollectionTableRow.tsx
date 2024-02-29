@@ -3,7 +3,7 @@ import { Collapse } from 'react-collapse';
 import { Link } from 'react-router-dom';
 
 import Button from 'components/ui/Button';
-import { Collection, File } from 'types';
+import { Collection, NeatboxFile } from 'types';
 import { displayNumber } from 'utils/formatting';
 
 import { FileList } from './FileList';
@@ -11,7 +11,7 @@ import UpdateCollection from './UpdateCollection';
 
 type RowProps = {
   collection: Collection;
-  ownedFiles: File[];
+  ownedFiles: NeatboxFile[];
 };
 
 export const CollectionTableRow = ({ collection, ownedFiles }: RowProps) => {

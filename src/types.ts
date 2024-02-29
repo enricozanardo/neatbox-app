@@ -60,7 +60,7 @@ export type FileRequest = {
   sender: Buffer;
 };
 
-export type FileData = {
+export type NeatboxFileData = {
   title: string;
   id: string;
   name: string;
@@ -77,9 +77,9 @@ export type FileData = {
   private: boolean;
 };
 
-export type File = {
+export type NeatboxFile = {
   meta: Meta;
-  data: FileData;
+  data: NeatboxFileData;
 };
 
 export type StorageStatistics = {
@@ -88,7 +88,7 @@ export type StorageStatistics = {
   transfers: number;
 };
 
-export type CreateFileAssetProps = Omit<FileData, 'owner' | 'id' | 'requests' | 'history'> & {
+export type CreateFileAssetProps = Omit<NeatboxFileData, 'owner' | 'id' | 'requests' | 'history'> & {
   transferFee: number;
   accessPermissionFee: number;
   private: boolean;
@@ -119,8 +119,16 @@ export type RespondToFileRequestAssetProps = {
   timestamp: number;
 };
 
-export type TimedTransferAssetProps = Omit<FileData, 'owner' | 'id' | 'requests' | 'history'> & {
+// export type TimedTransferAssetProps = Omit<FileData, 'owner' | 'id' | 'requests' | 'history'> & {
+//   transferFee: number;
+//   recipientEmailHash: string;
+//   timestamp: number;
+// };
+
+export type TimedTransferAssetProps = Omit<NeatboxFileData, 'owner' | 'id' | 'requests' | 'history'> & {
   transferFee: number;
+  accessPermissionFee: number;
+  private: boolean;
   recipientEmailHash: string;
   timestamp: number;
 };
@@ -187,7 +195,7 @@ export type AccountStoreData = {
   outgoingFileRequests: { fileId: string; requestId: string }[];
   incomingCollectionRequests: { collectionId: string; requestId: string }[];
   outgoingCollectionRequests: { collectionId: string; requestId: string }[];
-  email: string;
+  emailHash: string;
   username: string;
 };
 
@@ -267,7 +275,7 @@ export type MapStoreData = {
   address: Buffer;
   lsk32address: string;
   username: string;
-  email: string;
+  emailHash: string;
 };
 
 export type StatisticStoreData = {

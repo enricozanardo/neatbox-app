@@ -3,11 +3,11 @@ import { useState } from 'react';
 import Button from 'components/ui/Button';
 import CollectionModal from 'components/ui/CollectionLink/CollectionModal';
 import Icon from 'components/ui/Icon';
-import { File } from 'types';
+import { NeatboxFile } from 'types';
 
 type Props = {
   type: 'text' | 'icon';
-  file: File;
+  file: NeatboxFile;
 };
 
 const CollectionLink = ({ type, file }: Props) => {

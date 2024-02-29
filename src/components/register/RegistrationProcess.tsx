@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import Button from 'components/ui/Button';
 import PageTitle from 'components/ui/PageTitle';
 import useWallet from 'hooks/useWallet';
-import { fetchMapByEmailOrUsername } from 'services/api';
+import { fetchMapByEmailHashOrUsername } from 'services/api';
 import { sendInitializeAccountCommand } from 'services/axios';
 import { generateWallet, hashEmail } from 'utils/crypto';
 import { handleError } from 'utils/errors';
@@ -60,7 +60,7 @@ const RegistrationProcess = ({ email }: Props) => {
       }
 
       const sanitizedInput = username.toLocaleLowerCase();
-      const mapByUsername = await fetchMapByEmailOrUsername({ username: sanitizedInput });
+      const mapByUsername = await fetchMapByEmailHashOrUsername({ username: sanitizedInput });
 
       if (mapByUsername) {
         setError('Username already exists');

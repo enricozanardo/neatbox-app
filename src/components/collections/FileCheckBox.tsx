@@ -1,9 +1,9 @@
 import FileTypeIcon from 'components/upload/FileTypeIcon';
-import { File } from 'types';
+import { NeatboxFile } from 'types';
 
 type FileCheckboxProps = {
   checked: boolean;
-  file: File;
+  file: NeatboxFile;
   handleCheck: (id: string, checked: boolean) => void;
 };
 export const FileCheckBox = ({ checked, file, handleCheck }: FileCheckboxProps) => {

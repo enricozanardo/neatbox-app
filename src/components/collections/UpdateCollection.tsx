@@ -7,7 +7,7 @@ import Button from 'components/ui/Button';
 import Modal from 'components/ui/Modal';
 import useWallet from 'hooks/useWallet';
 import { sendUpdateCollectionAsset } from 'services/transactions';
-import { Collection, File, UpdateCollectionAssetProps } from 'types';
+import { Collection, NeatboxFile, UpdateCollectionAssetProps } from 'types';
 import { optimisticallyUpdateCollection, optimisticallyUpdateFileCollection } from 'utils/cache';
 import { handleError } from 'utils/errors';
 import { getTransactionTimestamp } from 'utils/helpers';
@@ -18,7 +18,7 @@ const DEFAULT_FEE = 100;
 
 type Props = {
   collection: Collection;
-  ownedFiles: File[];
+  ownedFiles: NeatboxFile[];
 };
 
 const UpdateCollection = ({ collection, ownedFiles }: Props) => {

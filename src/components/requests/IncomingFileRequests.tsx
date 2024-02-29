@@ -10,14 +10,14 @@ import useWallet from 'hooks/useWallet';
 import { getFileById, getPublicKeyFromTransaction } from 'services/api';
 import { buildDamUrl, getAxios } from 'services/axios';
 import { sendRespondToFileRequestAsset } from 'services/transactions';
-import { File, FileRequest, FileRequestType, RespondToFileRequestAssetProps } from 'types';
+import { NeatboxFile, FileRequest, FileRequestType, RespondToFileRequestAssetProps } from 'types';
 import { handleError } from 'utils/errors';
 import { getTransactionTimestamp, prepareFileRequests } from 'utils/helpers';
 
 import { FileRequestItem } from './FileRequestItem';
 
 type Props = {
-  files: File[];
+  files: NeatboxFile[];
 };
 
 export const requestTypeMap = {
@@ -58,6 +58,10 @@ const IncomingFileRequests = ({ files }: Props) => {
 
         const file = await getFileById(fileId);
 
+        if (!file) {
+          throw new Error('File does not exist');
+        }
+
         const requesterPublicKey = await getPublicKeyFromTransaction(requestId);
         const responderPublicKey = wallet.publicKey;
 
@@ -69,9 +73,11 @@ const IncomingFileRequests = ({ files }: Props) => {
         formData.append('newPassword', requesterIsOldOwner ? responderPublicKey : requesterPublicKey);
 
         setDamIsProcessing(true);
+
         const { encryptedHash }: { encryptedHash: string } = await getAxios()
           .post(buildDamUrl('transfer-file'), formData)
           .then(res => res.data);
+
         setDamIsProcessing(false);
 
         newHash = encryptedHash;

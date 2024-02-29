@@ -31,7 +31,7 @@ const Dashboard = () => {
   }, [ref]);
 
   devLog(account);
-  const accountIsRegistered = account?.email;
+  const accountIsRegistered = account?.emailHash;
 
   return (
     <div className="mb-32">

@@ -2,7 +2,16 @@ import { APIClient } from '@liskhq/lisk-api-client';
 import { apiClient } from '@liskhq/lisk-client/browser';
 
 import config from 'config';
-import { AccountProps, ApiAction, ApiOptions, Collection, EventType, File, MapStoreData, Transaction } from 'types';
+import {
+  AccountProps,
+  ApiAction,
+  ApiOptions,
+  Collection,
+  EventType,
+  NeatboxFile,
+  MapStoreData,
+  Transaction,
+} from 'types';
 import { bufferToHex } from 'utils/crypto';
 import { cleanupMessySDKResponse, sanitizeBuffers } from 'utils/helpers';
 
@@ -71,7 +80,7 @@ export const fetchTx = async <T>(id: string): Promise<Transaction<T>> => {
   return tx;
 };
 
-export const fetchMapByEmailOrUsername = async (data: { username: string } | { email: string }) => {
+export const fetchMapByEmailHashOrUsername = async (data: { username: string } | { emailHash: string }) => {
   const result = await invokeSafeAction<MapStoreData>(ApiAction.GetEmailOrUsernameMap, data);
   return result;
 };
@@ -89,18 +98,18 @@ export const getPublicKeyFromTransaction = async (txId: string) => {
 };
 
 export const getFiles = async (options: ApiOptions = {}) => {
-  return invokeAction<{ files: File[]; total: number }>(ApiAction.GetFiles, { ...options });
+  return invokeAction<{ files: NeatboxFile[]; total: number }>(ApiAction.GetFiles, { ...options });
 };
 
 export const getFilesByIds = async (fileIds: string[], options: ApiOptions = {}) => {
-  return invokeAction<{ files: File[]; total: number }>(ApiAction.GetFilesByIds, {
+  return invokeAction<{ files: NeatboxFile[]; total: number }>(ApiAction.GetFilesByIds, {
     ids: fileIds,
     ...options,
   });
 };
 
 export const getFileById = async (id: string) => {
-  return invokeAction<File>(ApiAction.GetFileById, { id });
+  return invokeSafeAction<NeatboxFile>(ApiAction.GetFileById, { id });
 };
 
 export const getCollectionsByIds = (ids: string[], options: ApiOptions = {}) => {
@@ -111,5 +120,5 @@ export const getCollectionsByIds = (ids: string[], options: ApiOptions = {}) => 
 };
 
 export const getCollectionById = async (id: string) => {
-  return invokeAction<Collection>(ApiAction.GetCollectionById, { id });
+  return invokeSafeAction<Collection>(ApiAction.GetCollectionById, { id });
 };

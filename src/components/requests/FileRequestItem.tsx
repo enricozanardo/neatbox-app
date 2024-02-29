@@ -2,12 +2,12 @@ import Button from 'components/ui/Button';
 import Hr from 'components/ui/Hr';
 import Icon from 'components/ui/Icon';
 import Spinner from 'components/ui/Spinner';
-import { File, FileRequest, FileRequestType } from 'types';
+import { NeatboxFile, FileRequest, FileRequestType } from 'types';
 import { bufferToHex } from 'utils/crypto';
 
 type Props = {
   request: FileRequest;
-  asset: File;
+  asset: NeatboxFile;
   handleResponse: (request: FileRequest, accept: boolean) => void;
   isLoading: boolean;
   disableInteraction: boolean;

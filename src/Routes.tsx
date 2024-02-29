@@ -59,7 +59,7 @@ const RegisteredUserRoute = ({
 const Routes = () => {
   const { isAuthenticated } = useAuth0();
   const { account } = useAccountData();
-  const accountExists = !!account?.email;
+  const accountExists = !!account?.emailHash;
   const { clientIsOnline } = useClientStatusStore();
 
   return (

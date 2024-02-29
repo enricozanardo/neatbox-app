@@ -2,7 +2,7 @@ import { cryptography } from '@liskhq/lisk-client/browser';
 import { Buffer } from 'buffer';
 import { DateTime } from 'luxon';
 
-import { Collection, CollectionRequest, File, FileRequest, JsonBuffer } from 'types';
+import { Collection, CollectionRequest, NeatboxFile, FileRequest, JsonBuffer } from 'types';
 
 import { beddowsToLsk } from './formatting';
 
@@ -37,11 +37,11 @@ export const isSameAddress = (a: Buffer, lsk32address?: string) => {
   return Buffer.compare(a, address) === 0;
 };
 
-export const fileIsTimedTransfer = (file: File) => {
+export const fileIsTimedTransfer = (file: NeatboxFile) => {
   return file.meta.expiration.unix > 0;
 };
 
-export const fileIsPArtOfCollection = (file: File) => {
+export const fileIsPArtOfCollection = (file: NeatboxFile) => {
   return !!file.meta.collection.id;
 };
 
@@ -83,13 +83,13 @@ export const removeDuplicates = (arr: string[]) => {
 };
 
 export const prepareFileRequests = (
-  files: File[],
+  files: NeatboxFile[],
   requests: {
     fileId: string;
     requestId: string;
   }[],
 ) => {
-  const data: { request: FileRequest; file: File }[] = [];
+  const data: { request: FileRequest; file: NeatboxFile }[] = [];
 
   requests.forEach(req => {
     const file = files.find(f => f.data.id === req.fileId);

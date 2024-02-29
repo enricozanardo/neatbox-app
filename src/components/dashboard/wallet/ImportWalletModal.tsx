@@ -36,7 +36,7 @@ const ImportWalletModal = ({ isOpen, handleClose }: Props) => {
 
     const account = await fetchAggregatedAccount(await getLisk32AddressFromPassphrase(passphrase));
 
-    if (account?.email !== hashEmail(user?.email ?? '')) {
+    if (account?.emailHash !== hashEmail(user?.email ?? '')) {
       setError('Passphrase does not match wallet registered to account');
       return;
     }

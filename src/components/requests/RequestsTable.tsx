@@ -1,5 +1,5 @@
 import Button from 'components/ui/Button';
-import { CancelRequestAssetProps, Collection, CollectionRequest, File, FileRequest } from 'types';
+import { CancelRequestAssetProps, Collection, CollectionRequest, NeatboxFile, FileRequest } from 'types';
 import { getTransactionTimestamp } from 'utils/helpers';
 
 import { requestTypeMap } from './IncomingFileRequests';
@@ -7,7 +7,7 @@ import { requestTypeMap } from './IncomingFileRequests';
 type Props = {
   fileRequests: {
     request: FileRequest;
-    file: File;
+    file: NeatboxFile;
   }[];
   collectionRequests: {
     request: CollectionRequest;

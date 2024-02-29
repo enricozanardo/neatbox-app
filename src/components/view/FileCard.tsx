@@ -4,7 +4,7 @@ import DetailInline from 'components/ui/DetailInline';
 import Hr from 'components/ui/Hr';
 import { CustomField } from 'components/upload/CustomFields';
 import FileTypeIcon from 'components/upload/FileTypeIcon';
-import { File } from 'types';
+import { NeatboxFile } from 'types';
 import { handleError } from 'utils/errors';
 import { displayDate, displayDateTime, displayFileSize, displayNumber } from 'utils/formatting';
 import { bufferToJson, devLog, fileIsTimedTransfer } from 'utils/helpers';
@@ -14,7 +14,7 @@ import FileActions from './FileActions';
 import UpdateFile from './UpdateFile';
 
 type Props = {
-  file: File;
+  file: NeatboxFile;
   isOwner: boolean;
   isAllowed: boolean;
 };

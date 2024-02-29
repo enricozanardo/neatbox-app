@@ -11,7 +11,7 @@ export const generateDefaultAccount = (address: string): AccountProps => {
     incomingCollectionRequests: [],
     outgoingCollectionRequests: [],
     username: '',
-    email: '',
+    emailHash: '',
     address: Buffer.from(''),
     token: {
       balance: BigInt(0),

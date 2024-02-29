@@ -1,8 +1,8 @@
 import Icon from 'components/ui/Icon';
-import { File } from 'types';
+import { NeatboxFile } from 'types';
 
 type Props = {
-  file: File;
+  file: NeatboxFile;
 };
 
 const FileTypeIcon = ({ file }: Props) => {

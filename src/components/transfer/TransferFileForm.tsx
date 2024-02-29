@@ -5,12 +5,12 @@ import AddressInput, { ADDRESS_RESULT_INIT } from 'components/ui/AddressInput';
 import Button from 'components/ui/Button';
 import Label from 'components/ui/Label';
 import { sendRequestFileTransferAsset } from 'services/transactions';
-import { File, RequestFileTransferAssetProps, Wallet } from 'types';
+import { NeatboxFile, RequestFileTransferAssetProps, Wallet } from 'types';
 import { handleError } from 'utils/errors';
 import { accountHasEnoughBalance, getTransactionTimestamp } from 'utils/helpers';
 
 type Props = {
-  files: File[];
+  files: NeatboxFile[];
   defaultValue: string | null;
   wallet: Wallet | null;
   isAuthenticated: boolean;
@@ -19,7 +19,7 @@ type Props = {
 
 const TransferFileForm = ({ files, defaultValue, wallet, isAuthenticated, setSuccess }: Props) => {
   const [selectedFileId, setSelectedFileId] = useState(defaultValue || '');
-  const [selectedFileData, setSelectedFileData] = useState<File | null>(null);
+  const [selectedFileData, setSelectedFileData] = useState<NeatboxFile | null>(null);
   const [addressResult, setAddressResult] = useState(ADDRESS_RESULT_INIT);
 
   useEffect(() => {
