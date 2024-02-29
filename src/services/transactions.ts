@@ -7,7 +7,7 @@ import {
   CreateFileAssetProps,
   RequestCollectionOwnershipAssetProps,
   RequestCollectionTransferAssetProps,
-  RequestFileAccessPermissionAssetProps,
+  RequestFileAccessAssetProps,
   RequestFileOwnershipAssetProps,
   RequestFileTransferAssetProps,
   RespondToCollectionRequestAssetProps,
@@ -63,16 +63,13 @@ export const sendRequestFileOwnershipAsset = async (passphrase: string, params: 
   return client.transaction.send(tx);
 };
 
-export const sendRequestFileAccessPermissionAsset = async (
-  passphrase: string,
-  params: RequestFileAccessPermissionAssetProps,
-) => {
+export const sendRequestFileAccessAsset = async (passphrase: string, params: RequestFileAccessAssetProps) => {
   const client = await api.getClient();
 
   const tx = await client.transaction.create(
     {
       module: 'storage',
-      command: 'requestFilePermission',
+      command: 'requestFileAccess',
       fee: TX_FEES.base,
       params,
     },

@@ -100,7 +100,7 @@ export type RequestFileOwnershipAssetProps = {
   timestamp: number;
 };
 
-export type RequestFileAccessPermissionAssetProps = {
+export type RequestFileAccessAssetProps = {
   id: string;
   timestamp: number;
 };
@@ -216,15 +216,15 @@ export type HistoryItem = {
   userAddress: Buffer;
 };
 
-export type Transaction<Asset> = {
-  asset: Asset;
-  assetID: number;
+export type Transaction<Params> = {
+  command: string;
   fee: BigInt;
   id: Buffer;
-  moduleID: number;
+  module: string;
   nonce: BigInt;
+  params: Params;
   senderPublicKey: Buffer;
-  signatures: any;
+  signatures: Buffer[];
 };
 
 export type Collection = {

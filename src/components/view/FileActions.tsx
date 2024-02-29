@@ -67,15 +67,14 @@ const FileActions = ({ file, isOwner, isAllowed, isTransferrable }: Props) => {
         }
 
         const responseTx = await fetchTx<RespondToFileRequestAssetProps>(lastTransfer.id);
-        const requestTx = await fetchTx(responseTx.asset.requestId);
 
-        /** assetID 2 = ownership request, assetID 3 = access permission request */
-        if (requestTx.assetID === 2 || requestTx.assetID === 3) {
+        const requestTx = await fetchTx(responseTx.params.requestId);
+
+        if (requestTx.command === 'requestFileOwnership' || requestTx.command === 'requestFileAccess') {
           formData.append('password', requestTx.senderPublicKey.toString('hex'));
         }
 
-        /** assetID 4 = transfer request */
-        if (requestTx.assetID === 4) {
+        if (requestTx.command === 'requestFileTransfer') {
           formData.append('password', responseTx.senderPublicKey.toString('hex'));
         }
       }

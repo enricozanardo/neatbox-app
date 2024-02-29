@@ -4,8 +4,8 @@ import toast from 'react-hot-toast';
 import Button from 'components/ui/Button';
 import Modal from 'components/ui/Modal';
 import useWallet from 'hooks/useWallet';
-import { sendRequestFileAccessPermissionAsset, sendRequestFileOwnershipAsset } from 'services/transactions';
-import { File, RequestFileAccessPermissionAssetProps, RequestFileOwnershipAssetProps } from 'types';
+import { sendRequestFileAccessAsset, sendRequestFileOwnershipAsset } from 'services/transactions';
+import { File, RequestFileAccessAssetProps, RequestFileOwnershipAssetProps } from 'types';
 import { handleError } from 'utils/errors';
 import { getTransactionTimestamp } from 'utils/helpers';
 
@@ -47,13 +47,13 @@ const FileRequests = ({ file, isAllowed }: Props) => {
       return;
     }
 
-    const txAsset: RequestFileAccessPermissionAssetProps = {
+    const txAsset: RequestFileAccessAssetProps = {
       id: file.data.id,
       timestamp: getTransactionTimestamp(),
     };
 
     try {
-      await sendRequestFileAccessPermissionAsset(wallet.passphrase, txAsset);
+      await sendRequestFileAccessAsset(wallet.passphrase, txAsset);
       toast.success('Access Permission successfully requested!');
     } catch (err) {
       handleError(err);
