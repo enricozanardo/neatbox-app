@@ -199,3 +199,7 @@ export const sanitizeBuffers = <T>(input: T): T => {
 
   return output;
 };
+
+export const getCurrentYear = () => {
+  return DateTime.now().year;
+};

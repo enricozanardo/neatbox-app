@@ -2,6 +2,7 @@ import secureLogo from 'assets/img/neatbox-secure-logo.png';
 import Icon from 'components/ui/Icon';
 import config from 'config';
 import { useClientStatusStore } from 'stores/useClientStatusStore';
+import { getCurrentYear } from 'utils/helpers';
 
 const Footer = () => {
   const { clientIsOnline } = useClientStatusStore();
@@ -68,7 +69,9 @@ const Footer = () => {
             </a>
           </div>
 
-          <p className="mb-16">© 2022 {config.PROJECT_TITLE} - All Rights Reserved</p>
+          <p className="mb-16">
+            © {getCurrentYear()} {config.PROJECT_TITLE} - All Rights Reserved
+          </p>
         </div>
       </div>
     </footer>
