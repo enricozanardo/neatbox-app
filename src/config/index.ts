@@ -1,3 +1,5 @@
+import { isDev } from 'utils/helpers';
+
 const config = {
   PROJECT_TITLE: process.env.REACT_APP_PROJECT_TITLE || 'Project',
   BLOCKCHAIN_API: process.env.REACT_APP_BLOCKCHAIN_API || 'ws://localhost:8080/ws',
@@ -8,6 +10,7 @@ const config = {
   VERSION: process.env.REACT_APP_VERSION,
   MAX_UPLOAD_FILE_SIZE: Number(process.env.REACT_APP_MAX_UPLOAD_FILE_SIZE || 10000000),
   MAX_TIMED_TRANSFER_FILE_SIZE: Number(process.env.REACT_APP_MAX_TIMED_TRANSFER_FILE_SIZE || 200000000),
+  TIMED_TRANSFER_EXPIRATION: isDev ? 120 : 604800, // 7 days in seconds,
   AUTH0_DOMAIN: process.env.REACT_APP_AUTH0_DOMAIN || 'fallback',
   AUTH0_CLIENT_ID: process.env.REACT_APP_AUTH0_CLIENT_ID || 'fallback',
   ITEMS_PER_PAGE: Number(process.env.REACT_APP_ITEMS_PER_PAGE || 10),

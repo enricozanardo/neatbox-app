@@ -1,6 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { cloneDeep } from 'lodash';
-import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
 import { FileWithPath } from 'react-dropzone';
 import toast from 'react-hot-toast';
@@ -76,7 +75,8 @@ const Upload = () => {
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
 
-    const timestamp = DateTime.now().toUTC().toUnixInteger() - 10;
+    const timestamp = getTransactionTimestamp();
+    const expiration = timestamp + config.TIMED_TRANSFER_EXPIRATION;
     const { file, checksum, title, isPrivate, transferFee, accessPermissionFee, isTimedTransfer } = form;
 
     try {
@@ -105,7 +105,7 @@ const Upload = () => {
       const formData = new FormData();
       formData.append('password', wallet.publicKey);
       formData.append('file', file, file.name);
-      formData.append('expiration', isTimedTransfer ? timestamp.toString() : '0');
+      formData.append('expiration', isTimedTransfer ? expiration.toString() : '0');
 
       setLoadingStatus('Uploading file');
 
@@ -119,8 +119,6 @@ const Upload = () => {
       const finalCustomFields = jsonToBuffer(isPrivate ? [] : customFields);
 
       if (isTimedTransfer) {
-        const timestamp = getTransactionTimestamp();
-
         const asset: TimedTransferAssetProps = {
           title,
           name,
@@ -131,9 +129,9 @@ const Upload = () => {
           customFields: finalCustomFields,
           transferFee,
           accessPermissionFee: 0,
-          recipientEmailHash: addressResult.account ? addressResult.account.emailHash : addressResult.emailHash,
           timestamp,
           private: isPrivate,
+          recipientEmailHash: addressResult.account ? addressResult.account.emailHash : addressResult.emailHash,
         };
 
         await sendTimedTransferAsset(wallet.passphrase, asset);
@@ -144,7 +142,7 @@ const Upload = () => {
             from: user?.email || 'Unknown Sender',
             to: addressResult.rawInput,
             filename: name,
-            expiration: timestamp + 604800,
+            expiration,
           };
 
           await sendTimedTransferMail(mailData).catch(err => {
