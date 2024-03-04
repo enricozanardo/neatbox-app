@@ -1,26 +1,13 @@
-import { isDev, sanitizeBuffers } from './helpers';
+import { sanitizeBuffers } from './helpers';
 
 export type StorageKey = 'neatbox-wallet-map' | 'templates';
 
-export const setToLocalStorage = (data: string | Object | boolean, keyInput: StorageKey) => {
-  let key = keyInput;
-
-  if (isDev) {
-    key += '_dev';
-  }
-
+export const setToLocalStorage = (data: string | Object | boolean, key: StorageKey) => {
   const processed = typeof data === 'string' ? data : JSON.stringify(data);
   localStorage.setItem(key, processed);
 };
 
-export const getFromLocalStorage = <T>(keyInput: StorageKey): T | null => {
-  let key = keyInput;
-
-  if (isDev) {
-    key += '_dev';
-  }
-
-  console.log(keyInput);
+export const getFromLocalStorage = <T>(key: StorageKey): T | null => {
   const data = localStorage.getItem(key);
 
   let parsed;

@@ -9,6 +9,7 @@ import { sendInitializeAccountCommand } from 'services/axios';
 import { generateWallet, hashEmail } from 'utils/crypto';
 import { handleError } from 'utils/errors';
 
+import { devLog } from 'utils/helpers';
 import CompletedScreen from './CompletedScreen';
 import InitializationIndicator from './LoadingScreen';
 
@@ -23,6 +24,8 @@ type Props = {
 
 const RegistrationProcess = ({ email }: Props) => {
   const { addWallet } = useWallet();
+  const { wallet } = useWallet();
+
   const [screen, setScreen] = useState<Screen>('start');
 
   const [username, setUsername] = useState('');
@@ -91,15 +94,22 @@ const RegistrationProcess = ({ email }: Props) => {
   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
 
-    const newWallet = await generateWallet();
     const emailHash = hashEmail(email);
 
     try {
+      let passphrase = wallet?.passphrase;
+
+      if (!passphrase) {
+        devLog('Creating new wallet');
+        const newWallet = await generateWallet();
+        addWallet(newWallet);
+        passphrase = newWallet.passphrase;
+      }
+
       setScreen('initializing');
-      addWallet(newWallet);
 
       await sendInitializeAccountCommand({
-        passphrase: newWallet.passphrase,
+        passphrase,
         username: username.toLowerCase(),
         emailHash,
       });
