@@ -24,7 +24,6 @@ const Requests = () => {
       account;
 
     const fileIdsToRequest = [...incomingFileRequests, ...outgoingFileRequests].map(req => req.fileId);
-    console.log(fileIdsToRequest);
 
     const fetchFileData = async () => {
       const data = await getFilesByIds(removeDuplicates(fileIdsToRequest), { limit: -1 });

@@ -19,8 +19,6 @@ const AccountDataFetcher = () => {
     onSuccess: () => devLog('Account data fetched'),
   });
 
-  console.log({ wallet });
-
   useEffect(() => {
     devLog('Refetching..');
     refetch();

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
-import { invokeAction } from 'services/api';
-import { ApiAction, StatisticStoreData } from 'types';
+import { getStatistics } from 'services/api';
+import { StatisticStoreData } from 'types';
 
 import StatCard from './StatCard';
 
@@ -10,8 +10,11 @@ const Statistics = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await invokeAction<StatisticStoreData>(ApiAction.GetStorageStatistics);
-      setStats(data);
+      const data = await getStatistics();
+
+      if (data) {
+        setStats(data);
+      }
     };
 
     fetchData();

@@ -6,14 +6,16 @@ import {
   AccountProps,
   ApiAction,
   ApiOptions,
+  ApiResponse,
   Collection,
   EventType,
-  NeatboxFile,
   MapStoreData,
+  NeatboxFile,
+  StatisticStoreData,
   Transaction,
 } from 'types';
 import { bufferToHex } from 'utils/crypto';
-import { cleanupMessySDKResponse, sanitizeBuffers } from 'utils/helpers';
+import { sanitizeBuffers } from 'utils/helpers';
 
 const RPC_ENDPOINT = config.BLOCKCHAIN_API;
 
@@ -58,31 +60,19 @@ export const subscribeToEvent = async (handler: (data?: any) => void, event: Eve
 
 export const invokeAction = async <T>(action: ApiAction, args: Record<string, unknown> = {}) => {
   const client = await getClient();
-  const response = await client.invoke<T>(action, args);
+  const response = await client.invoke<ApiResponse<T>>(action, args);
   return sanitizeBuffers(response);
 };
 
-export const invokeSafeAction = async <T>(action: ApiAction, args: Record<string, unknown> = {}) => {
-  const client = await getClient();
-  const response = await client.invoke<T>(action, args);
-
-  return sanitizeBuffers(cleanupMessySDKResponse(response));
-};
-
 export const fetchAggregatedAccount = async (address: string) => {
-  const result = await invokeSafeAction<AccountProps>(ApiAction.GetAggregatedAccount, { address });
-  return result;
+  const result = await invokeAction<AccountProps>(ApiAction.GetAggregatedAccount, { address });
+  return result.data;
 };
 
 export const fetchTx = async <T>(id: string): Promise<Transaction<T>> => {
   const client = await getClient();
   const tx = (await client.transaction.get(id)) as unknown as Transaction<T>;
   return tx;
-};
-
-export const fetchMapByEmailHashOrUsername = async (data: { username: string } | { emailHash: string }) => {
-  const result = await invokeSafeAction<MapStoreData>(ApiAction.GetEmailOrUsernameMap, data);
-  return result;
 };
 
 export const getPublicKeyFromTransaction = async (txId: string) => {
@@ -97,28 +87,48 @@ export const getPublicKeyFromTransaction = async (txId: string) => {
   return bufferToHex(tx.senderPublicKey);
 };
 
+export const fetchMapByEmailHashOrUsername = async (data: { username: string } | { emailHash: string }) => {
+  const result = await invokeAction<MapStoreData>(ApiAction.GetEmailOrUsernameMap, data);
+  return result.data;
+};
+
 export const getFiles = async (options: ApiOptions = {}) => {
-  return invokeAction<{ files: NeatboxFile[]; total: number }>(ApiAction.GetFiles, { ...options });
+  const result = await invokeAction<{ files: NeatboxFile[]; total: number }>(ApiAction.GetFiles, { ...options });
+  return result.data;
 };
 
 export const getFilesByIds = async (fileIds: string[], options: ApiOptions = {}) => {
-  return invokeAction<{ files: NeatboxFile[]; total: number }>(ApiAction.GetFilesByIds, {
+  const result = await invokeAction<{ files: NeatboxFile[]; total: number }>(ApiAction.GetFilesByIds, {
     ids: fileIds,
     ...options,
   });
+  return result.data;
 };
 
 export const getFileById = async (id: string) => {
-  return invokeSafeAction<NeatboxFile>(ApiAction.GetFileById, { id });
+  const result = await invokeAction<NeatboxFile>(ApiAction.GetFileById, { id });
+  return result.data;
 };
 
-export const getCollectionsByIds = (ids: string[], options: ApiOptions = {}) => {
-  return invokeAction<{ collections: Collection[]; total: number }>(ApiAction.GetCollectionsByIds, {
+export const getFileByChecksum = async (checksum: string) => {
+  const result = await invokeAction<NeatboxFile>(ApiAction.GetFileByChecksum, { checksum });
+  return result.data;
+};
+
+export const getCollectionsByIds = async (ids: string[], options: ApiOptions = {}) => {
+  const result = await invokeAction<{ collections: Collection[]; total: number }>(ApiAction.GetCollectionsByIds, {
     ids,
     ...options,
   });
+  return result.data;
 };
 
 export const getCollectionById = async (id: string) => {
-  return invokeSafeAction<Collection>(ApiAction.GetCollectionById, { id });
+  const result = await invokeAction<Collection>(ApiAction.GetCollectionById, { id });
+  return result.data;
+};
+
+export const getStatistics = async () => {
+  const result = await invokeAction<StatisticStoreData>(ApiAction.GetStorageStatistics);
+  return result.data;
 };

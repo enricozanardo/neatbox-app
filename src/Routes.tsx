@@ -38,8 +38,6 @@ const AuthenticatedRoute = ({
     return <UnauthorizedPage />;
   }
 
-  console.log({ emailVerified });
-
   if (!emailVerified) {
     return <EmailNotVerifiedPage />;
   }

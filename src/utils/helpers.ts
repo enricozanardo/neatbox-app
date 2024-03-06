@@ -181,7 +181,7 @@ export const replaceBuffersRecursively = (obj: any) => {
   }
 
   if (errors.length > 0) {
-    console.log('Errors while iterating over object: ', { errors });
+    console.debug('Errors while iterating over object: ', { errors });
   }
 
   return obj;

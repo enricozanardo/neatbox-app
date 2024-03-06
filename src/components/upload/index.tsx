@@ -11,10 +11,10 @@ import SuccessScreen from 'components/ui/SuccessScreen';
 import Toggle from 'components/ui/Toggle';
 import config from 'config';
 import useWallet from 'hooks/useWallet';
-import { invokeSafeAction } from 'services/api';
+import { getFileByChecksum } from 'services/api';
 import { buildDamUrl, getAxios, handleLoadingProgress, sendTimedTransferMail } from 'services/axios';
 import { sendCreateFileAsset, sendTimedTransferAsset } from 'services/transactions';
-import { ApiAction, CreateFileAssetProps, TimedTransferAssetProps } from 'types';
+import { CreateFileAssetProps, TimedTransferAssetProps } from 'types';
 import { handleError } from 'utils/errors';
 import { getTransactionTimestamp, isEmail, jsonToBuffer } from 'utils/helpers';
 
@@ -92,7 +92,7 @@ const Upload = () => {
         throw new Error('Fee must be at least 1');
       }
 
-      const fileExists = await invokeSafeAction(ApiAction.GetFileByChecksum, { checksum });
+      const fileExists = await getFileByChecksum(checksum);
 
       if (fileExists) {
         throw new Error('File already exists');

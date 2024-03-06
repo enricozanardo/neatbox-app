@@ -62,7 +62,6 @@ const fallBack = {
 };
 
 const FileHistoryItem = ({ item }: Props) => {
-  console.log(item);
   const content = contentMap[item.activity] || fallBack;
 
   return (

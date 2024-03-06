@@ -23,7 +23,7 @@ export enum ApiAction {
   GetCollectionById = 'api_getCollectionById',
   GetCollectionsByIds = 'api_getCollectionsByIds',
   GetStorageStatistics = 'api_getStatistics',
-  GetEmailOrUsernameMap = 'storage_getEmailOrUsernameMap',
+  GetEmailOrUsernameMap = 'api_getEmailOrUsernameMap',
 }
 
 export enum EventType {
@@ -118,12 +118,6 @@ export type RespondToFileRequestAssetProps = {
   newHash: string;
   timestamp: number;
 };
-
-// export type TimedTransferAssetProps = Omit<FileData, 'owner' | 'id' | 'requests' | 'history'> & {
-//   transferFee: number;
-//   recipientEmailHash: string;
-//   timestamp: number;
-// };
 
 export type TimedTransferAssetProps = Omit<NeatboxFileData, 'owner' | 'id' | 'requests' | 'history'> & {
   transferFee: number;
@@ -284,3 +278,11 @@ export type StatisticStoreData = {
   transfers: number;
   collections: number;
 };
+
+export type ApiResponse<T> = T extends Array<unknown> | { total: number }
+  ? {
+      data: T;
+    }
+  : {
+      data: T | null;
+    };
