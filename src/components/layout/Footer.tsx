@@ -16,18 +16,13 @@ const Footer = () => {
 
         <div className="text-sm font-thin">
           <p className="mb-4">
-            Neatbox - Secure cloud storage built on{' '}
-            <span className="block md:inline">distributed storage system and blockchain technologies</span>
-          </p>
-
-          <p className="mb-8">
             Network Status:{' '}
             <span className="text-xs">
               <Icon type="faCircle" className={clientIsOnline ? 'text-green-400' : 'text-red-400'} />
             </span>
           </p>
 
-          <div className="text-2xl mb-8 flex justify-center gap-8">
+          <div className="text-2xl mb-4 flex justify-center gap-8">
             <a
               href="https://discord.gg/placeholder"
               target="_blank"
@@ -59,7 +54,7 @@ const Footer = () => {
             </a>
 
             <a
-              href="mailto:info@neatbox.app"
+              href="mailto:info@neatbox.it"
               target="_blank"
               rel="noreferrer"
               aria-label="E-mail"

@@ -9,12 +9,10 @@ type Props = {
 const AccountInformation = ({ account }: Props) => {
   return (
     <>
-      <div className="hidden md:flex justify-center gap-12 ">
+      <div className="hidden md:flex justify-center gap-16 ">
         <Statistic label="Balance" value={displayBalance(account.token.balance)} />
-        <Statistic label="Files Owned" value={displayNumber(account.filesOwned.length)} />
-
-        {/* Using a dummy num of transactions value for the time being. Fetching the number of transactions is not easily achieved in v5 of the SDK. */}
-        <Statistic label="Transactions" value={displayNumber(64)} />
+        <Statistic label="Files" value={displayNumber(account.filesOwned.length)} />
+        <Statistic label="Collections" value={displayNumber(account.collectionsOwned.length)} />
       </div>
 
       <div className="md:hidden mx-8">
@@ -29,8 +27,8 @@ const AccountInformation = ({ account }: Props) => {
         </div>
 
         <div className="flex justify-between">
-          <div>Transactions</div>
-          <div className="font-bold">{displayNumber(64)}</div>
+          <div>Collections Owned</div>
+          <div className="font-bold">{displayNumber(account.collectionsOwned.length)}</div>
         </div>
       </div>
     </>

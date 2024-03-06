@@ -15,7 +15,7 @@ const Layout = ({ children }: Props) => {
   return (
     <>
       <Header />
-      <main className="flex justify-center min-h-[calc(100vh-22.2rem)] ">
+      <main className="flex justify-center min-h-[calc(100vh-20rem)] ">
         <div className="w-full px-4 pt-4 pb-32 md:pt-6 lg:pt-8 flex justify-center relative">
           <ErrorBoundary>{children}</ErrorBoundary>
           <Clouds />
