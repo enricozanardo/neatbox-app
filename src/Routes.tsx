@@ -16,6 +16,7 @@ const CollectionsPage = lazy(() => import('pages/CollectionsPage'));
 const DashboardPage = lazy(() => import('pages/DashboardPage'));
 const HomePage = lazy(() => import('pages/HomePage'));
 const UnauthorizedPage = lazy(() => import('pages/UnauthorizedPage'));
+const EmailNotVerifiedPage = lazy(() => import('pages/EmailNotVerified'));
 const NotFoundPage = lazy(() => import('pages/NotFoundPage'));
 const RequestsPage = lazy(() => import('pages/RequestsPage'));
 const TransferCollectionPage = lazy(() => import('pages/TransferCollectionPage'));
@@ -24,9 +25,23 @@ const TransferPage = lazy(() => import('pages/TransferPage'));
 const UploadPage = lazy(() => import('pages/UploadPage'));
 const RegisterPage = lazy(() => import('pages/RegisterPage'));
 
-const AuthenticatedRoute = ({ isAllowed, children }: { isAllowed: boolean; children?: any }) => {
-  if (!isAllowed) {
+const AuthenticatedRoute = ({
+  isAuthenticated,
+  emailVerified,
+  children,
+}: {
+  isAuthenticated: boolean;
+  emailVerified?: boolean;
+  children?: any;
+}) => {
+  if (!isAuthenticated) {
     return <UnauthorizedPage />;
+  }
+
+  console.log({ emailVerified });
+
+  if (!emailVerified) {
+    return <EmailNotVerifiedPage />;
   }
 
   return children ?? <Outlet />;
@@ -57,10 +72,12 @@ const RegisteredUserRoute = ({
 };
 
 const Routes = () => {
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated, user } = useAuth0();
   const { account } = useAccountData();
-  const accountExists = !!account?.emailHash;
   const { clientIsOnline } = useClientStatusStore();
+
+  const accountExists = !!account?.emailHash;
+  const emailVerified = !!user?.email_verified;
 
   return (
     <Suspense fallback={null}>
@@ -68,13 +85,13 @@ const Routes = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/browse" element={<BrowsePage />} />
         <Route path="/view/:id" element={<ViewPage />} />
-        <Route path="/register" element={<RegisterPage />} />
         <Route path="/welcome" element={<WelcomePage />} />
         <Route path="/landing" element={<LandingPage />} />
         <Route path="*" element={<NotFoundPage />} />
 
-        <Route element={<AuthenticatedRoute isAllowed={isAuthenticated} />}>
+        <Route element={<AuthenticatedRoute isAuthenticated={isAuthenticated} emailVerified={emailVerified} />}>
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/register" element={<RegisterPage />} />
 
           <Route element={<RegisteredUserRoute clientIsOnline={clientIsOnline} isAllowed={accountExists} />}>
             <Route path="/upload" element={<UploadPage />} />
