@@ -148,7 +148,7 @@ export const cleanupMessySDKResponse = <T>(value: T) => {
 };
 
 export const isJsonBuffer = (input: any) => {
-  return input && typeof input === 'object' && input.constructor === Object && input.type === 'Buffer';
+  return input && typeof input === 'object' && input?.constructor === Object && input?.type === 'Buffer';
 };
 
 export const convertJsonBufferToRegularBuffer = (input: JsonBuffer) => {
@@ -166,15 +166,14 @@ export const replaceBuffersRecursively = (obj: any) => {
           replaceBuffersRecursively(obj[key][i]);
         }
       } else {
-        if (typeof obj[key] !== 'string') {
-          replaceBuffersRecursively(obj[key]);
-        }
+        replaceBuffersRecursively(obj[key]);
       }
     } else {
       try {
-        obj[key] = isJsonBuffer(obj[key]) ? convertJsonBufferToRegularBuffer(obj[key]) : obj[key];
+        if (typeof obj[key] !== 'string') {
+          obj[key] = isJsonBuffer(obj[key]) ? convertJsonBufferToRegularBuffer(obj[key]) : obj[key];
+        }
       } catch (err) {
-        // Todo: resolve (non-harmful) error
         errors.push(errors);
       }
     }

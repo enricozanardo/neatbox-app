@@ -16,9 +16,12 @@ const Footer = () => {
 
         <div className="text-sm font-thin">
           <p className="mb-4">
-            Network Status:{' '}
-            <span className="text-xs">
-              <Icon type="faCircle" className={clientIsOnline ? 'text-green-400' : 'text-red-400'} />
+            App version {process.env.REACT_APP_VERSION} | {process.env.REACT_APP_GIT_SHA}
+            <span className="block mt-2">
+              Network Status:{' '}
+              <span className="text-xs">
+                <Icon type="faCircle" className={clientIsOnline ? 'text-green-400' : 'text-red-400'} />
+              </span>
             </span>
           </p>
 

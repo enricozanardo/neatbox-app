@@ -17,7 +17,7 @@ type Props = {
   accountHasCollections: boolean;
 };
 
-const DEFAULT_FEE = 100;
+const DEFAULT_FEE = 500;
 
 const CreateCollection = ({ accountHasCollections }: Props) => {
   const { wallet } = useWallet();
